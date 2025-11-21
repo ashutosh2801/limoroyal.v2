@@ -2,7 +2,6 @@ export const metadata = {
   title: "Wedding Limo & Chauffeur Services Toronto | Limo Royale",
   description: "Elegant wedding cars and airport limo service to make your big day perfect—reliable transport for your special moments.",
   keywords: "airport limo service, airport limo",
-  viewport: "width=device-width, initial-scale=1",
   alternates: {
     canonical: "https://limoroyal.com/wedding-cars",
     languages: {
