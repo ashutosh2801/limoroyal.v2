@@ -1,26 +1,229 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Sora", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Sora", sans-serif;
+}
+
+p {
+  font-family: "Sora", sans-serif;
+}
+
+.container {
+    @media (width >= 80rem) {
+        max-width: 90rem;
+    }
+}
+
+a {
+  transition: .3s ease-in-out;
+}
+
+.link {
+  color: #FFF;
+}
+
+.link:hover {
+  color: #ceb366;
+}
+
+.link.active {
+  color: #ceb366;
+}
+
+@media (max-width:1024px){
+    
+  .link {
+    color: #000;
+    padding: 8px 15px;
+  }
+
+  .link:hover {
+    background-color: #ceb366;
+    color: #FFF;
+  }
+
+  .link.active {
+    background-color: #000;
+    color: #FFF;
+  }
+
+  .book-now-link {
+    padding: 8px 15px;
+  }
+
+  .container.px-2 {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1279px) {
+
+  .link {
+    color: #000;
+    padding: 8px 15px;
+  }
+
+  .link:hover {
+    background-color: #ceb366;
+    color: #FFF;
+  }
+
+  .link.active {
+    background-color: #000;
+    color: #FFF;
+  }
+
+  .book-now-link {
+    padding: 8px 15px;
+  }
+
+}
+
+.webFont {
+  font-family: "Inconsolata", monospace;
+}
+
+.webFontColor {
+  color: #a6a6a6;
+}
+
+.webBG {
+  background-color: #bb9a4b;
+}
+
+.webColor {
+  color: #ceb366;
+}
+
+.webBorderColor {
+  border-color: #FFFFFF24;
+}
+
+.side-active {
+  color: #ceb366;
+}
+
+.book-now-link {
+  color: #FFF;
+  background-color: #bb9a4b;
+}
+
+.link-service {
+  color: #000;
+}
+
+.link-service:hover {
+  color: #FFF;
+  background-color: #ceb366;
+}
+
+.service-active {
+  color: #FFF;
+  background-color: #ceb366;
+}
+
+.main-slider {
+  opacity: .6;
+}
+
+.book-now-slide {
+  font-family: "Sora", sans-serif;
+  color: #333;
+  background-color: #bb9a4b;
+}
+
+.view-more-btn {
+  color: #FFF;
+  background-color: #bb9a4b;
+}
+
+.view-more-btn:hover {
+  background-color: #b01f24;
+}
+
+.check-map-btn {
+  color: #bb9a4b;
+  border: 1px solid #bb9a4b;
+}
+
+.check-map-btn:hover {
+  color: #FFF;
+  border: 1px solid #b01f24;
+  background-color: #b01f24;
+}
+
+.value-bg {
+  background-image: url(/assets/banners/value-bg.jpg);
+  background-repeat: no-repeat;
+  background-position: bottom center;
+}
+
+.car-banner {
+  background-image: url(/assets/banners/banner-2.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.luxury-car-bg {
+  background-image: url(/assets/banners/banner-3.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.social-icon:hover {
+  background-color: #ceb366;
+}
+
+.page-bg {
+  background-image: url(/assets/slides/about-slide.jpg);
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+
+.bus-page-bg {
+  background-image: url(/assets/slides/2.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media (max-width:767px){
+
+  .page-bg {
+    background-size: 300%;
+  }
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+
+  .page-bg {
+    background-size: 150%;
+  }
+
+}
+
+.breadcrumb li:after {
+  content: ".";
+  padding: 0 10px;
+}
+
+.breadcrumb li:last-child:after {
+  content: "";
+}
+
+.services-link:hover {
+  color: #ceb366;
 }
