@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import ServiceSidePanel from '../components/ServiceSidePanel'
-import ServiceFaq from '../components/ServiceFaq'
+import FaqPage from './FaqPage'
 import CustomerExperiences from '../components/CustomerExperiences'
 import chauffeuringBanner from '../../public/assets/services/chauffeuring-services.jpg'
 
@@ -35,17 +35,24 @@ const LuxuryChauffeuringServices = () => {
                         <div className='border-b webBorderColor pb-10 mb-10' data-aos="fade-up">
                             <h1 className='text-white text-2xl lg:text-4xl mt-10 mb-5 lg:mb-10'>Luxury Chauffeuring Services</h1>
                             <p className='webFontColor text-base leading-relaxed'>
-                                Our Luxury Chauffeuring Services offer an elevated level of comfort and professionalism for any occasion. Whether you’re attending a corporate event, a wedding, or simply need a luxurious ride to the airport, our experienced chauffeurs ensure a smooth, stylish, and timely journey. We take pride in offering impeccable service, from the moment you are picked up to your final destination.<br></br><br></br>
+                                Our Luxury Chauffeuring Services offer an elevated level of comfort and professionalism for any occasion. Whether you’re attending a corporate event, a wedding, or simply need a luxurious ride to an event, our experienced chauffeurs ensure a smooth, stylish, and timely journey. We take pride in offering impeccable service, from the moment you are picked up to your final destination. We are the best Toronto airport chauffeur service providing high-quality service from all aspects.<br></br><br></br>
 
                                 Our fleet features high-end vehicles that are meticulously maintained and equipped with all the amenities to provide you with an extraordinary experience. From plush interiors to advanced technology, every detail is carefully considered to enhance your comfort and relaxation.<br></br><br></br>
 
-                                Our chauffeurs are highly trained professionals who embody courtesy and discretion. They are knowledgeable of the best routes, ensuring you arrive on time, while also maintaining the highest standards of safety and privacy. You can trust our team to make your trip stress-free and enjoyable.<br></br><br></br>
+                                As a reputed Toronto airport chauffeur service, our chauffeurs are highly trained professionals who embody courtesy and discretion. They are knowledgeable of the best routes, ensuring you arrive on time, while also maintaining the highest standards of safety and privacy. You can trust our team to make your trip stress-free and enjoyable.<br></br><br></br>
 
-                                Whether you’re looking for a ride for a special event or need reliable transportation for daily commutes, our Luxury Chauffeuring Services offer convenience, elegance, and personalized attention. We are committed to ensuring that every journey you take with us is nothing short of exceptional.
+                                Whether you’re looking for a ride for a special event or need reliable transportation for daily commutes, our Luxury Toronto Airport Chauffeur Services offer convenience, elegance, and personalized attention. We are committed to ensuring that every journey you take with us is nothing short of exceptional.
+                            </p>
+                            <b className='text-white w-full block mb-5 mt-5'>An Unmatchable Toronto Airport Chauffeur Service</b>
+                            <p className='webFontColor text-base leading-relaxed'>
+                                We guarantee you a luxurious and comfortable ride enabling you to focus on the core objective of your trip. Our Toronto Airport chauffeur service ensures you are well taken care of from the time you land in Canada up until you go back to the airport departure terminal.
+                                <br></br><br></br>
+                                Our professional team of chauffeurs will ensure your safety and comfort all throughout the journey. Rest assured your trip will be smooth and sailing as we have got the perfect fleet of vehicles and professional team of chauffeurs to make it successful. Contact us today for all you chauffeuring requirements and stress-free transportation.
+
                             </p>
                         </div>
                         <div data-aos="fade-up">
-                            <ServiceFaq />
+                            <FaqPage />
                         </div>
                         <div data-aos="fade-up">
                             <CustomerExperiences />

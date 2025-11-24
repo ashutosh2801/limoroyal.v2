@@ -3,27 +3,27 @@
 import React, { useState, useRef } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 
-const ServiceFaq = () => {
+const FaqPage = () => {
     const faqData = [
         {
-            question: "Do you offer limo rentals for special events?",
-            answer: "Yes, we provide luxury limousines for weddings, parties, corporate events, and other special occasions."
+            question: "What types of vehicles do you offer for Toronto Airport limousine service?",
+            answer: "We offer a variety of vehicles as the best airport limo service Toronto. Our fleet of vehicles include luxury sedans, SUVs, and limousines to ensure a comfortable transfer to and from the airport."
         },
         {
-            question: "Are your vehicles available for airport transfers?",
-            answer: "Yes, our fleet is available for convenient airport pickups and drop-offs."
+            question: "Is there a fee for meet-and-greet service?",
+            answer: "Our Pearson airport limo service charges no additional fee for meet-and-greet service."
         },
         {
-            question: "Can I rent a limo for just a few hours?",
-            answer: "Absolutely! We offer flexible rental durations, from a few hours to full-day service."
+            question: "Will I be picked up or dropped off at my hotel from the airport?",
+            answer: "Yes. Royal Limo airport transportation Toronto picks you up or drops you off at your doorstep, whether it’s a hotel or house."
         },
         {
-            question: "Do you provide luxury vehicles for corporate use?",
-            answer: "Yes, our luxury fleet is perfect for business meetings, conferences, and corporate travel."
+            question: "Can I hire Royal Limo airport limo service Toronto for special occasions?",
+            answer: "Yes, we provide luxury limousines for all types of special occasions including weddings, parties, corporate events, and more."
         },
         {
-            question: "Is there a minimum age requirement to rent a vehicle?",
-            answer: "Yes, you must be at least 21 years old to rent most vehicles, with some luxury models requiring you to be 25."
+            question: "Do you offer same-day Pearson Airport car service?",
+            answer: "We recommend you to book in advance if you require a limousine service for the airport. This allows us to track your flight and prepare for a seamless airport transfer."
         }
     ];
 
@@ -70,4 +70,4 @@ const ServiceFaq = () => {
     )
 }
 
-export default ServiceFaq;
+export default FaqPage;

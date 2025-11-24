@@ -3,27 +3,19 @@
 import React, { useState, useRef } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 
-const ServiceFaq = () => {
+const FaqPage = () => {
     const faqData = [
         {
-            question: "Do you offer limo rentals for special events?",
-            answer: "Yes, we provide luxury limousines for weddings, parties, corporate events, and other special occasions."
+            question: "How do I track the arrival of my shuttle?",
+            answer: "We will provide you with the timing of your pick-up or drop-off, the day prior to your travel. If there are any changes to this time we will notify it to you."
         },
         {
-            question: "Are your vehicles available for airport transfers?",
-            answer: "Yes, our fleet is available for convenient airport pickups and drop-offs."
+            question: "Can I hire Royal Limo Toronto shuttle service for special events?",
+            answer: "Yes. We provide corporate event packages for larger groups attending corporate functions. This package offers luxury transportation for VIPs, clients, and employees."
         },
         {
-            question: "Can I rent a limo for just a few hours?",
-            answer: "Absolutely! We offer flexible rental durations, from a few hours to full-day service."
-        },
-        {
-            question: "Do you provide luxury vehicles for corporate use?",
-            answer: "Yes, our luxury fleet is perfect for business meetings, conferences, and corporate travel."
-        },
-        {
-            question: "Is there a minimum age requirement to rent a vehicle?",
-            answer: "Yes, you must be at least 21 years old to rent most vehicles, with some luxury models requiring you to be 25."
+            question: "Are your chauffeurs licensed and insured?",
+            answer: "YWe give top priority for the safety of our clients. All our chauffeurs are fully licensed and insured. We do extensive background checks and provider training to all our chauffeurs."
         }
     ];
 
@@ -70,4 +62,4 @@ const ServiceFaq = () => {
     )
 }
 
-export default ServiceFaq;
+export default FaqPage;
