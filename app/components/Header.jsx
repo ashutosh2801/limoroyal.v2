@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import logo from "../../public/assets/limo-royale.png"
+import logo from "../../public/assets/limo-royal.png"
 
 const Header = () => {
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
@@ -35,7 +35,7 @@ const Header = () => {
                   <Link href='/'>
                     <Image
                       src={logo}
-                      alt='Luxury Limo Service for Memorable Rides - Limo Royale'
+                      alt='Luxury Limo Service for Memorable Rides - Limo Royal'
                       className='w-full md:w-50 lg:w-50'
                     />
                   </Link>
