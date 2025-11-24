@@ -3,7 +3,7 @@ export const metadata = {
   description:
     "Book professional corporate limo, airport shuttle, and Toronto shuttle services with Limo Royale. Ensure comfort, reliability, and style—reserve now!",
   keywords:
-    "lCorporate Limo Service, Corporate Limo Service in Toronto, Airport Shuttle Toronto, Toronto Shuttle Service",
+    "Corporate Limo Service, Corporate Limo Service in Toronto, Airport Shuttle Toronto, Toronto Shuttle Service",
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/corporate-limo-service",

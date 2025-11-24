@@ -24,7 +24,7 @@ const Footer = () => {
             <Link href='/bus-charter' className='webFontColor block mb-3' title='Bus Charter'>Bus Charter</Link>
             <Link href='/about' className='webFontColor block mb-3' title='Faqs'>Faqs</Link>
             <Link href='/online-reservations' className='webFontColor block mb-3' title='Book Now'>Book Now</Link>
-            <Link href='/about' className='webFontColor block mb-3' title='Blog'>Blog</Link>
+            <Link href='/blog' className='webFontColor block mb-3' title='Blog'>Blog</Link>
             <Link href='/contact' className='webFontColor block mb-3' title='Contact Limo Royale'>Contact Us</Link>
             <Link href='/sitemap' className='webFontColor block mb-3' title='Sitemap'>Sitemap</Link>
           </div>

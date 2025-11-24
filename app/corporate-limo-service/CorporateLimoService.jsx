@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import ServiceSidePanel from '../components/ServiceSidePanel'
 import CorporateBanner from '../../public/assets/services/corporate-service.jpg'
+import FaqPage from './FaqPage'
 
 const CorporateLimoService = () => {
   return (
@@ -38,13 +39,13 @@ const CorporateLimoService = () => {
                             <b className='text-white w-full block mb-5 mt-5'>Why Choose Limo Royale for Corporate Travel?</b>
                             <ul className='list-disc pl-5 space-y-4 webFontColor text-base'>
                                 <li><b>Luxury Fleet</b>: Our fleet includes state-of-the-art luxury sedans, SUVs, and limousines, each designed to provide maximum comfort and convenience for business executives. Equipped with leather interiors, WiFi, and quiet, smooth rides, our vehicles allow you to work, relax, or prepare for your next meeting in complete comfort.</li>
-                                <li><b>Royale Chauffeurs</b>: Our professional <b>Royale Chauffeurs</b> are handpicked for their experience, with <b>15-20 years of expertise</b> in navigating corporate travel. They are punctual, discreet, and fully committed to providing a smooth and seamless ride for busy professionals.</li>
+                                <li><b>Royale Chauffeurs</b>: Our professional Royale Chauffeurs are handpicked for their experience, with 15-20 years of expertise in navigating corporate travel. They are punctual, discreet, and fully committed to providing a smooth and seamless ride for busy professionals.</li>
                                 <li><b>Punctuality and Precision</b>: We understand that time is of the essence in the corporate world. Our chauffeurs are trained to ensure that you arrive at your destination on time, every time. We monitor traffic, plan optimal routes, and account for all details to ensure a smooth journey, even in the busiest of cities.</li>
                             </ul>
                             <b className='text-white w-full block mb-5 mt-5'>Corporate Services We Offer:</b>
                             <ul className='list-disc pl-5 space-y-4 webFontColor text-base'>
-                                <li><b>Airport Transfers</b>: Skip the stress of airport navigation and enjoy a seamless transfer from the terminal to your destination. We monitor flight schedules and ensure on-time pickups and drop-offs, allowing you to focus on business without worry.</li>
-                                <li><b>Corporate Event Transportation</b>: Whether you’re hosting a large corporate event or attending a business seminar, <b>Limo Royale</b> provides group and individual transportation solutions. Impress clients, business partners, and colleagues by arriving in luxury and comfort.</li>
+                                <li><b>Airport Shuttle Toronto Airport Transfers</b>: Skip the stress of airport navigation and enjoy a seamless transfer from the terminal to your destination. We monitor flight schedules and ensure on-time pickups and drop-offs, allowing you to focus on business without worry.</li>
+                                <li><b>Corporate Event Transportation</b>: Whether you’re hosting a large corporate event or attending a business seminar, Limo Royale provides group and individual transportation solutions. Impress clients, business partners, and colleagues by arriving in luxury and comfort.</li>
                                 <li><b>Client and Executive Hosting</b>: When it comes to hosting important clients or executives, first impressions are everything. Our corporate limo service ensures that your VIP guests are treated to a luxurious experience, setting the tone for productive meetings and successful business dealings.</li>
                                 <li><b>Roadshows and Corporate Tours</b>: For business roadshows or tours that require multiple stops, we offer customized transportation solutions that ensure executives and clients travel efficiently, comfortably, and in style.</li>
                             </ul>
@@ -58,14 +59,25 @@ const CorporateLimoService = () => {
                             <p className='webFontColor text-base'>We offer customizable corporate packages to suit your business needs:</p><br></br>
                             <ul className='list-disc pl-5 space-y-4 webFontColor text-base'>
                                 <li><b>Executive Travel Package</b>: Ideal for senior executives, this package offers door-to-door service with the option for extended bookings, allowing executives to make the most of their travel time.</li>
-                                <li><b>Corporate Event Package</b>: Designed for larger groups attending corporate functions, this package offers luxury transportation for employees, clients, and VIPs with multiple vehicles or shuttles as needed.</li>
-                                <li><b>Client Hosting Package</b>: Ensure that your business guests are treated with the utmost care. Our Client Hosting Package includes airport transfers, city tours, and dedicated limo service for their stay.</li>
+                                <li><b>Corporate Event Package</b>: Designed for larger groups attending corporate functions, this package offers luxury transportation for employees, clients, and VIPs with multiple vehicles or shuttles as needed. Toronto shuttle service at Limo Royal is your go-to service for transportation.</li>
+                                <li><b>Client Hosting Package</b>: Ensure that your business guests are treated with the utmost care. Our Client Hosting Package includes airport shuttle Toronto airport transfers, city tours, and dedicated limo service for their stay.</li>
                             </ul>
                             <br></br>
                             <p className='webFontColor text-base'>
                                 With <b>Limo Royale</b>, corporate travel is more than just getting from point A to point B—it’s an opportunity to enhance your professional image and make every journey productive, luxurious, and seamless.<br></br><br></br>
                                 <b>Book your Corporate Limo Service</b> today and experience the height of executive travel with <b>Limo Royale</b>
                             </p>
+                            <b className='text-white w-full block mb-5 mt-5'>Toronto Shuttle Service</b>
+                            <p className='webFontColor text-base'>Airport shuttle Toronto Limo service at Limo Royale is your go-to service for all your transportation needs. Here’s what we offer as the premium Toronto shuttle service:</p><br></br>
+                            <ul className='list-disc pl-5 space-y-4 webFontColor text-base'>
+                                <li><b>Cost-effectiveness</b>: Toronto shuttle service is cost effective as it splits the cost among multiple passengers.</li>
+                                <li><b>Comfort and convenience</b>: The shuttle service ensures your comfort with ample space, climate control functions, and on-board amenities like charging ports and Wi-Fi. Moreover, it provides convenience with door-to-door pickup and drop services.</li>
+                                <li><b>Reliability and efficiency</b>: Airport shuttle Toronto service provides great efficiency and reliability. This is possible due to features such as professional chauffeurs, flight tracking, fixed schedules, and on-board and scheduled booking.</li>
+                                <li><b>Booking and management</b>: It is simple to book via online reservations. Toronto shuttle service at Limo Royal provides real-time tracking to track all shuttles for an accurate pickup time.</li>
+                            </ul>
+                        </div>
+                        <div className='mt-10'>
+                            <FaqPage />
                         </div>
                     </div>
                 </div>

@@ -3,27 +3,23 @@
 import React, { useState, useRef } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 
-const ServiceFaq = () => {
+const FaqPage = () => {
     const faqData = [
         {
-            question: "Do you offer limo rentals for special events?",
-            answer: "Yes, we provide luxury limousines for weddings, parties, corporate events, and other special occasions."
+            question: "Do you have chauffeurs that speak multiple languages?",
+            answer: "Yes. At Toronto airport chauffeur service we cater to clients from all over the world. Therefore our team consists of chauffeurs that can converse in multiple languages."
         },
         {
-            question: "Are your vehicles available for airport transfers?",
-            answer: "Yes, our fleet is available for convenient airport pickups and drop-offs."
+            question: "How will I meet my chauffeur at the airport?",
+            answer: "After you complete all formalities at the airport you may look for your chauffeur at the arrival area. The chauffeur will be holding a sign board with your name on it. You might also receive a message from the Toronto airport chauffeur service, if you have provided your mobile number."
         },
         {
-            question: "Can I rent a limo for just a few hours?",
-            answer: "Absolutely! We offer flexible rental durations, from a few hours to full-day service."
+            question: "Will my chauffeur be there on time if my flight arrives early?",
+            answer: "Yes, we monitor all our client’s flights and ensure that we arrive on time."
         },
         {
-            question: "Do you provide luxury vehicles for corporate use?",
-            answer: "Yes, our luxury fleet is perfect for business meetings, conferences, and corporate travel."
-        },
-        {
-            question: "Is there a minimum age requirement to rent a vehicle?",
-            answer: "Yes, you must be at least 21 years old to rent most vehicles, with some luxury models requiring you to be 25."
+            question: "Will my chauffeur respect my privacy?",
+            answer: "Yes. All our chauffeurs adhere to our confidentiality policy that ensures the client’s privacy at all times."
         }
     ];
 
@@ -70,4 +66,4 @@ const ServiceFaq = () => {
     )
 }
 
-export default ServiceFaq;
+export default FaqPage;
