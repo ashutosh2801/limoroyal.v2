@@ -72,10 +72,10 @@ const Contact = () => {
                         </div>
                         <h3 className='text-white text-2xl lg:text-3xl mb-5'>Email</h3>
                         <a href='mailto:book@limo-royale.com;' className='text-base md:text-sm lg:text-base leading-relaxed webFontColor w-full inline-block mb-10'>
-                            book@limo-royale.com
+                            book@limoroyal.com
                         </a>
                     </div>
-                    <div className='bg-[#0a0a0a] p-5 md:p-5 lg:p-10' data-aos="fade-up">
+                    {/* <div className='bg-[#0a0a0a] p-5 md:p-5 lg:p-10' data-aos="fade-up">
                         <div className='w-auto inline-block bg-white rounded-full p-5 mb-5'>
                             <GlobeAltIcon className="w-5 h-5 lg:w-8 lg:h-8 text-black" />
                         </div>
@@ -83,16 +83,16 @@ const Contact = () => {
                         <a href='https://limo-royale.com/' className='text-base md:text-sm lg:text-base leading-relaxed webFontColor w-full inline-block mb-10'>
                            www.limoroyal.ca
                         </a>
-                    </div>
-                    {/* <div className='bg-[#0a0a0a] p-5 md:p-5 lg:p-10' data-aos="fade-up">
+                    </div> */}
+                    <div className='bg-[#0a0a0a] p-5 md:p-5 lg:p-10' data-aos="fade-up">
                         <div className='w-auto inline-block bg-white rounded-full p-5 mb-5'>
                             <MapPinIcon className="w-5 h-5 lg:w-8 lg:h-8 text-black" />
                         </div>
                         <h3 className='text-white text-2xl lg:text-3xl mb-5'>Location</h3>
-                        <a href='https://maps.app.goo.gl/oVrvqS7i5hgPHXzM7' target='_blank' className='text-base md:text-sm lg:text-base leading-relaxed webFontColor w-full inline-block mb-10'>
-                            1 Dundas Street West, Eaton Centre, Suite 2500, Toronto, ON M5G 1Z3
-                        </a>
-                    </div> */}
+                        <p className='text-base md:text-sm lg:text-base leading-relaxed webFontColor w-full inline-block mb-10'>
+                            16 Arnold St, Etobicoke, ON M8Z 5A6
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
