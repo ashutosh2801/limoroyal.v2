@@ -90,7 +90,7 @@ const Footer = () => {
                 <EnvelopeIcon className="h-4 w-4 webColor" />
               </div>
               <a href='mailto:book@limo-royale.com' className='webFontColor' title='Limo Royale Email'>
-                Email: <br /> book@limo-royale.com
+                Email: <br /> book@limoroyal.com
               </a>
             </div>
 
