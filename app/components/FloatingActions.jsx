@@ -3,7 +3,7 @@ import { FaWhatsapp } from "react-icons/fa";
 
 const FloatingActions = () => {
   return (
-    <div className="fixed bottom-5 right-5 flex-col items-end space-y-3 z-50 flex md:hidden">
+    <div className="fixed bottom-5 right-5 flex-col items-end space-y-3 z-50 flex">
       
       {/* WhatsApp */}
       <a href="https://wa.me/4167255466" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-white">
