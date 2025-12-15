@@ -29,6 +29,8 @@ import Icon1 from '../public/assets/icons/icon-1.png'
 import Icon2 from '../public/assets/icons/icon-2.png'
 import Icon3 from '../public/assets/icons/icon-3.png'
 
+import Search from '../app/components/Search'
+
 import Gallery from '../app/components/Gallery'
 
 import Testimonials from '../app/components/Testimonials'
@@ -45,11 +47,13 @@ export default function Home() {
   }
   return (
     <main>
-      <Slider/>
-
+      <div className='relative'>
+        <Slider/>
+        <Search />
+      </div>
       <div>
         <div className='container mx-auto px-2'>
-          <div className='grid md:grid-cols-2 space-x-4 py-17' data-aos="fade-up">
+          <div className='grid md:grid-cols-2 space-x-4 py-10 md:py-17' data-aos="fade-up">
             <div>
               <h1 className='text-white text-2xl lg:text-4xl mb-5 lg:mb-0 leading-snug font-medium'>Experience True Luxury with Over 20 Years of Global Expertise</h1>
             </div>

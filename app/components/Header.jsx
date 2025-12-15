@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <div>
       <nav className='relative webFont'>
-        <div className='absolute mt-3 w-full z-50 text-[15px]'>
+        <div className='header absolute mt-3 w-full z-50 text-[15px]'>
 
           {/* Top logo + contact */}
           <div className='border-b webBorderColor pb-2'>

@@ -1,10 +1,11 @@
 import React from 'react'
-
-import Blog from "./Blog";
+import Booking from "./Booking"
 
 const page = () => {
   return (
-    <Blog />
+    <div>
+        <Booking />
+    </div>
   )
 }
 
