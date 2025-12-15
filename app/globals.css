@@ -114,6 +114,16 @@ a {
   color: #ceb366;
 }
 
+.search-btn {
+  color: #FFF;
+  background-color: #bb9a4b;
+}
+
+.search-btn:hover {
+  color: #FFF;
+  background-color: #c19530;
+}
+
 .book-now-link {
   color: #FFF;
   background-color: #bb9a4b;

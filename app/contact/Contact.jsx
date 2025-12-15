@@ -90,7 +90,7 @@ const Contact = () => {
                         </div>
                         <h3 className='text-white text-2xl lg:text-3xl mb-5'>Location</h3>
                         <p className='text-base md:text-sm lg:text-base leading-relaxed webFontColor w-full inline-block mb-10'>
-                            16 Arnold St, Etobicoke, ON M8Z 5A6
+                            16 Arnold St, Toronto, ON M8Z 5A6
                         </p>
                     </div>
                 </div>
