@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import type { ReactNode } from 'react'
 import { Sora } from "next/font/google";
+import Providers from "./providers";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -86,9 +87,11 @@ export default function RootLayout({
           ></iframe>
         </noscript>
         {/* End Google Tag Manager (noscript) */}
+        <Providers>
         <Header />
         {children}
         <Footer />
+        </Providers>
       </body>
     </html>
   );
