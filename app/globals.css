@@ -209,6 +209,25 @@ a {
   background-position: center;
 }
 
+.react-datepicker {
+  border-radius: 0.75rem;
+}
+
+.react-datepicker__header {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__time-list-item--selected {
+  background-color: #000 !important;
+}
+
+.react-datepicker__input-container input {
+  background-color: #f3f4f6;
+}
+
+
 @media (max-width:767px){
 
   .page-bg {

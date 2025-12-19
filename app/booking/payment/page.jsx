@@ -4,37 +4,159 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  CalendarDaysIcon,
-  ClockIcon,
-  MapPinIcon,
   ExclamationCircleIcon,
   CheckCircleIcon
 } from "@heroicons/react/24/solid";
 import payment from '../../../public/assets/payment.png'
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardNumberElement,
+  CardExpiryElement,
+  CardCvcElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { useDispatch, useSelector } from "react-redux";
+import { saveSearch } from "@/store/searchSlice";
+import Tabs from "../../components/Tabs";
+import TripSummary from "../../components/TripSummary";
 
-export default function PaymentPage() {
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_KEY
+);
+
+function PaymentForm() {
   const router = useRouter();
-
-  const steps = ["Service Class", "Pickup Info", "Payment", "Checkout"];
+  const stripe = useStripe();
+  const elements = useElements();
+  const dispatch = useDispatch();
   const activeStep = 2; // Payment step
+
+  const { data } = useSelector((s) => s.search);
+
+  const [nameOnCard, setNameOnCard] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  if (!data || !data.selectedVehicle) return null;
+
+//   const amount = Number(
+//     data.selectedVehicle.price.replace("$", "")
+//   );
+
+  const amount = 12; // For testing purposes
+
+  const stripeStyle = {
+    style: {
+      base: {
+        fontSize: "14px",
+        color: "#000",
+        "::placeholder": { color: "#9ca3af" },
+      },
+      invalid: {
+        color: "#dc2626",
+      },
+    },
+  };
 
   // Trip data (should match previous pages)
   const trip = {
-    date: "Mon, Dec 8, 2025",
-    time: "01:57 AM (EST)",
-    from: "Toronto Pearson International Airport (YYZ)",
-    to: "L6Z 4V9",
+    date: new Date(data.pickupDate).toDateString(),
+    time: new Date(data.pickupTime).toLocaleTimeString(),
+    from: data.from.name,
+    to: data.to.name,
+    distanceKM: data.distanceKM,
+    pickupTimeLabel: data.pickupTimeLabel,
+    estimatedTimeLabel: data.estimatedTimeLabel,
+    durationMinutes: data.durationMinutes,
   };
 
-  // Payment form state
-  const [nameOnCard, setNameOnCard] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [cvv, setCVV] = useState("");
   const [saveCard, setSaveCard] = useState(true);
 
   const handleCheckout = () => {
     router.push("/booking/checkout");
+  };
+
+  const customerId = "cus_TEST123"; // Replace with actual customer ID from your DB
+
+  const handlePayment = async () => {
+    if (!stripe || !elements) return;
+
+    if (!nameOnCard.trim()) {
+      setError("Name on card is required");
+      return;
+    }
+
+    setProcessing(true);
+    setError("");
+
+    try {
+      // 1️⃣ Create SetupIntent
+      const res = await fetch("/api/create-setup-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: nameOnCard, email: "user@email.com" }),
+      });
+
+      const { clientSecret, customerId } = await res.json();
+
+      const cardNumberElement = elements.getElement(CardNumberElement);
+
+      console.log("SetupIntent client secret:", clientSecret);
+      console.log("Customer ID:", customerId);
+
+      // 2️⃣ Confirm card setup (SAVE CARD)
+      const result = await stripe.confirmCardSetup(clientSecret, {
+        payment_method: {
+          card: cardNumberElement,
+          billing_details: {
+            name: nameOnCard,
+          },
+        },
+      });
+
+      if (result.error) {
+        setError(result.error.message);
+        setProcessing(false);
+        return;
+      }
+
+      // 3️⃣ Saved payment method ID
+      const paymentMethodId = result.setupIntent.payment_method;
+      
+      // 4️⃣ Fetch card details from backend
+      const pmRes = await fetch("/api/get-payment-method", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentMethodId }),
+      });
+
+      const card = await pmRes.json();
+
+      const cardData = {
+        paymentMethodId,
+        brand: card.brand,
+        last4: card.last4,
+      };
+
+      dispatch(
+        saveSearch({...data, 'stripeCustomerId': customerId, ...cardData })
+      );
+
+      console.log("Saved data:", data);
+
+      // 👉 Save paymentMethodId to your DB
+      setSuccess(true);
+      setProcessing(false);
+
+      router.push("/booking/checkout");
+    } catch (err) {
+      console.error("Payment error:", err);
+      setError("Failed to save card");
+      setProcessing(false);
+    }
   };
 
   return (
@@ -45,81 +167,10 @@ export default function PaymentPage() {
             <div className="p-6 md:p-8">
 
                 {/* Blacklane Stepper */}
-                <div className="relative">
+                <Tabs activeStep={activeStep} />              
 
-                    {/* Connector Line */}
-                    <div className="absolute left-0 right-0 top-[30px] h-[2px] bg-gray-300" />
-
-                    <div className="relative flex justify-between">
-
-                    {steps.map((label, i) => {
-                        const isActive = i === activeStep;          // current page step
-                        const isCompleted = i < activeStep;         // passed steps
-
-                        return (
-                        <div key={label} className="flex flex-col items-center w-full">
-
-                            {/* Label */}
-                            <div
-                            className={`
-                                mb-2 text-[9px] md:text-xs font-semibold
-                                ${isActive || isCompleted ? "text-black" : "text-gray-400"}
-                            `}
-                            >
-                            {label}
-                            </div>
-                            
-                            {/* Circle */}
-                            <div
-                            className={`
-                                w-4 h-4 rounded-full border-[3px] z-10
-                                ${isActive ? "bg-white border-black" : ""}
-                                ${isCompleted ? "bg-black border-black" : ""}
-                                ${!isActive && !isCompleted ? "bg-white border-gray-400" : ""}
-                            `}
-                            />
-                            
-                        </div>
-                        );
-                    })}
-
-                    </div>
-
-                    {/* Progress fill line */}
-                    <div
-                    className="absolute top-[30px] h-[2px] bg-black transition-all duration-500"
-                    style={{
-                        width: `${(activeStep / (steps.length - 0.8)) * 100}%`,
-                    }}
-                    />
-                </div>
-
-                {/* --- Trip Summary --- */}
-                <div className="mt-6 bg-gray-100 rounded-xl p-4">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                    <div>
-                        <div className="text-xs md:text-sm font-semibold">
-                        {trip.date} at {trip.time}
-                        </div>
-                        <div className="text-[10px] md:text-xs text-gray-600 mt-1">
-                        <MapPinIcon className="inline w-4 h-4 mr-1 -mt-0.5 text-gray-500" />
-                        {trip.from} → {trip.to}
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2 text-[10px] md:text-xs text-gray-600">
-                        <CalendarDaysIcon className="w-4 h-4 text-gray-500" />
-                        <span>{trip.date}</span>
-                        </div>
-
-                        <div className="flex items-center gap-2 text-[10px] md:text-xs text-gray-600">
-                        <ClockIcon className="w-4 h-4 text-gray-500" />
-                        <span>{trip.time}</span>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+                {/* Trip summary (date,time,from,to) */}
+                <TripSummary trip={trip} />
 
                 {/* --- Payment Form --- */}
                 <h2 className="mt-7 text-lg md:text-xl font-bold">Add credit or debit card</h2>
@@ -133,20 +184,25 @@ export default function PaymentPage() {
                         type="text"
                         className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
                         value={nameOnCard}
+                        placeholder="Name on card"
                         onChange={(e) => setNameOnCard(e.target.value)}
                     />
+                    
                     </div>
 
                     {/* Card number */}
                     <div className="flex flex-col">
                     <label className="text-gray-700 text-xs md:text-sm font-semibold mb-1">Card number *</label>
                     <div className="relative">
-                        <input
+                        <div className="px-3 py-3 border rounded-xl bg-gray-100 border-gray-200">
+                  <CardNumberElement options={stripeStyle} />
+                </div>
+                        {/* <input
                         type="number"
                         className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
                         value={cardNumber}
                         onChange={(e) => setCardNumber(e.target.value)}
-                        />
+                        /> */}
                         <div className="absolute right-2 top-4 md:top-3">
                         <Image
                             src={payment}
@@ -163,25 +219,36 @@ export default function PaymentPage() {
                         <label className="text-gray-700 text-xs md:text-sm font-semibold mb-1">
                         Expiration date *
                         </label>
-                        <input
+                        {/* <input
                         type="number"
                         placeholder="MM/YY"
                         className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
                         value={expiry}
                         onChange={(e) => setExpiry(e.target.value)}
-                        />
+                        /> */}
+                        <div className="px-3 py-3 border rounded-xl bg-gray-100 border-gray-200">
+                    <CardExpiryElement options={stripeStyle} />
+                  </div>
                     </div>
 
                     <div className="flex flex-col">
                         <label className="text-gray-700 text-xs md:text-sm font-semibold mb-1">CVV *</label>
-                        <input
+                        {/* <input
                         type="number"
                         className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
                         value={cvv}
                         onChange={(e) => setCVV(e.target.value)}
-                        />
+                        /> */}
+                        <div className="px-3 py-3 border rounded-xl bg-gray-100 border-gray-200">
+                    <CardCvcElement options={stripeStyle} />
+                  </div>
                     </div>
                     </div>
+
+                    {/* ERROR */}
+                    {error && (
+                        <p className="text-red-500 text-xs mb-4">{error}</p>
+                    )}
 
                     {/* Save card */}
                     <label className="flex items-center gap-1 text-xs md:text-sm text-gray-700 mt-4 cursor-pointer">
@@ -210,11 +277,20 @@ export default function PaymentPage() {
                 {/* Continue button */}
                 <div className="mt-6 flex justify-end">
                 <button
-                    onClick={handleCheckout}
-                    className="py-3 px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-sm md:text-base w-full md:w-auto"
-                >
-                    Proceed to Checkout
-                </button>
+                    // onClick={handleCheckout}
+                    onClick={handlePayment}
+                    disabled={processing}
+                    className={`py-3 px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-sm md:text-base w-full md:w-auto ${
+                    processing
+                      ? "opacity-60 cursor-not-allowed"
+                      : "hover:opacity-90"
+                    }`}
+                    >
+                        {processing
+                    ? "Processing..."
+                    : `Proceed to Checkout`}
+                        
+                    </button>
                 </div>
 
             </div>
@@ -231,5 +307,16 @@ export default function PaymentPage() {
         `}</style>
       </div>
     </div>
+  );
+}
+
+
+/* ---------------- WRAPPER ---------------- */
+
+export default function PaymentPage() {
+  return (
+    <Elements stripe={stripePromise}>
+      <PaymentForm />
+    </Elements>
   );
 }

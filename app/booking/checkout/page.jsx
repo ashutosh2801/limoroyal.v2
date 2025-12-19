@@ -3,8 +3,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  CalendarDaysIcon,
-  ClockIcon,
   MapPinIcon,
   UsersIcon,
   BriefcaseIcon,
@@ -13,28 +11,114 @@ import {
 
 import vClass from "../../../public/assets/sedan/mercedes-benz-s-class.png";
 import visaIcon from "../../../public/assets/mastercard.png";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import Tabs from "../../components/Tabs";
+
+const formatDate = (isoString) => {
+  const date = new Date(isoString);
+
+  return date.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};
 
 export default function CheckoutPage() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState([]);
   const router = useRouter();
+  const activeStep = 3; // Payment step
 
-  const steps = ["Service Class", "Pickup Info", "Payment", "Checkout"];
-  const activeStep = 3;
+  const { data } = useSelector((s) => s.search);
 
-  // Trip mock data — replace later
-  const trip = {
-    date: "Mon, Dec 8, 2025",
-    time: "01:57 AM",
-    from: "Toronto Pearson International Airport (YYZ)",
-    fromAddress: "Silver Dart Dr 6301, ON L5P 1B2 Toronto, Mississauga",
-    to: "L6Z 4V9 Brampton",
-    duration: "19 min",
-    distance: "25 km",
-    car: "Mercedes Benz s-class",
-    passengers: 3,
-    bags: 2,
-    price: 147.47,
-    tax: 16.96,
-    exclTax: 130.51,
+  useEffect(() => {
+    // If no search data, redirect to home
+    if (!data || Object.keys(data).length === 0) {
+      router.push("/");
+    }
+
+    console.log("Checkout Page - Retrieved data:", data);
+  }, [router]);
+
+  const booknow = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      setErrors(null);
+
+      const payload = {
+        pickup_date: data.pickupDate,
+        pickup_time: data.pickupTime,
+        from: data.from,
+        to: data.to,
+        distance_km: data.distanceKM,
+        duration_minutes: data.durationMinutes,
+
+        vehicle: {
+          id: data.selectedVehicle.id,
+          name: data.selectedVehicle.name,
+          passengers: data.selectedVehicle.passengers,
+          luggage: data.selectedVehicle.luggage,
+          total_price: data.selectedVehicle.totalPrice,
+        },
+
+        guest: {
+          title: data.PickupInfo.title,
+          first_name: data.PickupInfo.firstName,
+          last_name: data.PickupInfo.lastName,
+          email: data.PickupInfo.email,
+          phone: data.PickupInfo.contactNumber,
+          flight_number: data.PickupInfo.flightNumber,
+          pickup_sign: data.PickupInfo.pickupSign,
+          notes: data.PickupInfo.chauffeurNotes,
+          reference_code: data.PickupInfo.referenceCode,
+        },
+
+        payment: {
+          brand: data.brand,
+          last4: data.last4,
+          payment_method_id: data.paymentMethodId, // Stripe saved card
+        },
+      };
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/bookings`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const result = await res.json();
+
+      console.log("Booking", result);
+      if (!res.ok) {
+        // If the API returns { message: "Validation failed", errors: ["Email is required", ...] }
+        setError(result.message || "Booking failed");
+        if (result.errors) {
+          const flattenedErrors = Object.values(result.errors).flat();
+          setErrors(flattenedErrors);
+        }
+        return; // Exit the function
+      }
+
+      if (res.ok) {
+        router.push(`/booking/success/${result.booking_id}`);
+      }
+    } catch (err) {
+      console.error("Booknow error:", err);
+      setError("A network error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,45 +131,7 @@ export default function CheckoutPage() {
               {/* ===========================
                   STEP INDICATOR
               ============================ */}
-              <div className="relative pb-5">
-                <div className="absolute left-0 right-0 top-[30px] h-[2px] bg-gray-300" />
-
-                <div className="relative flex justify-between">
-                  {steps.map((label, i) => {
-                    const isActive = i === activeStep;
-                    const isCompleted = i < activeStep;
-
-                    return (
-                      <div key={label} className="flex flex-col items-center w-full">
-                        <div
-                          className={`
-                            mb-2 text-[9px] md:text-xs font-semibold
-                            ${isActive || isCompleted ? "text-black" : "text-gray-400"}
-                          `}
-                        >
-                          {label}
-                        </div>
-
-                        <div
-                          className={`
-                            w-4 h-4 rounded-full border-[3px] z-10
-                            ${isActive ? "bg-white border-black" : ""}
-                            ${isCompleted ? "bg-black border-black" : ""}
-                            ${!isActive && !isCompleted ? "bg-white border-gray-400" : ""}
-                          `}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div
-                  className="absolute top-[30px] h-[2px] bg-black transition-all"
-                  style={{
-                    width: `${(activeStep / (steps.length - 1)) * 100}%`,
-                  }}
-                />
-              </div>
+              <Tabs activeStep={activeStep} />     
 
               {/* ===========================
                   TWO COLUMN LAYOUT
@@ -103,7 +149,7 @@ export default function CheckoutPage() {
                         {/* Title row */}
                         <div className="flex justify-between items-center">
                         <p className="font-semibold text-xs md:text-sm">
-                            {trip.date} • {trip.time}
+                            {formatDate(data.pickupDate)} • {data.pickupTimeLabel}
                         </p>
                         <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                         </div>
@@ -118,7 +164,7 @@ export default function CheckoutPage() {
                                     loading="lazy"
                                     allowFullScreen
                                     referrerPolicy="no-referrer-when-downgrade"
-                                    src="https://www.google.com/maps?q=Toronto+Pearson+International+Airport+YYZ+to+L6Z+4V9+Brampton&output=embed"
+                                    src={`https://www.google.com/maps?q=${data.from.name}+to+${data.to.name}&output=embed`}
                                 ></iframe>
                             </div>
                         </div>
@@ -130,8 +176,8 @@ export default function CheckoutPage() {
                         <div className="flex items-start gap-2">
                             <MapPinIcon className="w-4 h-4 mt-1 text-gray-600 flex-shrink-0" />
                             <div>
-                            <p className="font-semibold">{trip.from}</p>
-                            <p className="text-gray-600">{trip.fromAddress}</p>
+                            <p className="font-semibold">{data.from.name}</p>
+                            <p className="text-gray-600">{data.from.address}</p>
                             </div>
                         </div>
 
@@ -139,15 +185,15 @@ export default function CheckoutPage() {
                         <div className="flex items-start gap-2">
                             <MapPinIcon className="w-4 h-4 mt-1 text-red-500" />
                             <div>
-                            <p className="font-semibold text-xs md:text-base">{trip.to}</p>
-                            <p className="text-gray-600 text-xs md:text-sm">Canada</p>
+                            <p className="font-semibold text-xs md:text-base">{data.to.name}</p>
+                            <p className="text-gray-600 text-xs md:text-sm">{data.to.address}</p>
                             </div>
                         </div>
                         </div>
 
                         {/* Time + Distance */}
                         <p className="mt-4 text-xs text-gray-600">
-                        {trip.duration} • {trip.distance}
+                        {data.durationMinutes} minutes • {data.distanceKM} km
                         </p>
                     </div>
 
@@ -155,15 +201,14 @@ export default function CheckoutPage() {
                     <div className="mt-6 border border-gray-200 rounded-xl p-4">
                         <div className="flex justify-between">
                             <div>
-                            <p className="font-semibold text-xs md:text-sm">{trip.car}</p>
+                            <p className="font-semibold text-xs md:text-sm">{data.selectedVehicle.name}</p>
                             <div className="flex items-center gap-4 mt-3 text-xs text-gray-700">
                                 <span className="flex items-center gap-2">
-                                <UsersIcon className="w-5 h-5" /> {trip.passengers}
+                                  <UsersIcon className="w-5 h-5" /> {data.selectedVehicle.passengers}
                                 </span>
                                 <span className="flex items-center gap-2">
-                                <BriefcaseIcon className="w-5 h-5" /> {trip.bags}
-                                </span>
-                                
+                                  <BriefcaseIcon className="w-5 h-5" /> {data.selectedVehicle.luggage}
+                                </span>                                
                             </div>
                             <div className="flex items-center gap-4 mt-3 text-xs text-gray-700">
                                 <p className="flex items-start md:items-center gap-1">
@@ -174,9 +219,12 @@ export default function CheckoutPage() {
                         
                             <div className="flex items-start flex-col md:flex-row">
                                 <Image
-                                    src={vClass}
-                                    alt="Car"
+                                    src={data.selectedVehicle.img ?? vClass}
+                                    alt={data.selectedVehicle.name}
                                     className="w-42 h-auto"
+                                    width={168}      // w-42 = 168px
+                                    height={100}     // adjust as per your image ratio
+                                    priority
                                 />
                                 <button className="text-xs font-semibold mt-3 md:mt-0 py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                             </div>
@@ -192,12 +240,26 @@ export default function CheckoutPage() {
                             {/* Guest Name */}
                             <div className="p-5 flex justify-between items-start border-b border-gray-200">
                             <div>
-                                <p className="text-sm text-gray-500">Guest name</p>
-                                <p className="text-xs md:text-sm font-semibold mt-1">Mr. Amjad</p>
-                                <p className="text-xs md:text-sm text-gray-500 mt-4">Contact details</p>
-                                <p className="text-xs md:text-sm font-medium mt-1">
-                                amjad@gmail.com • +94 1232 456 789
-                                </p>
+                                {/* {data.PickupInfo.bookingFor === "myself" && (
+                                  <>
+                                    <p className="text-sm text-gray-500">Guest name</p>
+                                    <p className="text-xs md:text-sm font-semibold mt-1">Mr. Amjad</p>
+                                    <p className="text-xs md:text-sm text-gray-500 mt-4">Contact details</p>
+                                    <p className="text-xs md:text-sm font-medium mt-1">
+                                    amjad@gmail.com • +94 1232 456 789
+                                    </p>
+                                  </>
+                                )}
+                                {data.PickupInfo.bookingFor === "someoneElse" && ( */}
+                                  <>
+                                    <p className="text-sm text-gray-500">Guest name</p>
+                                    <p className="text-xs md:text-sm font-semibold mt-1">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</p>
+                                    <p className="text-xs md:text-sm text-gray-500 mt-4">Contact details</p>
+                                    <p className="text-xs md:text-sm font-medium mt-1">
+                                    {`${data.PickupInfo.email} • +${data.PickupInfo.contactNumber}`}
+                                    </p>
+                                  </>
+                                {/* )} */}
                             </div>
 
                             <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
@@ -207,7 +269,7 @@ export default function CheckoutPage() {
                             <div className="p-5 flex justify-between items-center">
                             <div>
                                 <p className="text-sm text-gray-500">Flight number</p>
-                                <p className="text-xs md:text-sm font-semibold mt-1">–</p>
+                                <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.flightNumber || "-"}</p>
                             </div>
 
                             <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
@@ -217,7 +279,7 @@ export default function CheckoutPage() {
                             <div className="px-5 py-2 flex justify-between items-center">
                             <div>
                                 <p className="text-sm text-gray-500">Pickup sign</p>
-                                <p className="text-xs md:text-sm font-semibold mt-1">Amjad Mowlana</p>
+                                <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.pickupSign || "-"}</p>
                             </div>
                             </div>
 
@@ -225,7 +287,7 @@ export default function CheckoutPage() {
                             <div className="px-5 py-2 flex justify-between items-center">
                             <div>
                                 <p className="text-sm text-gray-500">Notes for the chauffeur</p>
-                                <p className="text-xs md:text-sm font-semibold mt-1">–</p>
+                                <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.chauffeurNotes || "-"}</p>
                             </div>
                             </div>
 
@@ -233,7 +295,7 @@ export default function CheckoutPage() {
                             <div className="px-5 py-2 flex justify-between items-center">
                             <div>
                                 <p className="text-sm text-gray-500">Reference code or cost center</p>
-                                <p className="text-xs md:text-sm font-semibold mt-1">–</p>
+                                <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.referenceCode || "-"}</p>
                             </div>
                             </div>
 
@@ -252,10 +314,10 @@ export default function CheckoutPage() {
                             <p className="text-sm text-gray-700">Payment</p>
                             <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                         </div>
-                        <b className="text-xs md:text-sm font-semibold">Amjad Mowlana</b>
+                        <b className="text-xs md:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
                         <div className="flex items-center gap-2 text-xs md:text-sm font-medium mt-2">
                             <Image src={visaIcon} alt="Visa" className="h-5 w-auto" />
-                            •••• 2950 • 09/2029
+                            •••• {data.last4} ({data.brand.toUpperCase()})
                         </div>
                     </div>
                     {/* Billing info */}
@@ -265,7 +327,7 @@ export default function CheckoutPage() {
                                 <p className="text-sm text-gray-700">Billing Information</p>
                                 <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                             </div>
-                            <b className="text-xs md:text-sm font-semibold">-</b>
+                            <b className="text-xs md:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
                         </div>
                     </div>
                     {/* Price breakdown */}
@@ -273,37 +335,46 @@ export default function CheckoutPage() {
                         <div className="text-sm">
                         <div className="flex justify-between py-1">
                             <span className="text-gray-700">Price excl. tax</span>
-                            <span>$ {trip.exclTax}</span>
+                            <span>{data.selectedVehicle.subTotalLabel}</span>
                         </div>
 
                         <div className="flex justify-between py-1">
                             <span className="text-gray-700">Estimated tax</span>
-                            <span>$ {trip.tax}</span>
+                            <span>{data.selectedVehicle.taxLabel}</span>
                         </div>
 
                         {/* Promo */}
-                        <details className="mt-4 cursor-pointer">
+                        {/* <details className="mt-4 cursor-pointer">
                             <summary className="text-sm font-medium">Add promotion</summary>
                             <input
                             type="text"
                             placeholder="Enter code"
                             className="w-full px-3 py-3 text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none mt-2"
                             />
-                        </details>
+                        </details> */}
 
                         {/* Total */}
                         <div className="flex justify-between items-center pt-4 border-t border-gray-300 mt-4">
                             <span className="font-normal text-md">Total price</span>
-                            <span className="font-semibold text-base">$ {trip.price}</span>
+                            <span className="font-semibold text-base">{data.selectedVehicle.totalLabel}</span>
                         </div>
                         </div>
                     </div>
 
                     {/* Book now button */}
                     <div>
-                        <button className="w-full py-3 text-white webBG rounded-md hover:opacity-90 text-sm mt-4 cursor-pointer">
-                            Book now
+                        <button
+                          onClick={booknow}
+                          disabled={loading}
+                          className="w-full py-3 text-white webBG rounded-md hover:opacity-90 text-sm mt-4 cursor-pointer">
+                            {loading ? "Booking..." : "Book now"}
                         </button>
+                        {error && (
+                          <p className="text-red-500 text-xs mt-2">{error}</p>
+                        )}
+                        {errors && errors.map((error, i) => (
+                          <p key={i} className="text-red-500 text-xs mt-2">{error}</p>
+                        ))}
                         <p className="text-gray-700 text-xs mt-4">By Booking, Our <a href="" target="_blank" className="font-medium underline text-black">Terms & Conditions</a> apply in their current version</p>
                     </div>
                 </div>

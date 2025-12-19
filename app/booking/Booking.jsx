@@ -1,79 +1,124 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CheckBadgeIcon,
-  MapPinIcon,
-  CalendarDaysIcon,
-  ClockIcon,
   ExclamationCircleIcon,
   CheckCircleIcon
 } from "@heroicons/react/24/solid";
+import { saveSearch } from "@/store/searchSlice";
+import TripSummary from "../components/TripSummary";
+import Tabs from "../components/Tabs";
+
 
 export default function Booking() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const activeStep = 0; // Service Class
+  
   const [selectedIdx, setSelectedIdx] = useState(null);
 
-  // sample trip info — replace with router query or state passed from Search
+  const { data } = useSelector((state) => state.search);
+
   const trip = {
-    date: "Mon, Dec 8, 2025",
-    time: "01:57 AM (EST)",
-    from: "Toronto Pearson International Airport (YYZ)",
-    to: "L6Z 4V9",
+    date: new Date(data.pickupDate).toDateString(),
+    time: new Date(data.pickupTime).toLocaleTimeString(),
+    from: data.from.name,
+    to: data.to.name,
+    distanceKM: data.distanceKM,
+    pickupTimeLabel: data.pickupTimeLabel,
+    estimatedTimeLabel: data.estimatedTimeLabel,
+    durationMinutes: data.durationMinutes,
   };
 
-  const vehicles = [
-    {
-      id: "SUV",
-      name: "Cadilac Escalade ESV",
-      price: "$147.47",
-      img: "../../assets/suv/cadilac-escalade-esv.png",
-      desc: "Ideal for single passengers or small groups",
-      passengers: 6,
-      luggage: 6,
-    },
-    {
-      id: "SEDAN",
-      name: "BMW 7 Series",
-      price: "$179.63",
-      img: "../../assets/sedan/bmw-7-series.png",
-      desc: "Traditional limo options for small to medium groups.",
-      passengers: 4,
-      luggage: 2,
-    },
-    {
-      id: "SEDAN 2",
-      name: "Mercedes-Benzn S-Class",
-      price: "$247.88",
-      img: "../../assets/sedan/mercedes-benz-s-class.png",
-      desc: "Mercedes-Benz S-Class or similar",
-      passengers: 4,
-      luggage: 2,
-    },
-    {
-      id: "Luxury Coaches",
-      name: "Prevost H3",
-      price: "$435.69",
-      img: "../../assets/coaches/prevost-h3.png",
-      desc: "Ideal for large events and tours.",
-      passengers: 56,
-      luggage: 112,
-    },
-    {
-      id: "Stretch Limousines",
-      name: "Royale Stretch Limousines",
-      price: "$199.99",
-      img: "../../assets/limousines/stretch.png",
-      desc: "Offering comfort and a touch of elegance for intimate gatherings or corporate transfers.",
-      passengers: 10,
-      luggage: 6,
-    },
-  ];
+  const [vehicles, setPickups] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const steps = ["Service Class", "Pickup Info", "Payment", "Checkout"];
-  const activeStep = 0; // Service Class
+  useEffect(() => {
+    const loadPickups = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/vehicles`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error(`Failed to load pickups: ${res.status}`);
+        }
+
+        const json = await res.json();
+
+        // Laravel usually doesn't return "success"
+        setPickups(json.data ?? json);
+
+        console.log("Fetched pickups:", json.data ?? json);
+      } catch (err) {
+        console.error(err);
+        console.error("Pickup fetch error:", err);
+      }
+      finally {
+        setLoading(false);
+      }
+    };
+
+    loadPickups();
+  }, []);  
+
+  const pricedVehicles = vehicles.map((v) => ({
+    ...v,
+    price: `$${(parseFloat(v.baseFare) + (parseFloat(v.priceKM) * trip.distanceKM)).toFixed(2)}`,
+  }));
+
+  const selectVahicle = () => {
+    if (selectedIdx === null) return;
+
+    const v = vehicles[selectedIdx];
+
+    let subTotalPrice = (
+      parseFloat(v.baseFare) +
+      parseFloat(v.priceKM) * parseFloat(trip.distanceKM)
+    ).toFixed(2);
+
+    let tax = subTotalPrice * (13/100);
+    let totalPrice = subTotalPrice + tax;
+
+    subTotalPrice = Number(subTotalPrice).toFixed(2);
+    tax = Number(tax).toFixed(2);
+    totalPrice = Number(totalPrice).toFixed(2);
+
+    const selectedVehicle = {
+      ...v,
+      subTotalLabel: `$${subTotalPrice}`,
+      subTotalPrice: subTotalPrice, // optional numeric value for calculations
+      taxLabel: `Tax (13%) $${tax}`,
+      taxPrice: tax, // optional numeric value for calculations
+      totalLabel: `$${totalPrice}`,
+      totalPrice: totalPrice, // optional numeric value for calculations
+    };    
+
+    dispatch(
+      saveSearch({ 
+        ...data, selectedVehicle
+      })
+    );
+
+    //console.log("Saved data:", data);
+
+    // For example, navigate to the next step
+    router.push("/booking/pickup-info");
+  };
 
   return (
     <div className="min-h-screen">
@@ -83,86 +128,30 @@ export default function Booking() {
           <div className="bg-white rounded-md shadow-xl overflow-hidden text-black">
             <div className="p-6 md:p-8">
               {/* Blacklane Stepper */}
-              <div className="relative">
-
-                {/* Connector Line */}
-                <div className="absolute left-0 right-0 top-[30px] h-[2px] bg-gray-300" />
-
-                <div className="relative flex justify-between">
-
-                  {steps.map((label, i) => {
-                    const isActive = i === activeStep;          // current page step
-                    const isCompleted = i < activeStep;         // passed steps
-
-                    return (
-                      <div key={label} className="flex flex-col items-center w-full">
-
-                        {/* Label */}
-                        <div
-                          className={`
-                            mb-2 text-[9px] md:text-xs font-semibold
-                            ${isActive || isCompleted ? "text-black" : "text-gray-400"}
-                          `}
-                        >
-                          {label}
-                        </div>
-                        
-                        {/* Circle */}
-                        <div
-                          className={`
-                            w-4 h-4 rounded-full border-[3px] z-10
-                            ${isActive ? "bg-white border-black" : ""}
-                            ${isCompleted ? "bg-black border-black" : ""}
-                            ${!isActive && !isCompleted ? "bg-white border-gray-400" : ""}
-                          `}
-                        />
-                        
-                      </div>
-                    );
-                  })}
-
-                </div>
-
-                {/* Progress fill line */}
-                <div className="absolute top-[30px] h-[2px] bg-black transition-all duration-500"
-                  style={{
-                    width: `${(activeStep + 0.4 / (steps.length - 1)) * 100}%`,
-                  }}
-                />
-              </div>
+              <Tabs activeStep={activeStep} />              
 
               {/* Trip summary (date,time,from,to) */}
-              <div className="mt-6 bg-gray-100 rounded-xl p-4">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                  <div>
-                    <div className="text-xs md:text-sm font-semibold">{trip.date} at {trip.time}</div>
-                    <div className="text-[10px] md:text-xs text-gray-600 mt-1">
-                      <MapPinIcon className="inline w-4 h-4 mr-1 -mt-0.5 text-gray-500" />
-                      <span>{trip.from} → {trip.to}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 text-[10px] md:text-xs text-gray-600">
-                      <CalendarDaysIcon className="w-4 h-4 text-gray-500" />
-                      <span>{trip.date}</span>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-[10px] md:text-xs text-gray-600">
-                      <ClockIcon className="w-4 h-4 text-gray-500" />
-                      <span>{trip.time}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <TripSummary trip={trip} />
+              
 
               {/* Heading */}
               <h2 className="mt-6 text-lg md:text-xl font-bold">Select a vehicle class</h2>
               <small className="text-gray-500 text-[10px] md:text-xs">All prices include estimated VAT, Fees, and Tolls</small>
 
+              {loading && (
+                <div className="flex items-center justify-center h-64">
+                  <div className="w-10 h-10 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
+                </div>
+              )}
+
+              {error && (
+                <p className="text-red-500 text-center">{error}</p>
+              )}
+
               {/* Vehicles grid */}
+              {!loading && !error && (<>
               <div className="mt-4 grid grid-cols-1 gap-4">
-                {vehicles.map((v, idx) => {
+                {pricedVehicles.map((v, idx) => {
                   const isSelected = selectedIdx === idx;
                   return (
                     <button
@@ -200,7 +189,7 @@ export default function Booking() {
                         </div>
 
                         <div>
-                          <p className="text-xs text-gray-600 mt-1">{v.desc}</p>
+                          <p className="text-xs text-gray-600 mt-1" dangerouslySetInnerHTML={{ __html: v.desc }} />
                         </div>
 
                         
@@ -243,6 +232,7 @@ export default function Booking() {
                   );
                 })}
               </div>
+              
 
               {/* Continue CTA */}
               <div className="mt-6 flex md:justify-end">
@@ -253,14 +243,16 @@ export default function Booking() {
                       ? "webBG cursor-pointer text-white"
                       : "bg-gray-300 text-gray-600 cursor-not-allowed"
                   }`}
-                  onClick={() => {
-                    router.push("/booking/pickup-info");
-                    console.log("selected vehicle:", vehicles[selectedIdx]);
+                  onClick={() => { selectVahicle();
+                    // router.push("/booking/pickup-info");
+                    // console.log("selected vehicle:", vehicles[selectedIdx]);
                   }}
                 >
                   Continue
                 </button>
-              </div>
+              </div></>
+
+              )}
 
               <div className="border-t border-gray-200 mt-5">
                 <h6 className="py-5 flex w-full text-black text-xs md:text-sm"> <ExclamationCircleIcon className="h-4 w-4 md:h-5 md:w-5 text-black mr-1" /> Eligable promotion auto-supplied</h6>
