@@ -7,7 +7,7 @@ export default function Booknow() {
     <main>        
         <div className='relative'>
             <Slider />
-            <Search />
+            <Search /> 
         </div>
     </main>
     )
