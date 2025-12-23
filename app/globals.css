@@ -257,7 +257,6 @@ a {
   color: #ceb366;
 }
 
-<<<<<<< HEAD
 /* Calendar container */
 .large-datepicker {
   font-size: 2rem;
@@ -304,13 +303,4 @@ a {
 }
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
   width: 120px !important;
-=======
-.gallery-swiper .swiper-pagination-bullet {
-  background: #fff;
-  opacity: 0.4;
-}
-
-.gallery-swiper .swiper-pagination-bullet-active {
-  opacity: 1;
->>>>>>> a3c8d0b71877c1086a6e0ea589bbe63bba8c6585
 }
