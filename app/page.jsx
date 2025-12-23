@@ -3,7 +3,6 @@ import Home from "../app/home/page"
 
 const page = () => {
   return (
-<<<<<<< HEAD
     <main>
       <div className='relative'>
         <Slider/>
@@ -299,10 +298,6 @@ const page = () => {
 
     </main>
   );
-=======
-    <Home />
-  )
->>>>>>> a3c8d0b71877c1086a6e0ea589bbe63bba8c6585
 }
 
 export default page
