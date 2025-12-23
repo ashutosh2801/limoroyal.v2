@@ -1,51 +1,9 @@
-'use client'
-import React, { useState, useRef } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeadset } from '@fortawesome/free-solid-svg-icons'
-import Slider from './Slider'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/autoplay'
-import 'swiper/css/navigation'
-import 'swiper/css/effect-fade'
-import { Autoplay, EffectFade } from 'swiper/modules'
-import Image from 'next/image'
-import cat1 from '../public/assets/categories/1.png'
-import cat2 from '../public/assets/categories/2.png'
-import cat3 from '../public/assets/categories/3.png'
-import cat4 from '../public/assets/categories/4.png'
-import cat5 from '../public/assets/categories/5.png'
+import React from 'react'
+import Home from "../app/home/page"
 
-import { PlayIcon } from '@heroicons/react/24/solid'
-import VideoThumbnail from '../public/assets/banners/banner-video.png' 
-import CarBanner from '../public/assets/banners/banner-1.jpg'
-
-import GlobalImg1 from '../public/assets/banners/global-1.jpg'
-import GlobalImg2 from '../public/assets/banners/global-2.jpg'
-import GlobalImg3 from '../public/assets/banners/global-3.jpg'
-import GlobalImg4 from '../public/assets/banners/global-4.jpg'
-
-import Icon1 from '../public/assets/icons/icon-1.png'
-import Icon2 from '../public/assets/icons/icon-2.png'
-import Icon3 from '../public/assets/icons/icon-3.png'
-
-import Search from '../app/components/Search'
-
-import Gallery from '../app/components/Gallery'
-
-import Testimonials from '../app/components/Testimonials'
-
-export default function Home() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const videoRef = useRef(null)
-
-  const handlePlay = () => {
-    setIsPlaying(true)
-    if (videoRef.current) {
-      videoRef.current.play()
-    }
-  }
+const page = () => {
   return (
+<<<<<<< HEAD
     <main>
       <div className='relative'>
         <Slider/>
@@ -341,4 +299,10 @@ export default function Home() {
 
     </main>
   );
+=======
+    <Home />
+  )
+>>>>>>> a3c8d0b71877c1086a6e0ea589bbe63bba8c6585
 }
+
+export default page

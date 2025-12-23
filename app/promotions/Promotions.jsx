@@ -3,7 +3,7 @@ import Image from 'next/image'
 import ServiceSidePanel from '../components/ServiceSidePanel'
 import ServiceFaq from '../components/ServiceFaq'
 import CustomerExperiences from '../components/CustomerExperiences'
-import PromotionsBanner from '../../public/assets/services/promotions-service.jpg'
+import PromotionsBanner from '../../public/assets/banners/value-bg.jpg'
 
 const Promotions = () => {
   return (
@@ -30,7 +30,7 @@ const Promotions = () => {
                     <ServiceSidePanel />
                     <div className='w-full md:w-3/5 lg:w-2/3'>
                         <div data-aos="fade-up">
-                            <Image src={PromotionsBanner} className='w-full h-full' alt='Promotion Limo Service' />
+                            <Image src={PromotionsBanner} className='w-full h-[500px] object-cover object-bottom' alt='Promotion Limo Service' />
                         </div>
                         <div className='border-b webBorderColor pb-10 mb-10' data-aos="fade-up">
                             <h1 className='text-white text-2xl lg:text-4xl mt-10 mb-5 lg:mb-10'>Arrive in Style and Make Memories to Last a Lifetime</h1>

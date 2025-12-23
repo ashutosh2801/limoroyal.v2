@@ -7,9 +7,9 @@ import 'swiper/css/navigation'
 import 'swiper/css/effect-fade'
 import { Autoplay, EffectFade } from 'swiper/modules'
 import Image from 'next/image'
-import slider1 from '../public/assets/slides/1.jpg'
-import slider2 from '../public/assets/slides/2.jpg'
-import slider3 from '../public/assets/slides/3.png'
+import slider1 from '../../public/assets/slides/1.jpg'
+import slider2 from '../../public/assets/slides/2.jpg'
+import slider3 from '../../public/assets/slides/3.png'
 
 const Slider = () => {
     const slides = [

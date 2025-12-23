@@ -45,9 +45,9 @@ const Testimonials = () => {
         },
     ]
   return (
-    <div className='py-15'>
+    <div className='py-5'>
         <div className='container mx-auto px-2'>
-            <div className='pb-5 text-center'>
+            <div className='pb-0 md:pb-5 text-center'>
                 <small className='webColor uppercase'>Testimonials</small>
                 <h2 className='text-white text-2xl lg:text-4xl leading-snug my-2 font-medium' data-aos="fade-up">Unmatched Luxury, Always New</h2>
             </div>
