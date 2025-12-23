@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -39,14 +39,13 @@ function PaymentForm() {
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [saveCard, setSaveCard] = useState(true);
+
+  useEffect(()=>{
+    console.log(data);
+  }, [data]);
 
   if (!data || !data.selectedVehicle) return null;
-
-//   const amount = Number(
-//     data.selectedVehicle.price.replace("$", "")
-//   );
-
-  const amount = 12; // For testing purposes
 
   const stripeStyle = {
     style: {
@@ -73,13 +72,9 @@ function PaymentForm() {
     durationMinutes: data.durationMinutes,
   };
 
-  const [saveCard, setSaveCard] = useState(true);
-
-  const handleCheckout = () => {
-    router.push("/booking/checkout");
-  };
-
-  const customerId = "cus_TEST123"; // Replace with actual customer ID from your DB
+  useEffect(()=>{
+    setNameOnCard(data?.cardData?.nameOnCard || "");
+  }, [data]);
 
   const handlePayment = async () => {
     if (!stripe || !elements) return;
@@ -97,7 +92,7 @@ function PaymentForm() {
       const res = await fetch("/api/create-setup-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: nameOnCard, email: "user@email.com" }),
+        body: JSON.stringify({ name: nameOnCard, email: data?.PickupInfo?.email }),
       });
 
       const { clientSecret, customerId } = await res.json();
@@ -137,12 +132,14 @@ function PaymentForm() {
 
       const cardData = {
         paymentMethodId,
-        brand: card.brand,
-        last4: card.last4,
+        nameOnCard,
+        brand: card?.brand,
+        last4: card?.last4,
+        saveCard
       };
 
       dispatch(
-        saveSearch({...data, 'stripeCustomerId': customerId, ...cardData })
+        saveSearch({...data, 'stripeCustomerId': customerId, cardData })
       );
 
       console.log("Saved data:", data);
@@ -195,8 +192,8 @@ function PaymentForm() {
                     <label className="text-gray-700 text-xs md:text-sm font-semibold mb-1">Card number *</label>
                     <div className="relative">
                         <div className="px-3 py-3 border rounded-xl bg-gray-100 border-gray-200">
-                  <CardNumberElement options={stripeStyle} />
-                </div>
+                          <CardNumberElement options={stripeStyle} />
+                        </div>
                         {/* <input
                         type="number"
                         className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"

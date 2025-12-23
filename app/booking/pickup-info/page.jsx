@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CalendarDaysIcon,
@@ -35,18 +35,22 @@ export default function PickupInfoPage() {
 
   const [form, setForm] = useState({
     bookingFor: "myself",
-    title: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    contactNumber: "",
-    flightNumber: "",
-    pickupSign: "",
-    chauffeurNotes: "",
-    referenceCode: "",
+    title: data?.PickupInfo?.title || "",
+    firstName: data?.PickupInfo?.firstName || "",
+    lastName: data?.PickupInfo?.lastName || "",
+    email: data?.PickupInfo?.email || "",
+    contactNumber: data?.PickupInfo?.contactNumber || "",
+    flightNumber: data?.PickupInfo?.flightNumber || "",
+    pickupSign: data?.PickupInfo?.pickupSign || "",
+    chauffeurNotes: data?.PickupInfo?.chauffeurNotes || "",
+    referenceCode: data?.PickupInfo?.referenceCode || "",
   });
 
   const [errors, setErrors] = useState({});
+
+  useEffect(()=>{
+      console.log(data);
+    }, [data]);
 
   const validate = () => {
     const newErrors = {};
@@ -234,6 +238,8 @@ export default function PickupInfoPage() {
                   <div className="mt-2 p-4 border border-gray-200 rounded-xl">
                     <input
                       type="text"
+                      value={form.flightNumber}
+                      onChange={(e) => setForm({ ...form, flightNumber: e.target.value })}
                       placeholder="Flight number"
                       className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
                     />
@@ -243,6 +249,8 @@ export default function PickupInfoPage() {
                   <div className="mb-3">
                     <input
                       type="text"
+                      value={form.pickupSign}
+                      onChange={(e) => setForm({ ...form, pickupSign: e.target.value })}
                       placeholder="Pickup Sign"
                       className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
                     />
@@ -251,6 +259,8 @@ export default function PickupInfoPage() {
                   <div className="mb-3">
                     <textarea
                       type="text"
+                      value={form.chauffeurNotes}
+                      onChange={(e) => setForm({ ...form, chauffeurNotes: e.target.value })}
                       placeholder="Notes for the chauffeur"
                       className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none min-h-25"
                     ></textarea>
@@ -259,6 +269,8 @@ export default function PickupInfoPage() {
                   <div className="mb-3">
                     <input
                       type="text"
+                      value={form.referenceCode}
+                      onChange={(e) => setForm({ ...form, referenceCode: e.target.value })}
                       placeholder="Reference code or cost center"
                       className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
                     />

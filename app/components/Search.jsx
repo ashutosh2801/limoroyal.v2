@@ -84,7 +84,7 @@ export default function Search() {
     autocompleteService.current.getPlacePredictions(
       {
         input: value,
-        types: ["establishment"],
+        // types: ["establishment", ""],
         componentRestrictions: { country: "ca" },
       },
       (predictions, status) => {
@@ -171,6 +171,7 @@ export default function Search() {
           origin: { lat: from.lat, lng: from.lng },
           destination: { lat: to.lat, lng: to.lng },
           travelMode: window.google.maps.TravelMode.DRIVING,
+          unitSystem: google.maps.UnitSystem.IMPERIAL,
 
           // THIS IS THE KEY PART
           drivingOptions: {
@@ -410,6 +411,11 @@ export default function Search() {
                 placeholderText="Pickup date"
                 className={inputClass}
                 wrapperClassName="w-full"
+
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                calendarClassName="large-datepicker"
               />
             </div>
 
@@ -420,11 +426,12 @@ export default function Search() {
                 onChange={setPickupTime}
                 showTimeSelect
                 showTimeSelectOnly
-                timeIntervals={5}
+                timeIntervals={1}
                 dateFormat="hh:mm aa"
                 placeholderText="Pickup time"
                 className={inputClass}
                 wrapperClassName="w-full"
+                calendarClassName="large-timepicker"
               />
             </div>
 

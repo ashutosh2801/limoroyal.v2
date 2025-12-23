@@ -11,9 +11,10 @@ import {
 
 import vClass from "../../../public/assets/sedan/mercedes-benz-s-class.png";
 import visaIcon from "../../../public/assets/mastercard.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Tabs from "../../components/Tabs";
+import { saveSearch } from "@/store/searchSlice";
 
 const formatDate = (isoString) => {
   const date = new Date(isoString);
@@ -27,6 +28,9 @@ const formatDate = (isoString) => {
 };
 
 export default function CheckoutPage() {
+
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState([]);
@@ -56,32 +60,41 @@ export default function CheckoutPage() {
         from: data.from,
         to: data.to,
         distance_km: data.distanceKM,
+        distance_mile: data.distanceMiles,
         duration_minutes: data.durationMinutes,
+
+        flight_number: data.PickupInfo.flightNumber,
+        pickup_sign: data.PickupInfo.pickupSign,
+        notes: data.PickupInfo.chauffeurNotes,
+        reference_code: data.PickupInfo.referenceCode,
 
         vehicle: {
           id: data.selectedVehicle.id,
           name: data.selectedVehicle.name,
           passengers: data.selectedVehicle.passengers,
           luggage: data.selectedVehicle.luggage,
-          total_price: data.selectedVehicle.totalPrice,
+          base_fare: data.selectedVehicle.baseFare,
+          price_KM: data.selectedVehicle.priceKM,
+          price_HR: data.selectedVehicle.priceHR,
         },
 
         guest: {
+          booking_for: data.PickupInfo.bookingFor,
           title: data.PickupInfo.title,
           first_name: data.PickupInfo.firstName,
           last_name: data.PickupInfo.lastName,
           email: data.PickupInfo.email,
           phone: data.PickupInfo.contactNumber,
-          flight_number: data.PickupInfo.flightNumber,
-          pickup_sign: data.PickupInfo.pickupSign,
-          notes: data.PickupInfo.chauffeurNotes,
-          reference_code: data.PickupInfo.referenceCode,
         },
 
         payment: {
-          brand: data.brand,
-          last4: data.last4,
-          payment_method_id: data.paymentMethodId, // Stripe saved card
+          brand: data.cardData.brand,
+          last4: data.cardData.last4,
+          strip_customer_id: data.stripeCustomerId, // Stripe stripe Customer Id
+          payment_method_id: data.cardData.paymentMethodId, // Stripe saved card
+          sub_total_price: data.payment.subTotalPrice,
+          tax_price: data.payment.taxPrice,
+          total_price: data.payment.totalPrice,
         },
       };
 
@@ -111,7 +124,29 @@ export default function CheckoutPage() {
       }
 
       if (res.ok) {
-        router.push(`/booking/success/${result.booking_id}`);
+
+        dispatch(
+          saveSearch({...data, 'order_id': result.order_id })
+        );
+        // Authorize Payment
+        const chargeAmount = { 
+          paymentMethodId: data.cardData.paymentMethodId, 
+          customerId: data.stripeCustomerId, 
+          amount: data.payment.totalPrice
+        }
+        const res = await fetch("/api/charge-saved-card", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(chargeAmount),
+        });
+
+        const { success, error } = await res.json();
+        if(success) {
+          router.push(`/booking/success?booking_id=${result.order_id}`);
+        }
+        else {
+          setError(error);
+        }
       }
     } catch (err) {
       console.error("Booknow error:", err);
@@ -151,7 +186,9 @@ export default function CheckoutPage() {
                         <p className="font-semibold text-xs md:text-sm">
                             {formatDate(data.pickupDate)} • {data.pickupTimeLabel}
                         </p>
-                        <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
+                        <button 
+                        onClick={() => router.push("/")}
+                        className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                         </div>
 
                         {/* Map */}
@@ -226,7 +263,9 @@ export default function CheckoutPage() {
                                     height={100}     // adjust as per your image ratio
                                     priority
                                 />
-                                <button className="text-xs font-semibold mt-3 md:mt-0 py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
+                                <button 
+                                onClick={() => router.push("/booking")}
+                                className="text-xs font-semibold mt-3 md:mt-0 py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                             </div>
                         </div>
                     </div>
@@ -262,7 +301,9 @@ export default function CheckoutPage() {
                                 {/* )} */}
                             </div>
 
-                            <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
+                            <button 
+                            onClick={() => router.push("/booking/pickup-info")}
+                            className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                             </div>
 
                             {/* Flight Number */}
@@ -272,7 +313,7 @@ export default function CheckoutPage() {
                                 <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.flightNumber || "-"}</p>
                             </div>
 
-                            <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
+                            {/* <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button> */}
                             </div>
 
                             {/* Pickup Sign */}
@@ -312,12 +353,14 @@ export default function CheckoutPage() {
                     <div className="border border-gray-200 rounded-xl p-4 space-y-4 mb-3">
                         <div className="flex justify-between items-center">
                             <p className="text-sm text-gray-700">Payment</p>
-                            <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
+                            <button 
+                            onClick={() => router.push("/booking/payment")}
+                            className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                         </div>
                         <b className="text-xs md:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
                         <div className="flex items-center gap-2 text-xs md:text-sm font-medium mt-2">
                             <Image src={visaIcon} alt="Visa" className="h-5 w-auto" />
-                            •••• {data.last4} ({data.brand.toUpperCase()})
+                            •••• {data.cardData?.last4} ({data.cardData?.brand?.toUpperCase()})
                         </div>
                     </div>
                     {/* Billing info */}
@@ -325,7 +368,10 @@ export default function CheckoutPage() {
                         <div>
                             <div className="flex justify-between items-center">
                                 <p className="text-sm text-gray-700">Billing Information</p>
-                                <button className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
+                                <button 
+                                
+                                onClick={() => router.push("/booking/payment")}
+                                className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                             </div>
                             <b className="text-xs md:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
                         </div>
@@ -335,12 +381,12 @@ export default function CheckoutPage() {
                         <div className="text-sm">
                         <div className="flex justify-between py-1">
                             <span className="text-gray-700">Price excl. tax</span>
-                            <span>{data.selectedVehicle.subTotalLabel}</span>
+                            <span>{data.payment.subTotalLabel}</span>
                         </div>
 
                         <div className="flex justify-between py-1">
                             <span className="text-gray-700">Estimated tax</span>
-                            <span>{data.selectedVehicle.taxLabel}</span>
+                            <span>{data.payment.taxLabel}</span>
                         </div>
 
                         {/* Promo */}
@@ -356,7 +402,7 @@ export default function CheckoutPage() {
                         {/* Total */}
                         <div className="flex justify-between items-center pt-4 border-t border-gray-300 mt-4">
                             <span className="font-normal text-md">Total price</span>
-                            <span className="font-semibold text-base">{data.selectedVehicle.totalLabel}</span>
+                            <span className="font-semibold text-base">{data.payment.totalLabel}</span>
                         </div>
                         </div>
                     </div>
@@ -373,7 +419,7 @@ export default function CheckoutPage() {
                           <p className="text-red-500 text-xs mt-2">{error}</p>
                         )}
                         {errors && errors.map((error, i) => (
-                          <p key={i} className="text-red-500 text-xs mt-2">{error}</p>
+                          <p key={i} className="text-red-500 text-2xl font-medium mt-2">{error}</p>
                         ))}
                         <p className="text-gray-700 text-xs mt-4">By Booking, Our <a href="" target="_blank" className="font-medium underline text-black">Terms & Conditions</a> apply in their current version</p>
                     </div>

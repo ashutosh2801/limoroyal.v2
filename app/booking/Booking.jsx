@@ -84,37 +84,36 @@ export default function Booking() {
   const selectVahicle = () => {
     if (selectedIdx === null) return;
 
-    const v = vehicles[selectedIdx];
+    const selectedVehicle = vehicles[selectedIdx];
 
     let subTotalPrice = (
-      parseFloat(v.baseFare) +
-      parseFloat(v.priceKM) * parseFloat(trip.distanceKM)
-    ).toFixed(2);
+          parseFloat(selectedVehicle.baseFare) +
+          parseFloat(selectedVehicle.priceKM) * parseFloat(trip.distanceKM)
+        );
 
-    let tax = subTotalPrice * (13/100);
-    let totalPrice = subTotalPrice + tax;
+    let taxPrice = subTotalPrice * (13/100);
+    let totalPrice = subTotalPrice + parseFloat(taxPrice);
 
     subTotalPrice = Number(subTotalPrice).toFixed(2);
-    tax = Number(tax).toFixed(2);
+    taxPrice = Number(taxPrice).toFixed(2);
     totalPrice = Number(totalPrice).toFixed(2);
 
-    const selectedVehicle = {
-      ...v,
+    const payment = {
       subTotalLabel: `$${subTotalPrice}`,
-      subTotalPrice: subTotalPrice, // optional numeric value for calculations
-      taxLabel: `Tax (13%) $${tax}`,
-      taxPrice: tax, // optional numeric value for calculations
+      subTotalPrice, // optional numeric value for calculations
+      taxLabel: `Tax (13%) $${taxPrice}`,
+      taxPrice, // optional numeric value for calculations
       totalLabel: `$${totalPrice}`,
-      totalPrice: totalPrice, // optional numeric value for calculations
+      totalPrice, // optional numeric value for calculations
     };    
 
     dispatch(
       saveSearch({ 
-        ...data, selectedVehicle
+        ...data, selectedVehicle, payment
       })
     );
 
-    //console.log("Saved data:", data);
+    //console.log("Saved data:", payment);
 
     // For example, navigate to the next step
     router.push("/booking/pickup-info");

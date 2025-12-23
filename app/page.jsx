@@ -49,7 +49,7 @@ export default function Home() {
     <main>
       <div className='relative'>
         <Slider/>
-        <Search />
+        {/* <Search /> */}
       </div>
       <div>
         <div className='container mx-auto px-2'>

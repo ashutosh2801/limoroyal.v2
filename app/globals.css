@@ -256,3 +256,51 @@ a {
 .services-link:hover {
   color: #ceb366;
 }
+
+/* Calendar container */
+.large-datepicker {
+  font-size: 2rem;
+  width: 340px;
+}
+
+/* Month container */
+.large-datepicker .react-datepicker__month-container {
+  width: 100%;
+}
+
+/* Day cells */
+.large-datepicker .react-datepicker__day,
+.large-datepicker .react-datepicker__day-name {
+  width: 2.2rem;
+  line-height: 2.2rem;
+  margin: 0.2rem;
+  font-size: 0.95rem;
+}
+
+/* Header */
+.large-datepicker .react-datepicker__header {
+  padding: 1rem;
+}
+
+/* Month & year dropdowns */
+.large-datepicker select {
+  padding: 6px;
+  font-size: 0.95rem;
+}
+
+.large-timepicker {
+  font-size: 1rem; /* base */
+  width: 120px;
+}
+
+.large-timepicker .react-datepicker__time-list-item {
+  padding: 10px 14px;
+  font-size: 1rem;
+}
+
+.large-timepicker .react-datepicker__time-container {
+  width: 120px;
+}
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
+  width: 120px !important;
+}
