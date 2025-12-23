@@ -256,3 +256,12 @@ a {
 .services-link:hover {
   color: #ceb366;
 }
+
+.gallery-swiper .swiper-pagination-bullet {
+  background: #fff;
+  opacity: 0.4;
+}
+
+.gallery-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+}
