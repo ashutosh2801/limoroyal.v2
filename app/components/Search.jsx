@@ -299,11 +299,11 @@ export default function Search() {
     "w-full pl-11 pr-10 py-5 text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none";
 
   const iconStyle =
-    "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500";
+    "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 z-1";
 
   // ---------------- RENDER ----------------
   return (
-    <div className="w-full px-4 relative z-20 mt-5">
+    <div className="w-full px-4 relative z-52 mt-5">
       <div className="bg-white w-full max-w-md shadow-xl relative md:absolute right-0 md:right-20 bottom-0 md:bottom-18 mt-10 md:mt-0 rounded-md">
 
         {/* Tabs */}
@@ -327,7 +327,7 @@ export default function Search() {
 
             {/* FROM */}
             <div className="relative">
-              <MapPinIcon className={iconStyle} />
+              <FaCarSide className={iconStyle} />
               <input
                 ref={fromInputRef}
                 value={fromInput}

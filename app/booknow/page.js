@@ -1,5 +1,5 @@
 import Search from '../components/Search'
-import Slider from '../Slider'
+import Slider from '../components/Slider'
 
 export default function Booknow() {
 
