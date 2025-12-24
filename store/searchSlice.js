@@ -15,9 +15,13 @@ const searchSlice = createSlice({
     saveSearch: (state, action) => {
       state.loading = false;
       state.data = action.payload;
-    }
+    },
+    destroySearch: (state) => {
+      state.loading = false;
+      state.data = null;
+    },
   },
 });
 
-export const { startSearch, saveSearch } = searchSlice.actions;
+export const { startSearch, saveSearch, destroySearch } = searchSlice.actions;
 export default searchSlice.reducer;

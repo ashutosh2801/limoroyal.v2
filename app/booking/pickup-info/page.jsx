@@ -26,11 +26,13 @@ export default function PickupInfoPage() {
     date: new Date(data.pickupDate).toDateString(),
     time: new Date(data.pickupTime).toLocaleTimeString(),
     from: data.from.name,
-    to: data.to.name,
-    distanceKM: data.distanceKM,
+    to: data.to?.name || "",
+    distanceKM: data.distanceKM || "",
     pickupTimeLabel: data.pickupTimeLabel,
     estimatedTimeLabel: data.estimatedTimeLabel,
-    durationMinutes: data.durationMinutes,
+    durationMinutes: data.tripType == 'oneway' ? data.durationMinutes : data.duration,
+    tripType: data.tripType,
+    duration: data.duration || ""
   };
 
   const [form, setForm] = useState({

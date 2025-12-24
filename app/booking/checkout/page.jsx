@@ -38,15 +38,20 @@ export default function CheckoutPage() {
   const activeStep = 3; // Payment step
 
   const { data } = useSelector((s) => s.search);
+  if (!data) {
+    router.push("/");
+    return;
+  }
 
   useEffect(() => {
     // If no search data, redirect to home
     if (!data || Object.keys(data).length === 0) {
       router.push("/");
+      return;
     }
 
     console.log("Checkout Page - Retrieved data:", data);
-  }, [router]);
+  }, [router, data]);
 
   const booknow = async () => {
     try {
@@ -58,14 +63,16 @@ export default function CheckoutPage() {
         pickup_date: data.pickupDate,
         pickup_time: data.pickupTime,
         from: data.from,
-        to: data.to,
-        distance_km: data.distanceKM,
+        to: data.to?.name || "",
+        distance_km: data.distanceKM || "",
         distance_mile: data.distanceMiles,
-        duration_minutes: data.durationMinutes,
+        duration_minutes: data.tripType == 'oneway' ? data.durationMinutes : data.duration,
+        trip_type: data.tripType,
+        payment_type: data.paymentType,
 
         flight_number: data.PickupInfo.flightNumber,
         pickup_sign: data.PickupInfo.pickupSign,
-        notes: data.PickupInfo.chauffeurNotes,
+        chauffeur_notes: data.PickupInfo.chauffeurNotes,
         reference_code: data.PickupInfo.referenceCode,
 
         vehicle: {
@@ -88,10 +95,10 @@ export default function CheckoutPage() {
         },
 
         payment: {
-          brand: data.cardData.brand,
-          last4: data.cardData.last4,
-          strip_customer_id: data.stripeCustomerId, // Stripe stripe Customer Id
-          payment_method_id: data.cardData.paymentMethodId, // Stripe saved card
+          brand: data.cardData?.brand || null,
+          last4: data.cardData?.last4 || null,
+          stripe_customer_id: data.stripeCustomerId || null, // Stripe stripe Customer Id
+          payment_method_id: data.cardData?.paymentMethodId || null, // Stripe saved card
           sub_total_price: data.payment.subTotalPrice,
           tax_price: data.payment.taxPrice,
           total_price: data.payment.totalPrice,
@@ -128,29 +135,37 @@ export default function CheckoutPage() {
         dispatch(
           saveSearch({...data, 'order_id': result.order_id })
         );
-        // Authorize Payment
-        const chargeAmount = { 
-          paymentMethodId: data.cardData.paymentMethodId, 
-          customerId: data.stripeCustomerId, 
-          amount: data.payment.totalPrice
-        }
-        const res = await fetch("/api/charge-saved-card", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(chargeAmount),
-        });
 
-        const { success, error } = await res.json();
-        if(success) {
-          router.push(`/booking/success?booking_id=${result.order_id}`);
+        if(data.paymentType == 'card') {
+          // Authorize Payment
+          const chargeAmount = { 
+            paymentMethodId: data.cardData.paymentMethodId, 
+            customerId: data.stripeCustomerId, 
+            amount: data.payment.totalPrice
+          }
+          const res = await fetch("/api/charge-saved-card", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(chargeAmount),
+          });
+
+          const { success, error } = await res.json();
+          if(success) {
+            router.push(`/booking/success?booking_id=${result.order_id}`);
+          }
+          else {
+            setError(error);
+          }
         }
         else {
-          setError(error);
+          router.push(`/booking/success?booking_id=${result.order_id}`);
         }
+
+        
       }
     } catch (err) {
       console.error("Booknow error:", err);
-      setError("A network error occurred. Please try again.");
+      setError("A network error occurred. Please try again. " + err.message);
     } finally {
       setLoading(false);
     }
@@ -184,7 +199,7 @@ export default function CheckoutPage() {
                         {/* Title row */}
                         <div className="flex justify-between items-center">
                         <p className="font-semibold text-xs md:text-sm">
-                            {formatDate(data.pickupDate)} • {data.pickupTimeLabel}
+                            {formatDate(data?.pickupDate)} • {data?.pickupTimeLabel}
                         </p>
                         <button 
                         onClick={() => router.push("/")}
@@ -201,7 +216,7 @@ export default function CheckoutPage() {
                                     loading="lazy"
                                     allowFullScreen
                                     referrerPolicy="no-referrer-when-downgrade"
-                                    src={`https://www.google.com/maps?q=${data.from.name}+to+${data.to.name}&output=embed`}
+                                    src={data.to ? `https://www.google.com/maps?q=${data.from.name}+to+${data.to?.name}&output=embed` : `https://www.google.com/maps?q=${data.from.name}&output=embed`}
                                 ></iframe>
                             </div>
                         </div>
@@ -209,28 +224,32 @@ export default function CheckoutPage() {
                         {/* Locations */}
                         <div className="mt-6 space-y-4 text-xs md:text-sm">
 
-                        {/* FROM */}
-                        <div className="flex items-start gap-2">
-                            <MapPinIcon className="w-4 h-4 mt-1 text-gray-600 flex-shrink-0" />
-                            <div>
-                            <p className="font-semibold">{data.from.name}</p>
-                            <p className="text-gray-600">{data.from.address}</p>
-                            </div>
-                        </div>
+                          {/* FROM */}
+                          <div className="flex items-start gap-2">
+                              <MapPinIcon className="w-4 h-4 mt-1 text-gray-600 flex-shrink-0" />
+                              <div>
+                              <p className="font-semibold">{data.from.name}</p>
+                              <p className="text-gray-600">{data.from.address}</p>
+                              </div>
+                          </div>
 
-                        {/* TO */}
-                        <div className="flex items-start gap-2">
-                            <MapPinIcon className="w-4 h-4 mt-1 text-red-500" />
-                            <div>
-                            <p className="font-semibold text-xs md:text-base">{data.to.name}</p>
-                            <p className="text-gray-600 text-xs md:text-sm">{data.to.address}</p>
-                            </div>
-                        </div>
+                          {/* TO */}
+                          {data.to && ( 
+                          <div className="flex items-start gap-2">
+                              <MapPinIcon className="w-4 h-4 mt-1 text-red-500" />
+                              <div>
+                              <p className="font-semibold text-xs md:text-base">{data.to?.name}</p>
+                              <p className="text-gray-600 text-xs md:text-sm">{data.to?.address}</p>
+                              </div>
+                          </div>
+                          )}
                         </div>
 
                         {/* Time + Distance */}
                         <p className="mt-4 text-xs text-gray-600">
-                        {data.durationMinutes} minutes • {data.distanceKM} km
+                          {`${data.tripType == 'oneway' ? `${data.durationMinutes} minutes}` : `Duration: ${data.durationMinutes} hr`}`} 
+                          
+                          {data.distanceKM && (<> • {data.distanceKM} km</>)}
                         </p>
                     </div>
 
@@ -359,8 +378,11 @@ export default function CheckoutPage() {
                         </div>
                         <b className="text-xs md:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
                         <div className="flex items-center gap-2 text-xs md:text-sm font-medium mt-2">
+                          {data.paymentType == 'quote' ? <span className="text-green-500">Get a Quote</span> : <>
                             <Image src={visaIcon} alt="Visa" className="h-5 w-auto" />
                             •••• {data.cardData?.last4} ({data.cardData?.brand?.toUpperCase()})
+                            </>
+                          }
                         </div>
                     </div>
                     {/* Billing info */}
@@ -413,13 +435,13 @@ export default function CheckoutPage() {
                           onClick={booknow}
                           disabled={loading}
                           className="w-full py-3 text-white webBG rounded-md hover:opacity-90 text-sm mt-4 cursor-pointer">
-                            {loading ? "Booking..." : "Book now"}
+                            {loading ? "Booking..." : data.paymentType == 'quote' ? "Get a Quote Now"  : "Book now"}
                         </button>
                         {error && (
-                          <p className="text-red-500 text-xs mt-2">{error}</p>
+                          <p className="text-red-500 text-base mt-2">{error}</p>
                         )}
                         {errors && errors.map((error, i) => (
-                          <p key={i} className="text-red-500 text-2xl font-medium mt-2">{error}</p>
+                          <p key={i} className="text-red-500 text-base mt-2">{error}</p>
                         ))}
                         <p className="text-gray-700 text-xs mt-4">By Booking, Our <a href="" target="_blank" className="font-medium underline text-black">Terms & Conditions</a> apply in their current version</p>
                     </div>
