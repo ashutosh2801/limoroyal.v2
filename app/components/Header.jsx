@@ -23,10 +23,10 @@ const Header = () => {
   return (
     <div>
       <nav className='relative webFont'>
-        <div className='header absolute mt-3 w-full z-50 text-[15px]'>
+        <div className='header absolute mt-3 w-full text-[15px]'>
 
           {/* Top logo + contact */}
-          <div className='border-b webBorderColor pb-2'>
+          <div className='border-b webBorderColor pb-2 relative z-50'>
             <div className='container mx-auto px-2'>
               <div className='flex flex-row items-center justify-between'>
 
@@ -76,7 +76,7 @@ const Header = () => {
                 <div className="flex items-center py-4">
                     <div className="w-[90%]">
                         {/* main menu */}
-                        <div className="relative">
+                        <div className="relative z-50">
                             <div
                                 className={`overflow-y-scroll xl:overflow-y-visible fixed xl:relative top-0 left-0 h-full w-75 xl:w-full bg-white xl:bg-inherit transform transition-transform duration-300 z-30 ${
                                     isMobileNavOpen ? "translate-x-0" : "-translate-x-full xl:translate-x-0"
@@ -241,7 +241,7 @@ const Header = () => {
 
                     {/* Desktop Right Menu */}
                     <div className="w-[10%]">
-                        <div className="hidden xl:flex justify-end">
+                        <div className="hidden xl:flex justify-end relative z-55">
                             <button className="text-white cursor-pointer" onClick={() => setIsDesktopMenuOpen(true)}>
                                 <Bars3Icon className="h-8 w-8" />
                             </button>
