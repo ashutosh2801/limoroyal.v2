@@ -1,18 +1,22 @@
 "use client";
 
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { destroySearch } from "@/store/searchSlice";
 
 export default function BookingSuccess() {
 
   const searchParams = useSearchParams();
   const bookingId = searchParams.get("booking_id");
+  const router = useRouter();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (!bookingId) return;
 
-    //fetchBooking();
+    dispatch(destroySearch());
   }, [bookingId]);
 
   return (

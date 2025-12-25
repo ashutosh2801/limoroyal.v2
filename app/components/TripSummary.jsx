@@ -10,11 +10,21 @@ function TripSummary({ trip }) {
                 <div className="text-xs md:text-sm font-semibold">{trip.date} at {trip.pickupTimeLabel}</div>
                 <div className="text-[12px] md:text-xs text-gray-600 mt-1">
                     <MapPinIcon className="inline w-4 h-4 mr-1 -mt-0.5 text-gray-500" />
-                    <span>{trip.from} → {trip.to}</span>
+                    <span>{trip.from} {trip.to ? '→' : '' } {trip.to}</span>
                 </div>
+                {trip.tripType == 'oneway' && (
                 <div className="text-[12px] md:text-xs text-gray-600 mt-2">
-                    <ClockIcon className="inline w-4 h-4 mr-1 -mt-0.5 text-gray-500" /> Estimated arrival at {trip.estimatedTimeLabel} - ({trip.durationMinutes} min). {trip.distanceKM} KM
+                    <ClockIcon className="inline w-4 h-4 mr-1 -mt-0.5 text-gray-500" /> 
+                    Estimated arrival at {trip.estimatedTimeLabel} - ({trip.durationMinutes} min). 
+                    {trip.distanceKM} KM
                 </div>
+                )}
+                {trip.tripType == 'hourly' && (
+                <div className="text-[12px] md:text-xs text-gray-600 mt-2">
+                    <ClockIcon className="inline w-4 h-4 mr-1 -mt-0.5 text-gray-500" /> 
+                    Durstion {trip.duration} hr
+                </div> 
+                )}
             </div>
 
             <div className="flex items-center gap-4">

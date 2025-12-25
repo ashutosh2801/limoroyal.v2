@@ -22,6 +22,7 @@ export default function Search() {
   const { data } = useSelector((state) => state.search);
   
   const [activeTab, setActiveTab] = useState("oneway");
+  const [loading, setLoading] = useState(false);
 
   // ---------------- GOOGLE PLACES ----------------
   const fromInputRef = useRef(null);
@@ -41,6 +42,7 @@ export default function Search() {
   const [fromPlace, setFromPlace] = useState(null);
   const [toPlace, setToPlace] = useState(null);
 
+  const [duration, setDuration] = useState("");
   const [pickupDate, setPickupDate] = useState(null);
   const [pickupTime, setPickupTime] = useState(null);
 
@@ -138,7 +140,7 @@ export default function Search() {
       (place, status) => {
         if (status !== window.google.maps.places.PlacesServiceStatus.OK) return;
 
-        const value = `${place.name}, ${place.formatted_address || ""}`;
+        const value = `${place.name}`;
 
         setInput(value);
         inputRef.current.value = value;
@@ -234,8 +236,8 @@ export default function Search() {
   };
 
 
-  // ---------------- SEARCH HANDLER ----------------
-  const handleSearch = async() => {
+  // ---------------- SEARCH One Way HANDLER ----------------
+  const handleSearchOneWay = async() => {
     if (!googleReady) {
       alert("Map services are still loading. Please wait.");
       return;
@@ -249,6 +251,8 @@ export default function Search() {
     dispatch(startSearch());
 
     try {
+
+      setLoading(true);
 
       // Pickup DateTime
       const pickupDateTime = combineDateAndTime( pickupDate, pickupTime );
@@ -288,8 +292,61 @@ export default function Search() {
 
       router.push("/booking");
     } catch (err) {
+      setLoading(false);
       console.error(err);
       alert("Unable to calculate route. Please try again.");
+    }
+    finally {
+      setLoading(false);
+    }
+
+  };
+
+  // ---------------- SEARCH By The Hour HANDLER ----------------
+  const handleSearchByTheHr = async() => {
+    if (!googleReady) {
+      alert("Map services are still loading. Please wait.");
+      return;
+    }
+
+    if (!fromPlace || !duration || !pickupDate || !pickupTime) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    dispatch(startSearch());
+
+    try {
+
+      setLoading(true);
+
+      // Pickup DateTime
+      const pickupDateTime = combineDateAndTime( pickupDate, pickupTime );
+
+      // Estimated Arrival = pickup + duration
+      const estimatedTime = new Date( pickupDateTime.getTime() + (parseFloat(duration) * 60) );
+
+      dispatch(
+        saveSearch({
+          tripType: activeTab,
+          from: fromPlace,
+          duration,
+          pickupDate: pickupDate.toISOString(),
+          pickupTime: pickupTime.toISOString(),
+          pickupTimeLabel: pickupTime.toLocaleTimeString("en-US", time12HrOptions),
+          estimatedTime: estimatedTime.toISOString(),
+          estimatedTimeLabel: estimatedTime.toLocaleTimeString("en-US", time12HrOptions),
+        })
+      );
+
+      router.push("/booking");
+    } catch (err) {
+      setLoading(false);
+      console.error(err);
+      alert("Unable to calculate route. Please try again.");
+    }
+    finally {
+      setLoading(false);
     }
 
   };
@@ -436,10 +493,10 @@ export default function Search() {
             </div>
 
             <button
-              onClick={handleSearch}
+              onClick={handleSearchOneWay}
               className="w-full py-3 rounded-xl search-btn cursor-pointer text-base transition"
             >
-              Search
+              {loading ? 'Searching...' : 'Search'}
             </button>
           </div>
         )}
@@ -450,8 +507,39 @@ export default function Search() {
 
             {/* From */}
             <div className="relative">
-              <FaCarSide className={iconStyle} />
-              <input type="text" placeholder="From" className={inputClass} />
+              <MapPinIcon className={iconStyle} />
+              <input
+                ref={fromInputRef}
+                value={fromInput}
+                placeholder="From"
+                className={inputClass}
+                onChange={(e) => {
+                  setFromInput(e.target.value);
+                  setFromPlace(null);
+                  fetchPredictions(
+                    e.target.value,
+                    fromListRef,
+                    fromInputRef,
+                    setFromInput
+                  );
+                }}
+              />
+
+              {fromInput && (
+                <XMarkIcon
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                  onClick={() => {
+                    setFromInput("");
+                    setFromPlace(null);
+                    fromListRef.current.style.display = "none";
+                  }}
+                />
+              )}
+
+              <div
+                ref={fromListRef}
+                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-60 overflow-y-auto"
+              />
             </div>
 
             {/* Duration */}
@@ -459,29 +547,53 @@ export default function Search() {
               <AdjustmentsHorizontalIcon className={iconStyle} />
               <input
                 type="number"
+                value={duration}
+                onChange={(e)=>setDuration(e.target.value)}
                 placeholder="Duration (Hours)"
                 className={inputClass}
               />
             </div>
 
-            {/* Date */}
             <div className="relative">
               <CalendarDaysIcon className={iconStyle} />
-              <input type="date" className={inputClass} />
+              <DatePicker
+                selected={pickupDate}
+                onChange={setPickupDate}
+                dateFormat="dd MMM yyyy"
+                minDate={new Date()}
+                placeholderText="Pickup date"
+                className={inputClass}
+                wrapperClassName="w-full"
+
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                calendarClassName="large-datepicker"
+              />
             </div>
 
-            {/* Time */}
             <div className="relative">
               <ClockIcon className={iconStyle} />
-              <input type="time" className={inputClass} />
+              <DatePicker
+                selected={pickupTime}
+                onChange={setPickupTime}
+                showTimeSelect
+                showTimeSelectOnly
+                timeIntervals={1}
+                dateFormat="hh:mm aa"
+                placeholderText="Pickup time"
+                className={inputClass}
+                wrapperClassName="w-full"
+                calendarClassName="large-timepicker"
+              />
             </div>
 
             {/* Search Button */}
             <div>
               <button
-              
-              onClick={() => router.push("/booking")} className="w-full py-3 rounded-xl text-base search-btn transition cursor-pointer">
-                Search
+                onClick={handleSearchByTheHr}
+                className="w-full py-3 rounded-xl text-base search-btn transition cursor-pointer">
+                {loading ? 'Searching...' : 'Search'}
               </button>
             </div>
           </div>
