@@ -42,9 +42,16 @@ export default function Search() {
   const [fromPlace, setFromPlace] = useState(null);
   const [toPlace, setToPlace] = useState(null);
 
+  const [additionalStops, setAdditionalStops] = useState([]);
+
   const [duration, setDuration] = useState("");
-  const [pickupDate, setPickupDate] = useState(null);
+  const [pickupDate, setPickupDate] = useState(new Date());
   const [pickupTime, setPickupTime] = useState(null);
+
+  const [isRoundTrip, setIsRoundTrip] = useState(false);
+  const [passengers, setPassengers] = useState(1);
+  const [luggage, setLuggage] = useState(0);
+
 
   const [googleReady, setGoogleReady] = useState(false);
 
@@ -351,17 +358,39 @@ export default function Search() {
 
   };
 
+  const QuantitySelector = ({ label, value, setValue, min = 0 }) => (
+    <div className="flex flex-col ">
+      <span className="text-xs md:text-sm w-full mb-1">{label} :</span>
+      <div className="flex items-center space-x-2 w-full border border-gray-200 rounded-lg">
+        <button
+          onClick={() => setValue(prev => Math.max(min, prev - 1))}
+          className="w-12 h-8 text-xl flex items-center justify-center bg-gray-200 cursor-pointer"
+        >
+          -
+        </button>
+        <span className="w-full text-center">{value}</span>
+        <button
+          onClick={() => setValue(prev => prev + 1)}
+          className="w-12 h-8 text-xl flex items-center justify-center bg-gray-200 cursor-pointer"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+
+
   // ---------------- UI STYLES ----------------
   const inputClass =
-    "w-full pl-11 pr-10 py-5 text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none";
+    "w-full pl-11 pr-10 py-4 text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none";
 
   const iconStyle =
     "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 z-1";
 
   // ---------------- RENDER ----------------
   return (
-    <div className="w-full px-4 relative z-20 mt-5">
-      <div className="bg-white w-full max-w-md shadow-xl relative md:absolute right-0 md:right-20 bottom-0 md:bottom-18 mt-10 md:mt-0 rounded-md">
+    <div className="w-full px-4 relative z-52 mt-5">
+      <div className="bg-white w-full max-w-md shadow-xl relative md:absolute right-0 md:right-20 md:-top-130 mt-10 md:mt-0 rounded-md">
 
         {/* Tabs */}
         <div className="grid grid-cols-2 mt-1">
@@ -369,27 +398,32 @@ export default function Search() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 text-sm font-semibold ${
+              className={`px-2 py-3 text-sm font-semibold ${
                 activeTab === tab ? "bg-white" : "bg-gray-100"
               }`}
             >
-              {tab === "oneway" ? "One Way" : "By The Hour"}
+              {tab === "oneway" ? "Point to Point" : "By The Hour"}
             </button>
           ))}
         </div>
 
         {/* ---------------- ONE WAY ---------------- */}
         {activeTab === "oneway" && (
-          <div className="grid gap-4 p-6">
+          <div className="grid gap-3 px-4 py-3">
 
             {/* FROM */}
             <div className="relative">
-              <MapPinIcon className={iconStyle} />
+              {/* Icon */}
+              <FaCarSide
+                className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+              />
+
+              {/* Input */}
               <input
                 ref={fromInputRef}
                 value={fromInput}
-                placeholder="From"
-                className={inputClass}
+                placeholder=" "
+                className={`${inputClass} peer pl-10 pt-6`}
                 onChange={(e) => {
                   setFromInput(e.target.value);
                   setFromPlace(null);
@@ -401,6 +435,30 @@ export default function Search() {
                   );
                 }}
               />
+
+              {/* Floating label */}
+              <label
+                className={`pointer-events-none absolute left-11
+                  transition-all duration-200 text-gray-400
+                  ${
+                    fromInput
+                      ? "top-2 text-xs"
+                      : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                  }`}
+              >
+                From
+              </label>
+
+              {/* Helper text */}
+              {!fromInput && (
+                <span
+                  className="pointer-events-none absolute left-11 top-8
+                    text-[13px] text-gray-500 transition-opacity
+                    peer-focus:opacity-0"
+                >
+                  Address, Airport, Hotel...
+                </span>
+              )}
 
               {fromInput && (
                 <XMarkIcon
@@ -419,15 +477,57 @@ export default function Search() {
               />
             </div>
 
+            {/* ADDITIONAL STOP */}
+            {additionalStops.map((stop, index) => (
+              <div key={index} className="relative">
+                <FaCarSide className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`} />
+
+                <input
+                  value={stop}
+                  onChange={(e) => {
+                    const newStops = [...additionalStops];
+                    newStops[index] = e.target.value;
+                    setAdditionalStops(newStops);
+                  }}
+                  placeholder=" "
+                  className={`${inputClass} peer pl-10 pt-6`}
+                />
+
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${stop ? "top-2 text-xs" : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"}`}
+                >
+                  Stop {index + 1}
+                </label>
+
+                {/* Helper text */}
+                {!stop && (
+                  <span
+                    className="pointer-events-none absolute left-11 top-8
+                      text-[13px] text-gray-500 transition-opacity
+                      peer-focus:opacity-0"
+                  >
+                    Address, Airport, Hotel...
+                  </span>
+                )}
+              </div>
+            ))}
 
             {/* TO */}
             <div className="relative">
-              <MapPinIcon className={iconStyle} />
+              {/* Icon */}
+              <MapPinIcon
+                className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+              />
+
+              {/* Input */}
               <input
                 ref={toInputRef}
                 value={toInput}
-                placeholder="To"
-                className={inputClass}
+                placeholder=" "
+                className={`${inputClass} peer pl-10 pt-6`}
                 onChange={(e) => {
                   setToInput(e.target.value);
                   setToPlace(null);
@@ -440,23 +540,51 @@ export default function Search() {
                 }}
               />
 
+              {/* Floating label */}
+              <label
+                className={`pointer-events-none absolute left-11
+                  transition-all duration-200 text-gray-400
+                  ${
+                    toInput
+                      ? "top-2 text-xs"
+                      : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                  }`}
+              >
+                To
+              </label>
+
+              {/* Helper text */}
+              {!toInput && (
+                <span
+                  className="pointer-events-none absolute left-11 top-8
+                    text-[13px] text-gray-500 transition-opacity
+                    peer-focus:opacity-0"
+                >
+                  Address, Airport, Hotel...
+                </span>
+              )}
+
+              {/* Clear button */}
               {toInput && (
                 <XMarkIcon
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4
+                    cursor-pointer text-gray-400 hover:text-gray-600"
                   onClick={() => {
                     setToInput("");
                     setToPlace(null);
-                    toListRef.current.style.display = "none";
+                    if (toListRef.current) {
+                      toListRef.current.style.display = "none";
+                    }
                   }}
                 />
               )}
 
+              {/* Predictions dropdown */}
               <div
                 ref={toListRef}
                 className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-60 overflow-y-auto"
               />
             </div>
-
 
             <div className="relative">
               <CalendarDaysIcon className={iconStyle} />
@@ -466,7 +594,7 @@ export default function Search() {
                 dateFormat="dd MMM yyyy"
                 minDate={new Date()}
                 placeholderText="Pickup date"
-                className={inputClass}
+                className={`${inputClass} pt-[30px] pb-[8px]`}
                 wrapperClassName="w-full"
 
                 showMonthDropdown
@@ -474,6 +602,19 @@ export default function Search() {
                 dropdownMode="select"
                 calendarClassName="large-datepicker"
               />
+              
+              {/* Floating label */}
+              <label
+                className={`pointer-events-none absolute left-11
+                  transition-all duration-200 text-gray-400
+                  ${
+                    toInput
+                      ? "top-3 text-xs"
+                      : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                  }`}
+              >
+                Pickup Date
+              </label>
             </div>
 
             <div className="relative">
@@ -485,12 +626,55 @@ export default function Search() {
                 showTimeSelectOnly
                 timeIntervals={1}
                 dateFormat="hh:mm aa"
-                placeholderText="Pickup time"
-                className={inputClass}
+                placeholderText="12:00 pm"
+                className={`${inputClass} pt-[30px] pb-[8px]`}
                 wrapperClassName="w-full"
                 calendarClassName="large-timepicker"
               />
+              {/* Floating label */}
+              <label
+                className={`pointer-events-none absolute left-11
+                  transition-all duration-200 text-gray-400
+                  ${
+                    toInput
+                      ? "top-3 text-xs"
+                      : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                  }`}
+              >
+                Pickup Date
+              </label>
             </div>
+
+            <div className="relative">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center">
+                  <button
+                    onClick={() => setIsRoundTrip(!isRoundTrip)}
+                    className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
+                      isRoundTrip ? "webBG justify-end" : "bg-gray-300 justify-start"
+                    }`}
+                  >
+                    <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
+                  </button>
+                  <span className="text-xs md:text-sm w-full ml-2">Round Trip</span>
+                </div>
+                <div className="flex justify-end">
+                    <button
+                      onClick={() => setAdditionalStops([...additionalStops, ""])}
+                      className="text-xs px-2 md:px-4 py-2 rounded-full bg-gray-400 text-white cursor-pointer"
+                    >
+                      + Additional Stops
+                    </button>
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="relative">
+              <div className="grid grid-cols-2 gap-8">
+              <QuantitySelector label="Passengers" value={passengers} setValue={setPassengers} min={1} />
+              <QuantitySelector label="Luggage" value={luggage} setValue={setLuggage} />
+              </div>
+            </div> */}
 
             <button
               onClick={handleSearchOneWay}
@@ -503,16 +687,21 @@ export default function Search() {
 
         {/* ----------------------------- BY THE HOUR TAB ------------------------------ */}
         {activeTab === "hourly" && (
-          <div className="grid grid-cols-1 gap-4 p-6">
+          <div className="grid gap-3 px-4 py-3">
 
-            {/* From */}
+            {/* FROM */}
             <div className="relative">
-              <MapPinIcon className={iconStyle} />
+              {/* Icon */}
+              <FaCarSide
+                className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+              />
+
+              {/* Input */}
               <input
                 ref={fromInputRef}
                 value={fromInput}
-                placeholder="From"
-                className={inputClass}
+                placeholder=" "
+                className={`${inputClass} peer pl-10 pt-6`}
                 onChange={(e) => {
                   setFromInput(e.target.value);
                   setFromPlace(null);
@@ -524,6 +713,30 @@ export default function Search() {
                   );
                 }}
               />
+
+              {/* Floating label */}
+              <label
+                className={`pointer-events-none absolute left-11
+                  transition-all duration-200 text-gray-400
+                  ${
+                    fromInput
+                      ? "top-2 text-xs"
+                      : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                  }`}
+              >
+                From
+              </label>
+
+              {/* Helper text */}
+              {!fromInput && (
+                <span
+                  className="pointer-events-none absolute left-11 top-8
+                    text-[13px] text-gray-500 transition-opacity
+                    peer-focus:opacity-0"
+                >
+                  Address, Airport, Hotel...
+                </span>
+              )}
 
               {fromInput && (
                 <XMarkIcon
@@ -542,15 +755,112 @@ export default function Search() {
               />
             </div>
 
-            {/* Duration */}
+            {/* ADDITIONAL STOP */}
+            {additionalStops.map((stop, index) => (
+              <div key={index} className="relative">
+                <FaCarSide className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`} />
+
+                <input
+                  value={stop}
+                  onChange={(e) => {
+                    const newStops = [...additionalStops];
+                    newStops[index] = e.target.value;
+                    setAdditionalStops(newStops);
+                  }}
+                  placeholder=" "
+                  className={`${inputClass} peer pl-10 pt-6`}
+                />
+
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${stop ? "top-2 text-xs" : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"}`}
+                >
+                  Stop {index + 1}
+                </label>
+
+                {/* Helper text */}
+                {!stop && (
+                  <span
+                    className="pointer-events-none absolute left-11 top-8
+                      text-[13px] text-gray-500 transition-opacity
+                      peer-focus:opacity-0"
+                  >
+                    Address, Airport, Hotel...
+                  </span>
+                )}
+              </div>
+            ))}
+
+            {/* TO */}
             <div className="relative">
-              <AdjustmentsHorizontalIcon className={iconStyle} />
+              {/* Icon */}
+              <AdjustmentsHorizontalIcon
+                className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+              />
+
+              {/* Input */}
               <input
-                type="number"
-                value={duration}
-                onChange={(e)=>setDuration(e.target.value)}
-                placeholder="Duration (Hours)"
-                className={inputClass}
+                ref={toInputRef}
+                value={toInput}
+                placeholder=" "
+                className={`${inputClass} peer pl-10 pt-6`}
+                onChange={(e) => {
+                  setToInput(e.target.value);
+                  setToPlace(null);
+                  fetchPredictions(
+                    e.target.value,
+                    toListRef,
+                    toInputRef,
+                    setToInput
+                  );
+                }}
+              />
+
+              {/* Floating label */}
+              <label
+                className={`pointer-events-none absolute left-11
+                  transition-all duration-200 text-gray-400
+                  ${
+                    toInput
+                      ? "top-2 text-xs"
+                      : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                  }`}
+              >
+                Duration (Hours)
+              </label>
+
+              {/* Helper text */}
+              {!toInput && (
+                <span
+                  className="pointer-events-none absolute left-11 top-8
+                    text-[13px] text-gray-500 transition-opacity
+                    peer-focus:opacity-0"
+                >
+                  02:00 Hrs
+                </span>
+              )}
+
+              {/* Clear button */}
+              {toInput && (
+                <XMarkIcon
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4
+                    cursor-pointer text-gray-400 hover:text-gray-600"
+                  onClick={() => {
+                    setToInput("");
+                    setToPlace(null);
+                    if (toListRef.current) {
+                      toListRef.current.style.display = "none";
+                    }
+                  }}
+                />
+              )}
+
+              {/* Predictions dropdown */}
+              <div
+                ref={toListRef}
+                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-60 overflow-y-auto"
               />
             </div>
 
@@ -562,7 +872,7 @@ export default function Search() {
                 dateFormat="dd MMM yyyy"
                 minDate={new Date()}
                 placeholderText="Pickup date"
-                className={inputClass}
+                className={`${inputClass} pt-[30px] pb-[8px]`}
                 wrapperClassName="w-full"
 
                 showMonthDropdown
@@ -570,6 +880,19 @@ export default function Search() {
                 dropdownMode="select"
                 calendarClassName="large-datepicker"
               />
+              
+              {/* Floating label */}
+              <label
+                className={`pointer-events-none absolute left-11
+                  transition-all duration-200 text-gray-400
+                  ${
+                    toInput
+                      ? "top-3 text-xs"
+                      : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                  }`}
+              >
+                Pickup Date
+              </label>
             </div>
 
             <div className="relative">
@@ -581,12 +904,55 @@ export default function Search() {
                 showTimeSelectOnly
                 timeIntervals={1}
                 dateFormat="hh:mm aa"
-                placeholderText="Pickup time"
-                className={inputClass}
+                placeholderText="12:00 pm"
+                className={`${inputClass} pt-[30px] pb-[8px]`}
                 wrapperClassName="w-full"
                 calendarClassName="large-timepicker"
               />
+              {/* Floating label */}
+              <label
+                className={`pointer-events-none absolute left-11
+                  transition-all duration-200 text-gray-400
+                  ${
+                    toInput
+                      ? "top-3 text-xs"
+                      : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                  }`}
+              >
+                Pickup Date
+              </label>
             </div>
+
+            <div className="relative">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center">
+                  <button
+                    onClick={() => setIsRoundTrip(!isRoundTrip)}
+                    className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
+                      isRoundTrip ? "webBG justify-end" : "bg-gray-300 justify-start"
+                    }`}
+                  >
+                    <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
+                  </button>
+                  <span className="text-xs md:text-sm w-full ml-2">Round Trip</span>
+                </div>
+                <div className="flex justify-end">
+                    <button
+                      onClick={() => setAdditionalStops([...additionalStops, ""])}
+                      className="text-xs px-2 md:px-4 py-2 rounded-full bg-gray-400 text-white cursor-pointer"
+                    >
+                      + Additional Stops
+                    </button>
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="relative">
+              <div className="grid grid-cols-2 gap-8">
+              <QuantitySelector label="Passengers" value={passengers} setValue={setPassengers} min={1} />
+              <QuantitySelector label="Luggage" value={luggage} setValue={setLuggage} />
+              </div>
+            </div> */}
 
             {/* Search Button */}
             <div>
