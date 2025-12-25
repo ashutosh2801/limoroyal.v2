@@ -87,7 +87,7 @@ export default function Search() {
       {
         input: value,
         // types: ["establishment", ""],
-        componentRestrictions: { country: "ca" },
+        // componentRestrictions: { country: "ca" },
       },
       (predictions, status) => {
         if (
