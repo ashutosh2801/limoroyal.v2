@@ -18,6 +18,7 @@ export default function Booking() {
   const router = useRouter();
   const dispatch = useDispatch();
   const activeStep = 0; // Service Class
+  const [submiting, setSubmitting] = useState(false);
   
   const [selectedIdx, setSelectedIdx] = useState(null);
 
@@ -27,11 +28,13 @@ export default function Booking() {
     date: new Date(data.pickupDate).toDateString(),
     time: new Date(data.pickupTime).toLocaleTimeString(),
     from: data.from.name,
-    to: data.to.name,
-    distanceKM: data.distanceKM,
+    to: data.to?.name || "",
+    distanceKM: data.distanceKM || "",
     pickupTimeLabel: data.pickupTimeLabel,
     estimatedTimeLabel: data.estimatedTimeLabel,
-    durationMinutes: data.durationMinutes,
+    durationMinutes: data.tripType == 'oneway' ? data.durationMinutes : data.duration,
+    tripType: data.tripType,
+    duration: data.duration || ""
   };
 
   const [vehicles, setPickups] = useState([]);
@@ -78,45 +81,59 @@ export default function Booking() {
 
   const pricedVehicles = vehicles.map((v) => ({
     ...v,
-    price: `$${(parseFloat(v.baseFare) + (parseFloat(v.priceKM) * trip.distanceKM)).toFixed(2)}`,
+    price: trip.tripType == 'oneway' ? 
+    `$${((parseFloat(v.priceKM) * trip.distanceKM)).toFixed(2)}` : 
+    `$${((parseFloat(v.priceHR) * trip.duration)).toFixed(2)}`,
   }));
 
   const selectVahicle = () => {
+
     if (selectedIdx === null) return;
+    
+    try {
+      setSubmitting(true);
+      const selectedVehicle = vehicles[selectedIdx];
 
-    const selectedVehicle = vehicles[selectedIdx];
+      const subTotal = trip.tripType == 'oneway' ? 
+                      (parseFloat(selectedVehicle.priceKM) * trip.distanceKM): 
+                      (parseFloat(selectedVehicle.priceHR) * trip.duration);
 
-    let subTotalPrice = (
-          parseFloat(selectedVehicle.baseFare) +
-          parseFloat(selectedVehicle.priceKM) * parseFloat(trip.distanceKM)
-        );
+      let subTotalPrice = subTotal;
+      let taxPrice = subTotalPrice * (13/100);
+      let totalPrice = subTotalPrice + parseFloat(taxPrice);
 
-    let taxPrice = subTotalPrice * (13/100);
-    let totalPrice = subTotalPrice + parseFloat(taxPrice);
+      subTotalPrice = Number(subTotalPrice).toFixed(2);
+      taxPrice = Number(taxPrice).toFixed(2);
+      totalPrice = Number(totalPrice).toFixed(2);
 
-    subTotalPrice = Number(subTotalPrice).toFixed(2);
-    taxPrice = Number(taxPrice).toFixed(2);
-    totalPrice = Number(totalPrice).toFixed(2);
+      const payment = {
+        subTotalLabel: `$${subTotalPrice}`,
+        subTotalPrice, // optional numeric value for calculations
+        taxLabel: `Tax (13%) $${taxPrice}`,
+        taxPrice, // optional numeric value for calculations
+        totalLabel: `$${totalPrice}`,
+        totalPrice, // optional numeric value for calculations
+      };    
 
-    const payment = {
-      subTotalLabel: `$${subTotalPrice}`,
-      subTotalPrice, // optional numeric value for calculations
-      taxLabel: `Tax (13%) $${taxPrice}`,
-      taxPrice, // optional numeric value for calculations
-      totalLabel: `$${totalPrice}`,
-      totalPrice, // optional numeric value for calculations
-    };    
+      const durationMinutes = data.tripType == 'oneway' ? data.durationMinutes : data.duration
 
-    dispatch(
-      saveSearch({ 
-        ...data, selectedVehicle, payment
-      })
-    );
+      dispatch(
+        saveSearch({ 
+          ...data, durationMinutes, selectedVehicle, payment
+        })
+      );
 
-    //console.log("Saved data:", payment);
+      //console.log("Saved data:", payment);
 
-    // For example, navigate to the next step
-    router.push("/booking/pickup-info");
+      // For example, navigate to the next step
+      router.push("/booking/pickup-info");
+    }
+    catch (err) {
+      console.error(err);
+    }
+    finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -247,7 +264,7 @@ export default function Booking() {
                     // console.log("selected vehicle:", vehicles[selectedIdx]);
                   }}
                 >
-                  Continue
+                  {submiting ? 'Continue...' : 'Continue'}
                 </button>
               </div></>
 

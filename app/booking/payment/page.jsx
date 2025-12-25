@@ -35,6 +35,7 @@ function PaymentForm() {
 
   const { data } = useSelector((s) => s.search);
 
+  const [paymentOption, setPaymentOption] = useState("card");
   const [nameOnCard, setNameOnCard] = useState("");
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -65,18 +66,36 @@ function PaymentForm() {
     date: new Date(data.pickupDate).toDateString(),
     time: new Date(data.pickupTime).toLocaleTimeString(),
     from: data.from.name,
-    to: data.to.name,
+    to: data.to?.name || "",
+    distanceKM: data.distanceKM || "",
     distanceKM: data.distanceKM,
     pickupTimeLabel: data.pickupTimeLabel,
     estimatedTimeLabel: data.estimatedTimeLabel,
-    durationMinutes: data.durationMinutes,
+    durationMinutes: data.tripType == 'oneway' ? data.durationMinutes : data.duration,
+    tripType: data.tripType,
+    duration: data.duration || ""
   };
 
   useEffect(()=>{
     setNameOnCard(data?.cardData?.nameOnCard || "");
+    setPaymentOption(data?.paymentType || "card")
   }, [data]);
 
   const handlePayment = async () => {
+
+    if (paymentOption === "quote") {
+      dispatch(
+        saveSearch({
+          ...data,
+          paymentType: "quote",
+        })
+      );
+
+      router.push("/booking/checkout");
+      return;
+    }
+
+
     if (!stripe || !elements) return;
 
     if (!nameOnCard.trim()) {
@@ -139,7 +158,7 @@ function PaymentForm() {
       };
 
       dispatch(
-        saveSearch({...data, 'stripeCustomerId': customerId, cardData })
+        saveSearch({...data, paymentType: "card", 'stripeCustomerId': customerId, cardData })
       );
 
       console.log("Saved data:", data);
@@ -170,8 +189,53 @@ function PaymentForm() {
                 <TripSummary trip={trip} />
 
                 {/* --- Payment Form --- */}
-                <h2 className="mt-7 text-lg md:text-xl font-bold">Add credit or debit card</h2>
+                {/* <h2 className="mt-7 text-lg md:text-xl font-bold">Add credit or debit card</h2> */}
 
+                <h2 className="mt-7 text-lg md:text-xl font-bold">
+                  Choose an option
+                </h2>
+
+                <div className="mt-4 space-y-3">
+                  <label className="flex items-center gap-3 border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-black">
+                    <input
+                      type="radio"
+                      name="paymentOption"
+                      value="card"
+                      checked={paymentOption === "card"}
+                      onChange={() => setPaymentOption("card")}
+                      className="w-4 h-4"
+                    />
+                    <div>
+                      <p className="font-semibold text-sm md:text-base">
+                        Add credit or debit card
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Secure card verification. Pay after the ride.
+                      </p>
+                    </div>
+                  </label>
+
+                  <label className="flex items-center gap-3 border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-black">
+                    <input
+                      type="radio"
+                      name="paymentOption"
+                      value="quote"
+                      checked={paymentOption === "quote"}
+                      onChange={() => setPaymentOption("quote")}
+                      className="w-4 h-4"
+                    />
+                    <div>
+                      <p className="font-semibold text-sm md:text-base">
+                        Get a Quote
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        No card required. Receive pricing via email.
+                      </p>
+                    </div>
+                  </label>
+                </div>
+
+                {paymentOption === "card" && (
                 <div className="mt-4 space-y-4 border border-gray-200 rounded-xl p-5">
 
                     {/* Name on card */}
@@ -258,6 +322,7 @@ function PaymentForm() {
                     Save card to your list
                     </label>
                 </div>
+                )}
 
                 <div className="mt-5">
                     <div className="border border-gray-200 rounded-xl">
@@ -273,8 +338,7 @@ function PaymentForm() {
 
                 {/* Continue button */}
                 <div className="mt-6 flex justify-end">
-                <button
-                    // onClick={handleCheckout}
+                {/* <button
                     onClick={handlePayment}
                     disabled={processing}
                     className={`py-3 px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-sm md:text-base w-full md:w-auto ${
@@ -287,7 +351,20 @@ function PaymentForm() {
                     ? "Processing..."
                     : `Proceed to Checkout`}
                         
-                    </button>
+                    </button> */}
+                    <button
+  onClick={handlePayment}
+  disabled={processing}
+  className={`py-3 px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-sm md:text-base w-full md:w-auto ${
+    processing ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
+  }`}
+>
+  {processing
+    ? "Processing..."
+    : paymentOption === "card"
+    ? "Proceed to Checkout"
+    : "Get a Quote"}
+</button>
                 </div>
 
             </div>
