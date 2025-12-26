@@ -30,8 +30,8 @@ export default function Booking() {
   const trip = {
     date: new Date(data.pickupDate).toDateString(),
     time: new Date(data.pickupTime).toLocaleTimeString(),
-    from: data.from.name,
-    to: data.to?.name || "",
+    from: data.from,
+    to: data.to || "",
     distanceKM: data.distanceKM || "",
     pickupTimeLabel: data.pickupTimeLabel,
     estimatedTimeLabel: data.estimatedTimeLabel,
@@ -43,11 +43,10 @@ export default function Booking() {
   const [vehicles, setPickups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [expandedIdx, setExpandedIdx] = useState(null);
   const [passengers, setPassengers] = useState(1);
   const [luggage, setLuggage] = useState(0);
-
+  const [vehicleData, setVehicleData] = useState({});
 
   useEffect(() => {
     const loadPickups = async () => {
@@ -144,6 +143,39 @@ export default function Booking() {
     }
   };
 
+  const updatePassengers = (idx, max, delta) => {
+    setVehicleData(prev => {
+      const current = prev[idx]?.passengers ?? 1;
+      return {
+        ...prev,
+        [idx]: {
+          ...prev[idx],
+          passengers: Math.min(
+            max,
+            Math.max(1, current + delta)
+          ),
+        },
+      };
+    });
+  };
+
+  const updateLuggage = (idx, max, delta) => {
+    setVehicleData(prev => {
+      const current = prev[idx]?.luggage ?? 0;
+      return {
+        ...prev,
+        [idx]: {
+          ...prev[idx],
+          luggage: Math.min(
+            max,
+            Math.max(0, current + delta)
+          ),
+        },
+      };
+    });
+  };
+
+
   return (
     <div className="min-h-screen">
       <div className="py-10 border-b webBorderColor">
@@ -164,11 +196,11 @@ export default function Booking() {
                 </div>
                 <div className="mt-4 mb-2 text-sm text-black flex gap-5 px-3"> 
                   <p className="flex gap-1">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8 16C12.7882 16 14.4 14.3882 14.4 12.4L14.4 3.2L15.2 3.2C15.5235 3.2 15.8153 3.00512 15.9391 2.70616C16.0629 2.4072 15.9945 2.06312 15.7657 1.83432L14.1657 0.23432C13.8532 -0.0780794 13.3467 -0.0780795 13.0343 0.23432L11.4343 1.83432C11.2055 2.06312 11.137 2.4072 11.2609 2.70616C11.3847 3.00512 11.6764 3.2 12 3.2L12.8 3.2L12.8 12.4C12.8 13.5046 11.9045 14.4 10.8 14.4C9.69541 14.4 8.8 13.5046 8.8 12.4L8.8 3.6C8.8 1.61176 7.18824 -7.70349e-07 5.2 -9.44166e-07C3.21176 -1.11798e-06 1.6 1.61176 1.6 3.6L1.6 11.3366C0.667839 11.666 -1.60618e-06 12.555 -1.69753e-06 13.6C-1.81341e-06 14.9255 1.07448 16 2.4 16C3.72552 16 4.8 14.9255 4.8 13.6C4.8 12.555 4.13216 11.666 3.2 11.3366L3.2 3.6C3.2 2.49544 4.09544 1.6 5.2 1.6C6.30456 1.6 7.2 2.49544 7.2 3.6L7.2 12.4C7.2 14.3882 8.81176 16 10.8 16Z" fill="#ceb366"></path></svg> 24.74 km
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8 16C12.7882 16 14.4 14.3882 14.4 12.4L14.4 3.2L15.2 3.2C15.5235 3.2 15.8153 3.00512 15.9391 2.70616C16.0629 2.4072 15.9945 2.06312 15.7657 1.83432L14.1657 0.23432C13.8532 -0.0780794 13.3467 -0.0780795 13.0343 0.23432L11.4343 1.83432C11.2055 2.06312 11.137 2.4072 11.2609 2.70616C11.3847 3.00512 11.6764 3.2 12 3.2L12.8 3.2L12.8 12.4C12.8 13.5046 11.9045 14.4 10.8 14.4C9.69541 14.4 8.8 13.5046 8.8 12.4L8.8 3.6C8.8 1.61176 7.18824 -7.70349e-07 5.2 -9.44166e-07C3.21176 -1.11798e-06 1.6 1.61176 1.6 3.6L1.6 11.3366C0.667839 11.666 -1.60618e-06 12.555 -1.69753e-06 13.6C-1.81341e-06 14.9255 1.07448 16 2.4 16C3.72552 16 4.8 14.9255 4.8 13.6C4.8 12.555 4.13216 11.666 3.2 11.3366L3.2 3.6C3.2 2.49544 4.09544 1.6 5.2 1.6C6.30456 1.6 7.2 2.49544 7.2 3.6L7.2 12.4C7.2 14.3882 8.81176 16 10.8 16Z" fill="#ceb366"></path></svg> {trip.distanceKM} km
                   </p>
                   <p className="flex gap-1">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.3904 10.0572C10.1976 10.0572 10.0145 10.003 9.86024 9.89458L7.46988 8.21386C7.24819 8.06024 7.11325 7.80723 7.11325 7.54518V4.18373C7.11325 3.72289 7.50843 3.35241 8 3.35241C8.49157 3.35241 8.88675 3.72289 8.88675 4.18373V7.12952L10.9205 8.55723C11.1133 8.69277 11.2289 8.88253 11.2675 9.10843C11.2964 9.3253 11.2386 9.5512 11.094 9.72289C10.9301 9.93072 10.6699 10.0572 10.3807 10.0572H10.3904Z" fill="#ceb366"></path><path d="M8 15C3.58554 15 0 11.6386 0 7.5C0 3.36145 3.58554 0 8 0C12.4145 0 16 3.36145 16 7.5C16 11.6386 12.4145 15 8 15ZM8 1.66265C4.56867 1.66265 1.77349 4.28313 1.77349 7.5C1.77349 10.7169 4.56867 13.3373 8 13.3373C11.4313 13.3373 14.2265 10.7169 14.2265 7.5C14.2265 4.28313 11.4313 1.66265 8 1.66265Z" fill="#ceb366"></path></svg>
-                    0 Hours 30 Mins
+                    {trip.durationMinutes} minutes
                   </p>
                 </div>
               </div>
@@ -181,8 +213,8 @@ export default function Booking() {
                   <div className="flex items-start gap-2 text-sm mb-3">
                       <MapPinIcon className="w-5 h-5 mt-1 text-gray-600 flex-shrink-0" />
                       <div>
-                      <p className="font-semibold line-clamp-1">Toronto Pearson International Airport</p>
-                      <p className="text-gray-600">6301 Silver Dart Dr, Mississauga, ON L5P 1B2, Canada</p>
+                      <p className="font-semibold line-clamp-1">{trip.from.name}</p>
+                      <p className="text-gray-600">{trip.from.addr}</p>
                       </div>
                   </div>
 
@@ -191,8 +223,8 @@ export default function Booking() {
                     <div className="flex items-start gap-2 text-sm">
                         <MapPinIcon className="w-5 h-5 mt-1 text-red-500" />
                         <div>
-                        <p className="font-semibold">Toronto Premium Outlets</p>
-                        <p className="text-gray-600">13850 Steeles Ave, Halton Hills, ON L7G 0J1, Canada</p>
+                        <p className="font-semibold">{trip.to?.name}</p>
+                        <p className="text-gray-600">{trip.to?.addr}</p>
                         </div>
                     </div>
                   )}
@@ -206,6 +238,23 @@ export default function Booking() {
                     <ClockIcon className="w-5 h-5 text-gray-600" />
                     <span>{trip.pickupTimeLabel}</span>
                   </div>
+                  {selectedIdx != null && (<>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 mt-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
+                      <path fillRule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0Z" clipRule="evenodd"></path>
+                      <path d="M6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"></path>
+                    </svg>
+                    <span>{vehicleData[selectedIdx]?.passengers || 1} Passengers</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 mt-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
+                      <path fillRule="evenodd" d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd"></path>
+                      <path d="M3 18.4v-2.796a4.3 4.3 0 0 0 .713.31A26.226 26.226 0 0 0 12 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 0 1-6.477-.427C4.047 21.128 3 19.852 3 18.4Z"></path>
+                    </svg>
+                    <span>{vehicleData[selectedIdx]?.luggage || 1} Luggages</span>
+                  </div>
+                  </>)
+                  }
                 </div>
               </div>
             </div>
@@ -238,6 +287,11 @@ export default function Booking() {
                   <div className="mt-4 grid gap-4">
                     {pricedVehicles.map((v, idx) => {
                       const isSelected = selectedIdx === idx;
+                      const passengers = vehicleData[idx]?.passengers ?? 1;
+                      const luggage = vehicleData[idx]?.luggage ?? 1;
+                      const MAX_PASSENGERS = v.passengers;
+                      const MAX_LUGGAGE = v.luggage;
+
                       return (
                         <div role="button"
                           key={v.id}
@@ -245,15 +299,15 @@ export default function Booking() {
                             setSelectedIdx(idx);
                             setExpandedIdx(expandedIdx === idx ? null : idx);
                           }}
-                          className={`w-full md:flex items-center flex-wrap gap-4 p-4 rounded-xl text-left transition-shadow border cursor-pointer ${
+                          className={`w-full relative md:flex items-center flex-wrap gap-4 p-4 mt-4 rounded-xl text-left transition-shadow border cursor-pointer ${
                             isSelected
-                              ? "border-gray-400 shadow-[0_6px_30px_rgba(0,0,0,0.12)]"
+                              ? "border-gray-400 shadow-[0_6px_30px_rgba(0,0,0,0.12)] bg-amber-50"
                               : "border-gray-200"
                           } hover:shadow-md`}
                           aria-pressed={isSelected}
                         >
                           {/* left: image */}
-                          <div className="flex w-full md:w-32 h-20 relative items-center mb-3 md:mb-0">
+                          <div className="flex w-full md:w-42 h-20 relative items-center mb-3 md:mb-0">
                             <Image
                               src={v.img}
                               alt={v.name}
@@ -265,24 +319,34 @@ export default function Booking() {
 
                           {/* center: details */}
                           <div className="flex-1">
+
+
                             <div className="flex items-start justify-between">
-                              <div>
-                                <div className="font-semibold text-sm md:text-base">{v.name}</div>
+                              <div className="">
+                                <div className="absolute -top-3 bg-white">
+                                  <span className="flex py-0.5 px-3 text-sm border rounded-2xl w-fit">
+                                    <CheckBadgeIcon className="w-5 h-5 text-yellow-600" /> Top Rated
+                                  </span>
+                                </div>
+                                <div className="font-semibold text-sm md:text-xl my-3">{v.name}</div>
+                                <div className="text-xs text-gray-600 mt-1" dangerouslySetInnerHTML={{ __html: v.desc }} />
                               </div>
 
                               {/* price */}
-                              <div className="text-right">
-                                <div className="text-sm md:text-base font-bold">{v.price}</div>
+                              <div className="text-right w-40">
+                                <div className="text-sm md:text-base font-bold text-red-400 line-through">{v.price}</div>
+                                <div className="text-sm md:text-2xl font-bold my-1">{v.price}</div>
+                                <div className="">
+                                  <span className="flex py-1 text-sm font-light"><CheckBadgeIcon className="w-5 h-5 text-green-600" /> Gratuity included</span>
+                                </div>
                               </div>
                             </div>
 
-                            <div>
-                              <p className="text-xs text-gray-600 mt-1" dangerouslySetInnerHTML={{ __html: v.desc }} />
-                            </div>
                             
+                            {expandedIdx === idx && (
                             <div className="flex justify-between items-center gap-6">
                               {/* icons list */}
-                              <ul className="flex justify-center gap-5 bg-[#f3f3f3] rounded-xl px-2 py-1">
+                              <ul className="flex justify-center gap-5 rounded-xl px-2 py-1">
                                 <li className="flex items-center gap-2">
                                   {/* passenger icon (svg as in user's snippet) */}
                                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
@@ -300,9 +364,14 @@ export default function Booking() {
                                   </svg>
                                   <small className="text-sm text-black">{v.luggage}</small>
                                 </li>
+
+                                {/* {v.features & v.features.map((f, i)=>{
+                                  <li className="flex items-center gap-2">Free WiFi</li>
+                                })} */}
                               </ul>
                               {/* right: selection tick */}
                               <div className="flex-shrink-0">
+                                
                                 {isSelected ? (
                                   <div className="w-10 h-10 rounded-full webColor border text-white flex items-center justify-center">
                                     <CheckBadgeIcon className="w-5 h-5" />
@@ -314,6 +383,7 @@ export default function Booking() {
                                 )}
                               </div>
                             </div>
+                            )}
                           </div>
 
                           {expandedIdx === idx && (
@@ -326,9 +396,10 @@ export default function Booking() {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setPassengers(Math.max(1, passengers - 1));
+                                    updatePassengers(idx, MAX_PASSENGERS, -1);
                                   }}
                                   className="w-7 h-7 border rounded-full cursor-pointer"
+                                  disabled={passengers === 1}
                                 >
                                   -
                                 </button>
@@ -336,9 +407,10 @@ export default function Booking() {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setPassengers(passengers + 1);
+                                    updatePassengers(idx, MAX_PASSENGERS, 1);
                                   }}
                                   className="w-7 h-7 border rounded-full cursor-pointer"
+                                  disabled={passengers === MAX_PASSENGERS}
                                 >
                                   +
                                 </button>
@@ -351,9 +423,10 @@ export default function Booking() {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setLuggage(Math.max(0, luggage - 1));
+                                    updateLuggage(idx, MAX_LUGGAGE, -1);
                                   }}
                                   className="w-7 h-7 border rounded-full cursor-pointer"
+                                  disabled={luggage === 0}
                                 >
                                   -
                                 </button>
@@ -361,8 +434,9 @@ export default function Booking() {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setLuggage(luggage + 1);
+                                    updateLuggage(idx, MAX_LUGGAGE, 1);
                                   }}
+                                  disabled={luggage === MAX_LUGGAGE}
                                   className="w-7 h-7 border rounded-full cursor-pointer"
                                 >
                                   +
@@ -391,7 +465,7 @@ export default function Booking() {
                   
 
                   {/* Continue CTA */}
-                  <div className="mt-6 flex md:justify-end">
+                  {/* <div className="mt-6 flex md:justify-end">
                     <button
                       disabled={selectedIdx === null}
                       className={`py-3 px-20 rounded-md font-medium text-black transition hover:opacity-90 text-sm md:text-base w-full md:w-auto ${
@@ -404,7 +478,7 @@ export default function Booking() {
                     >
                       {submiting ? 'Continue...' : 'Continue'}
                     </button>
-                  </div>
+                  </div> */}
                   
                   </>
 
