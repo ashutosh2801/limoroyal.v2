@@ -480,8 +480,12 @@ export default function Search() {
             {/* ADDITIONAL STOP */}
             {additionalStops.map((stop, index) => (
               <div key={index} className="relative">
-                <FaCarSide className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`} />
+                {/* Icon */}
+                <FaCarSide
+                  className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                />
 
+                {/* Input */}
                 <input
                   value={stop}
                   onChange={(e) => {
@@ -490,7 +494,7 @@ export default function Search() {
                     setAdditionalStops(newStops);
                   }}
                   placeholder=" "
-                  className={`${inputClass} peer pl-10 pt-6`}
+                  className={`${inputClass} peer pl-10 pr-10 pt-6`}
                 />
 
                 {/* Floating label */}
@@ -512,6 +516,18 @@ export default function Search() {
                     Address, Airport, Hotel...
                   </span>
                 )}
+
+                {/* ❌ Remove Stop Icon */}
+                <XMarkIcon
+                  className="absolute right-3 top-1/2 -translate-y-1/2
+                    w-4 h-4 cursor-pointer text-gray-400 hover:text-red-500"
+                  onClick={(e) => {
+                    e.stopPropagation(); // 🔥 IMPORTANT
+                    setAdditionalStops((prev) =>
+                      prev.filter((_, i) => i !== index)
+                    );
+                  }}
+                />
               </div>
             ))}
 
@@ -646,8 +662,8 @@ export default function Search() {
             </div>
 
             <div className="relative">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center">
+              <div className="grid grid-cols-1 gap-4">
+                {/* <div className="flex items-center">
                   <button
                     onClick={() => setIsRoundTrip(!isRoundTrip)}
                     className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
@@ -657,7 +673,7 @@ export default function Search() {
                     <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
                   </button>
                   <span className="text-xs md:text-sm w-full ml-2">Round Trip</span>
-                </div>
+                </div> */}
                 <div className="flex justify-end">
                     <button
                       onClick={() => setAdditionalStops([...additionalStops, ""])}
@@ -758,8 +774,12 @@ export default function Search() {
             {/* ADDITIONAL STOP */}
             {additionalStops.map((stop, index) => (
               <div key={index} className="relative">
-                <FaCarSide className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`} />
+                {/* Icon */}
+                <FaCarSide
+                  className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                />
 
+                {/* Input */}
                 <input
                   value={stop}
                   onChange={(e) => {
@@ -768,7 +788,7 @@ export default function Search() {
                     setAdditionalStops(newStops);
                   }}
                   placeholder=" "
-                  className={`${inputClass} peer pl-10 pt-6`}
+                  className={`${inputClass} peer pl-10 pr-10 pt-6`}
                 />
 
                 {/* Floating label */}
@@ -790,6 +810,18 @@ export default function Search() {
                     Address, Airport, Hotel...
                   </span>
                 )}
+
+                {/* ❌ Remove Stop Icon */}
+                <XMarkIcon
+                  className="absolute right-3 top-1/2 -translate-y-1/2
+                    w-4 h-4 cursor-pointer text-gray-400 hover:text-red-500"
+                  onClick={(e) => {
+                    e.stopPropagation(); // 🔥 IMPORTANT
+                    setAdditionalStops((prev) =>
+                      prev.filter((_, i) => i !== index)
+                    );
+                  }}
+                />
               </div>
             ))}
 
@@ -924,8 +956,8 @@ export default function Search() {
             </div>
 
             <div className="relative">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center">
+              <div className="grid grid-cols-1 gap-4">
+                {/* <div className="flex items-center">
                   <button
                     onClick={() => setIsRoundTrip(!isRoundTrip)}
                     className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
@@ -935,7 +967,7 @@ export default function Search() {
                     <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
                   </button>
                   <span className="text-xs md:text-sm w-full ml-2">Round Trip</span>
-                </div>
+                </div> */}
                 <div className="flex justify-end">
                     <button
                       onClick={() => setAdditionalStops([...additionalStops, ""])}
