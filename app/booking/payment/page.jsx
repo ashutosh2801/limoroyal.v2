@@ -201,24 +201,29 @@ function PaymentForm() {
                 <div>
                   <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Booking Summary</h4>
                 </div>
-                <div>
+                <div className="relative">
+                  {/* Vertical connector */}
+                  {data.to && (
+                    <div className="absolute left-[9px] top-[19px] h-[calc(100%-35px)] border-r-3 border-dotted border-black" />
+                  )}
+
                   {/* FROM */}
-                  <div className="flex items-start gap-2 text-xs md:text-sm mb-3">
-                      <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
-                      <div>
+                  <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
+                    <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                    <div>
                       <p className="font-semibold line-clamp-1">{trip.from.name}</p>
                       <p className="text-gray-600">{trip.from.addr}</p>
-                      </div>
+                    </div>
                   </div>
 
                   {/* TO */}
-                  {data.to && ( 
-                    <div className="flex items-start gap-2 text-xs md:text-sm">
-                        <MapPinIcon className="w-5 h-5 text-red-500" />
-                        <div>
+                  {data.to && (
+                    <div className="flex items-start gap-3 text-xs md:text-sm relative z-10">
+                      <MapPinIcon className="w-5 h-5 text-red-500 flex-shrink-0" />
+                      <div>
                         <p className="font-semibold">{trip.to?.name}</p>
                         <p className="text-gray-600">{trip.to?.addr}</p>
-                        </div>
+                      </div>
                     </div>
                   )}
                 </div>

@@ -303,26 +303,37 @@ export default function CheckoutPage() {
                             </div>
 
                             {/* Locations */}
-                            <div className="mt-6 space-y-4 text-xs md:text-sm">
+                            <div className="relative mt-6 space-y-4 text-xs md:text-sm">
+
+                              {/* Vertical connector */}
+                              {data.to && (
+                                <div
+                                  className="absolute left-[7px] top-[20px] h-[calc(100%-55px)] border-l-2 border-dotted border-gray-500 pointer-events-none"
+                                />
+                              )}
 
                               {/* FROM */}
-                              <div className="flex items-start gap-2">
-                                  <MapPinIcon className="w-4 h-4 mt-1 text-gray-600 flex-shrink-0" />
-                                  <div>
+                              <div className="flex items-start gap-2 relative z-10">
+                                <MapPinIcon className="w-4 h-4 mt-1 text-gray-600 flex-shrink-0" />
+                                <div>
                                   <p className="font-semibold">{data.from.name}</p>
                                   <p className="text-gray-600">{data.from.address}</p>
-                                  </div>
+                                </div>
                               </div>
 
                               {/* TO */}
-                              {data.to && ( 
-                              <div className="flex items-start gap-2">
+                              {data.to && (
+                                <div className="flex items-start gap-2 relative z-10">
                                   <MapPinIcon className="w-4 h-4 mt-1 text-red-500 flex-shrink-0" />
                                   <div>
-                                  <p className="font-semibold text-xs md:text-base">{data.to?.name}</p>
-                                  <p className="text-gray-600 text-xs md:text-sm">{data.to?.address}</p>
+                                    <p className="font-semibold text-xs md:text-base">
+                                      {data.to?.name}
+                                    </p>
+                                    <p className="text-gray-600 text-xs md:text-sm">
+                                      {data.to?.address}
+                                    </p>
                                   </div>
-                              </div>
+                                </div>
                               )}
                             </div>
 
