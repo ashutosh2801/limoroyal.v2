@@ -12,6 +12,7 @@ import {
 import {
   CheckCircleIcon as CheckCircleOutlineIcon,
 } from "@heroicons/react/24/outline";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { saveSearch } from "@/store/searchSlice";
 import "react-phone-input-2/lib/style.css";
@@ -184,24 +185,29 @@ export default function PickupInfoPage() {
                 <div>
                   <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Pickup Trip Details</h4>
                 </div>
-                <div>
+                <div className="relative">
+                  {/* Vertical connector */}
+                  {data.to && (
+                    <div className="absolute left-[9px] top-[19px] h-[calc(100%-35px)] border-r-3 border-dotted border-black" />
+                  )}
+
                   {/* FROM */}
-                  <div className="flex items-start gap-2 text-xs md:text-sm mb-3">
-                      <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
-                      <div>
+                  <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
+                    <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                    <div>
                       <p className="font-semibold line-clamp-1">{trip.from.name}</p>
                       <p className="text-gray-600">{trip.from.addr}</p>
-                      </div>
+                    </div>
                   </div>
 
                   {/* TO */}
-                  {data.to && ( 
-                    <div className="flex items-start gap-2 text-xs md:text-sm">
-                        <MapPinIcon className="w-5 h-5 text-red-500" />
-                        <div>
+                  {data.to && (
+                    <div className="flex items-start gap-3 text-xs md:text-sm relative z-10">
+                      <MapPinIcon className="w-5 h-5 text-red-500 flex-shrink-0" />
+                      <div>
                         <p className="font-semibold">{trip.to?.name}</p>
                         <p className="text-gray-600">{trip.to?.addr}</p>
-                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -330,7 +336,7 @@ export default function PickupInfoPage() {
                     <div className="mb-6">
                       <p className="font-semibold mb-2 text-sm md:text-base">Select Who you are booking for?</p>
 
-                      <div className="flex flex-col gap-4 p-4 border border-gray-200 rounded-xl">
+                      <div className="flex flex-col gap-4 p-3 md:p-4 border border-gray-200 rounded-xl">
                         <label className="flex items-center gap-2 text-xs md:text-sm">
                           <input
                             type="radio"
@@ -356,7 +362,7 @@ export default function PickupInfoPage() {
                     </div>
 
                     {(form.bookingFor === "someoneElse" || form.bookingFor === "myself") && (
-                      <div className="mb-6 p-4 md:p-6 lg:!pr-50 border border-gray-200 rounded-xl space-y-4">
+                      <div className="mb-6 p-3 md:p-4 md:p-6 lg:!pr-50 border border-gray-200 rounded-xl space-y-4">
                         <p className="font-semibold mb-2 text-sm md:text-base">Guest Information</p>
 
                         <div className="grid md:grid-cols-2 gap-4">
@@ -582,7 +588,7 @@ export default function PickupInfoPage() {
                       <small className="flex mt-1 text-gray-500 text-[10px] md:text-xs">
                         Enter your flight number to ensure your chauffeur can track your flight and adjust the pickup time.
                       </small>
-                      <div className="mt-2 p-4 border border-gray-200 rounded-xl">
+                      <div className="mt-2 p-3 md:p-4 border border-gray-200 rounded-xl">
                         <div className="relative w-full">
                           {/* Input */}
                           <input
@@ -619,7 +625,7 @@ export default function PickupInfoPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="mt-3 p-4 border border-gray-200 rounded-xl">
+                    <div className="mt-3 p-3 md:p-4 border border-gray-200 rounded-xl">
                       <div className="mb-3">
                         <div className="relative w-full">
                           {/* Input */}
@@ -738,12 +744,20 @@ export default function PickupInfoPage() {
                   </div>
 
                   {/* Continue button */}
-                  <div className="mt-6 flex justify-end">
+                  <div className="mt-6 flex justify-between">
+                    <button
+                      onClick={(e) => {e.preventDefault(); router.back(); }}
+                      className="flex py-3 px-3 md:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs md:text-base w-auto transition"
+                    >
+                      <FaChevronLeft className="text-white text-sm mr-1 md:mt-1" />
+                      Back
+                    </button>
                     <button
                       onClick={handleContinue}
-                      className="py-3 px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-sm md:text-base w-full md:w-auto"
+                      className="flex py-3 px-2 md:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs md:text-base w-auto"
                     >
                       Continue to Payment
+                      <FaChevronRight className="text-white text-sm ml-1 md:mt-1" />
                     </button>
                   </div>
 

@@ -10,7 +10,7 @@ import {
   ExclamationCircleIcon,
   CheckCircleIcon
 } from "@heroicons/react/24/solid";
-import { FaCarSide } from "react-icons/fa";
+import { FaCarSide, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import payment from '../../../public/assets/payment.png'
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -46,6 +46,13 @@ function PaymentForm() {
   const [error, setError] = useState("");
   const [saveCard, setSaveCard] = useState(true);
   const [selectedIdx, setSelectedIdx] = useState(null);
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardFocused, setCardFocused] = useState(false);
+  const [cardExpiry, setCardExpiry] = useState("");
+  const [expiryFocused, setExpiryFocused] = useState(false);
+  const [cardCvc, setCardCvc] = useState("");
+  const [cvcFocused, setCvcFocused] = useState(false);
+
 
   useEffect(()=>{
     console.log(data);
@@ -58,13 +65,17 @@ function PaymentForm() {
       base: {
         fontSize: "14px",
         color: "#000",
-        "::placeholder": { color: "#9ca3af" },
+        "::placeholder": { 
+          color: "#6a7282", 
+          fontSize: "12px"
+        },
       },
       invalid: {
         color: "#dc2626",
       },
     },
   };
+
 
   // Trip data (should match previous pages)
   const trip = {
@@ -190,24 +201,29 @@ function PaymentForm() {
                 <div>
                   <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Booking Summary</h4>
                 </div>
-                <div>
+                <div className="relative">
+                  {/* Vertical connector */}
+                  {data.to && (
+                    <div className="absolute left-[9px] top-[19px] h-[calc(100%-35px)] border-r-3 border-dotted border-black" />
+                  )}
+
                   {/* FROM */}
-                  <div className="flex items-start gap-2 text-xs md:text-sm mb-3">
-                      <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
-                      <div>
+                  <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
+                    <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                    <div>
                       <p className="font-semibold line-clamp-1">{trip.from.name}</p>
                       <p className="text-gray-600">{trip.from.addr}</p>
-                      </div>
+                    </div>
                   </div>
 
                   {/* TO */}
-                  {data.to && ( 
-                    <div className="flex items-start gap-2 text-xs md:text-sm">
-                        <MapPinIcon className="w-5 h-5 text-red-500" />
-                        <div>
+                  {data.to && (
+                    <div className="flex items-start gap-3 text-xs md:text-sm relative z-10">
+                      <MapPinIcon className="w-5 h-5 text-red-500 flex-shrink-0" />
+                      <div>
                         <p className="font-semibold">{trip.to?.name}</p>
                         <p className="text-gray-600">{trip.to?.addr}</p>
-                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -361,7 +377,7 @@ function PaymentForm() {
                     </h2>
 
                     <div className="mt-4 space-y-3">
-                      <label className="flex items-center gap-3 border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-black">
+                      <label className="flex items-center gap-3 border border-gray-200 rounded-xl p-3 md:p-4 cursor-pointer hover:border-black">
                         <input
                           type="radio"
                           name="paymentOption"
@@ -380,7 +396,7 @@ function PaymentForm() {
                         </div>
                       </label>
 
-                      <label className="flex items-center gap-3 border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-black">
+                      <label className="flex items-center gap-3 border border-gray-200 rounded-xl p-3 md:p-4 cursor-pointer hover:border-black">
                         <input
                           type="radio"
                           name="paymentOption"
@@ -401,74 +417,137 @@ function PaymentForm() {
                     </div>
 
                     {paymentOption === "card" && (
-                    <div className="mt-4 space-y-4 border border-gray-200 rounded-xl p-5">
+                    <div className="mt-4 space-y-4 border border-gray-200 rounded-xl p-3 md:p-5">
 
                         {/* Name on card */}
                         <div className="flex flex-col">
-                        <label className="text-gray-700 text-xs md:text-sm font-semibold mb-1">Name on card *</label>
-                        <input
-                            type="text"
-                            className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
-                            value={nameOnCard}
-                            placeholder="Name on card"
-                            onChange={(e) => setNameOnCard(e.target.value)}
-                        />
-                        
+                          <div className="relative w-full">
+                            {/* Input */}
+                            <input
+                              type="text"
+                              value={nameOnCard}
+                              onChange={(e) => setNameOnCard(e.target.value)}
+                              placeholder=" "
+                              className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
+                            />
+
+                            {/* Floating Label */}
+                            <label
+                              className={`absolute left-3 text-gray-400 pointer-events-none transition-all duration-200 ${
+                                nameOnCard
+                                  ? "top-2 text-xs"
+                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                              }`}
+                            >
+                              Name on card *
+                            </label>
+
+                            {/* Helper text */}
+                            {!nameOnCard && (
+                              <span className="hidden md:block pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0">
+                                Enter the name exactly as shown on your card
+                              </span>
+                            )}
+                          </div>
                         </div>
 
                         {/* Card number */}
-                        <div className="flex flex-col">
-                        <label className="text-gray-700 text-xs md:text-sm font-semibold mb-1">Card number *</label>
-                        <div className="relative">
-                            <div className="px-3 py-3 border rounded-xl bg-gray-100 border-gray-200">
-                              <CardNumberElement options={stripeStyle} />
+                        <div className="flex flex-col relative w-full">
+                          <div className="relative">
+                            <div
+                              className="pl-3 md:pr-40 pt-6 pb-3 border rounded-xl bg-gray-100 border-gray-200"
+                              onFocus={() => setCardFocused(true)}
+                              onBlur={() => setCardFocused(false)}
+                            >
+                              <CardNumberElement
+                                options={stripeStyle}
+                                onChange={(e) => setCardNumber(e.value)}
+                                onFocus={() => setCardFocused(true)}
+                                onBlur={() => setCardFocused(false)}
+                              />
                             </div>
-                            {/* <input
-                            type="number"
-                            className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
-                            value={cardNumber}
-                            onChange={(e) => setCardNumber(e.target.value)}
-                            /> */}
-                            <div className="absolute right-2 top-4 md:top-3">
-                            <Image
+
+                            {/* Floating Label */}
+                            <label
+                              className={`absolute left-3 text-gray-400 pointer-events-none transition-all duration-200 ${
+                                cardNumber || cardFocused
+                                  ? "top-1 text-xs"
+                                  : "top-2 text-[12px] md:text-sm"
+                              }`}
+                            >
+                              Card Number *
+                            </label>
+
+                            {/* Payment Icon */}
+                            <div className="absolute right-2 top-3 md:top-6">
+                              <Image
                                 src={payment}
                                 alt="Payment"
                                 className="object-contain h-3 md:h-5 w-auto"
-                            />
+                              />
                             </div>
-                        </div>
+                          </div>
                         </div>
 
                         {/* Expiry & CVV */}
-                        <div className="grid grid-cols-2 gap-4">
-                        <div className="flex flex-col">
-                            <label className="text-gray-700 text-xs md:text-sm font-semibold mb-1">
-                            Expiration date *
-                            </label>
-                            {/* <input
-                            type="number"
-                            placeholder="MM/YY"
-                            className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
-                            value={expiry}
-                            onChange={(e) => setExpiry(e.target.value)}
-                            /> */}
-                            <div className="px-3 py-3 border rounded-xl bg-gray-100 border-gray-200">
-                        <CardExpiryElement options={stripeStyle} />
-                      </div>
-                        </div>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          {/* Expiration Date */}
+                          <div className="flex flex-col relative w-full">
+                            <div className="relative">
+                              <div
+                                className="pl-3 pr-20 pt-6 pb-2 border rounded-xl bg-gray-100 border-gray-200"
+                                onFocus={() => setExpiryFocused(true)}
+                                onBlur={() => setExpiryFocused(false)}
+                              >
+                                <CardExpiryElement
+                                  options={stripeStyle}
+                                  onChange={(e) => setCardExpiry(e.value)}
+                                  onFocus={() => setExpiryFocused(true)}
+                                  onBlur={() => setExpiryFocused(false)}
+                                />
+                              </div>
 
-                        <div className="flex flex-col">
-                            <label className="text-gray-700 text-xs md:text-sm font-semibold mb-1">CVV *</label>
-                            {/* <input
-                            type="number"
-                            className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
-                            value={cvv}
-                            onChange={(e) => setCVV(e.target.value)}
-                            /> */}
-                            <div className="px-3 py-3 border rounded-xl bg-gray-100 border-gray-200">
-                        <CardCvcElement options={stripeStyle} />
-                      </div>
-                        </div>
+                              {/* Floating Label */}
+                              <label
+                                className={`absolute left-3 text-gray-400 pointer-events-none transition-all duration-200 ${
+                                  cardExpiry || expiryFocused
+                                    ? "top-1 text-xs"
+                                    : "top-2 text-[12px] md:text-sm"
+                                }`}
+                              >
+                                Expiration Date *
+                              </label>
+                            </div>
+                          </div>
+
+                          {/* CVV */}
+                          <div className="flex flex-col relative w-full">
+                            <div className="relative">
+                              <div
+                                className="pl-3 pr-20 pt-6 pb-2 border rounded-xl bg-gray-100 border-gray-200"
+                                onFocus={() => setCvcFocused(true)}
+                                onBlur={() => setCvcFocused(false)}
+                              >
+                                <CardCvcElement
+                                  options={stripeStyle}
+                                  onChange={(e) => setCardCvc(e.value)}
+                                  onFocus={() => setCvcFocused(true)}
+                                  onBlur={() => setCvcFocused(false)}
+                                />
+                              </div>
+
+                              {/* Floating Label */}
+                              <label
+                                className={`absolute left-3 text-gray-400 pointer-events-none transition-all duration-200 ${
+                                  cardCvc || cvcFocused
+                                    ? "top-1 text-xs"
+                                    : "top-2 text-[12px] md:text-sm"
+                                }`}
+                              >
+                                CVV *
+                              </label>
+                            </div>
+                          </div>
                         </div>
 
                         {/* ERROR */}
@@ -491,45 +570,39 @@ function PaymentForm() {
 
                     <div className="mt-5">
                         <div className="border border-gray-200 rounded-xl">
-                            <div className="p-4">
+                            <div className="p-3 md:p-4">
                                 <p className="text-gray-700 text-xs md:text-sm py-2 flex items-center items-start"> <CheckCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> Our Servers are encrypted with TLS/SSL to ensure security and privacy.</p>
                             </div>
                             <hr className="border-t border-gray-200" />
-                            <div className="p-4">
+                            <div className="p-3 md:p-4">
                                 <p className="text-gray-700 text-xs md:text-sm py-2 flex items-center items-start"> <ExclamationCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> The amount will be held from your selected payment method after the booking, We only charge you after the ride is finished.</p>
                             </div>
                         </div>
                     </div> 
 
                     {/* Continue button */}
-                    <div className="mt-6 flex justify-end">
-                    {/* <button
+                    <div className="mt-6 flex justify-between">
+                      <button
+                        onClick={(e) => {e.preventDefault(); router.back(); }}
+                        className="flex py-3 px-3 md:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs md:text-base w-auto transition"
+                      >
+                        <FaChevronLeft className="text-white text-sm mr-1 md:mt-1" />
+                        Back
+                      </button>
+                      <button
                         onClick={handlePayment}
                         disabled={processing}
-                        className={`py-3 px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-sm md:text-base w-full md:w-auto ${
-                        processing
-                          ? "opacity-60 cursor-not-allowed"
-                          : "hover:opacity-90"
+                        className={`flex py-3 px-3 md:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs md:text-base w-auto ${
+                          processing ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
                         }`}
-                        >
-                            {processing
-                        ? "Processing..."
-                        : `Proceed to Checkout`}
-                            
-                        </button> */}
-                        <button
-      onClick={handlePayment}
-      disabled={processing}
-      className={`py-3 px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-sm md:text-base w-full md:w-auto ${
-        processing ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
-      }`}
-    >
-      {processing
-        ? "Processing..."
-        : paymentOption === "card"
-        ? "Proceed to Checkout"
-        : "Get a Quote"}
-    </button>
+                      >
+                        {processing
+                            ? "Processing..."
+                            : paymentOption === "card"
+                            ? "Proceed to Checkout"
+                            : "Get a Quote"}
+                        <FaChevronRight className="text-white text-sm ml-1 md:mt-1" />
+                      </button>
                     </div>
 
                 </div>
