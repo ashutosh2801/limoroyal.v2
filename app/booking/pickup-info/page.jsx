@@ -370,87 +370,222 @@ export default function PickupInfoPage() {
                     </div>
 
                     {(form.bookingFor === "someoneElse" || form.bookingFor === "myself") && (
-                      <div className="mb-6 p-4 md:p-6 border border-gray-200 rounded-xl">
+                      <div className="mb-6 p-4 md:p-6 lg:!pr-50 border border-gray-200 rounded-xl space-y-4">
                         <p className="font-semibold mb-2 text-sm md:text-base">Guest Information</p>
-                        <div className="grid gap-4">
-                          <div>
-                            <select 
-                            value={form.title}
-                            onChange={(e) => setForm({ ...form, title: e.target.value })}
-                            className="w-full md:w-48 px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none">
-                              <option value="">Title</option>
+
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div className="relative w-full md:w-50">
+                            {/* Select */}
+                            <select
+                              value={form.title}
+                              onChange={(e) =>
+                                setForm({ ...form, title: e.target.value })
+                              }
+                              className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
+                                border rounded-xl bg-gray-100 border-gray-200
+                                focus:outline-none focus:bg-white"
+                            >
+                              <option value="" disabled hidden />
                               <option value="Mr.">Mr.</option>
                               <option value="Mrs.">Mrs.</option>
                               <option value="Ms.">Ms.</option>
                               <option value="Dr.">Dr.</option>
-                              </select>
-                              {errors.title && (
-                                <p className="text-red-500 text-xs mt-1">{errors.title}</p>
-                              )}
-                            </div>
+                            </select>
 
-                          <div className="flex gap-4">
-                            <div>  
+                            {/* Floating Label */}
+                            <label
+                              className={`absolute left-3 text-gray-400 pointer-events-none
+                                transition-all duration-200
+                                ${
+                                  form.title
+                                    ? "top-2 text-xs"
+                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                }`}
+                            >
+                              Title
+                            </label>
+
+                            {/* Helper text */}
+                            {!form.title && !errors.title && (
+                              <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 line-clamp-1">
+                                Please select a title
+                              </span>
+                            )}
+
+                            {/* Error */}
+                            {errors.title && (
+                              <p className="text-red-500 text-xs mt-1">
+                                {errors.title}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div className="relative w-full">
+                            {/* Input */}
                             <input
                               type="text"
                               value={form.firstName}
-                              onChange={(e) => setForm({ ...form, firstName: e.target.value })}
-                              placeholder="First Name"
-                              className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
+                              onChange={(e) =>
+                                setForm({ ...form, firstName: e.target.value })
+                              }
+                              placeholder=" "
+                              className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
+                                border rounded-xl bg-gray-100 border-gray-200
+                                focus:outline-none focus:bg-white"
                             />
+
+                            {/* Floating Label */}
+                            <label
+                              className={`absolute left-3 text-gray-400 pointer-events-none
+                                transition-all duration-200
+                                ${
+                                  form.firstName
+                                    ? "top-2 text-xs"
+                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                }`}
+                            >
+                              First Name
+                            </label>
+
+                            {/* Helper text */}
+                            {!form.firstName && !errors.firstName && (
+                              <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0">
+                                Enter your first name
+                              </span>
+                            )}
+
+                            {/* Error */}
                             {errors.firstName && (
-                                <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
-                              )}
-                              </div>
+                              <p className="text-red-500 text-xs mt-1">
+                                {errors.firstName}
+                              </p>
+                            )}
+                          </div>
 
-                            <div>
-
+                          <div className="relative w-full">
+                            {/* Input */}
                             <input
                               type="text"
                               value={form.lastName}
-                              onChange={(e) => setForm({ ...form, lastName: e.target.value })}
-                              placeholder="Last Name"
-                              className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
+                              onChange={(e) =>
+                                setForm({ ...form, lastName: e.target.value })
+                              }
+                              placeholder=" "
+                              className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
+                                border rounded-xl bg-gray-100 border-gray-200
+                                focus:outline-none focus:bg-white"
                             />
+
+                            {/* Floating Label */}
+                            <label
+                              className={`absolute left-3 text-gray-400 pointer-events-none
+                                transition-all duration-200
+                                ${
+                                  form.lastName
+                                    ? "top-2 text-xs"
+                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                }`}
+                            >
+                              Last Name
+                            </label>
+
+                            {/* Helper text */}
+                            {!form.lastName && !errors.lastName && (
+                              <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0">
+                                Enter your last name
+                              </span>
+                            )}
+
+                            {/* Error */}
                             {errors.lastName && (
-                                <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
-                              )}
-                              </div>
+                              <p className="text-red-500 text-xs mt-1">
+                                {errors.lastName}
+                              </p>
+                            )}
                           </div>
+                        </div>
+                        
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div className="relative w-full">
+                            {/* Input */}
+                            <input
+                              type="email"
+                              value={form.email}
+                              onChange={(e) =>
+                                setForm({ ...form, email: e.target.value })
+                              }
+                              placeholder=" "
+                              className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
+                                border rounded-xl bg-gray-100 border-gray-200
+                                focus:outline-none focus:bg-white"
+                            />
 
-                          <input
-                            type="email"
-                            value={form.email}
-                            onChange={(e) => setForm({ ...form, email: e.target.value })}
-                            placeholder="Email Address"
-                            className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
-                          />
-                          {errors.email && (
-                                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-                              )}
+                            {/* Floating Label */}
+                            <label
+                              className={`absolute left-3 text-gray-400 pointer-events-none
+                                transition-all duration-200
+                                ${
+                                  form.email
+                                    ? "top-2 text-xs"
+                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                }`}
+                            >
+                              Email Address
+                            </label>
 
-                          {/* <input
-                            type="text"
-                            value={form.contactNumber}
-                            onChange={(e) => setForm({ ...form, contactNumber: e.target.value })}
-                            placeholder="Contact Number"
-                            className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
-                          /> */}
-                          <PhoneInput
-                            country={"ca"}
-                            value={form.contactNumber}
-                            onChange={(phone) =>
-                              setForm({ ...form, contactNumber: phone })
-                            }
-                            inputClass="!w-full !py-6 !pr-3 !pl-12 !text-xs md:!text-sm !border !rounded-xl !bg-gray-100 !border-gray-200 focus:!outline-none"
-                            buttonClass="!border-none !bg-transparent"
-                            containerClass="!w-full"
-                            placeholder="Contact Number"
-                          />
-                          {errors.contactNumber && (
-                                <p className="text-red-500 text-xs mt-1">{errors.contactNumber}</p>
-                              )}
+                            {/* Helper text */}
+                            {!form.email && !errors.email && (
+                              <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0">
+                                Enter your email address
+                              </span>
+                            )}
 
+                            {/* Error */}
+                            {errors.email && (
+                              <p className="text-red-500 text-xs mt-1">
+                                {errors.email}
+                              </p>
+                            )}
+                          </div>
+                          <div className="relative w-full">
+                            {/* Phone Input */}
+                            <PhoneInput
+                              country={"ca"}
+                              value={form.contactNumber}
+                              onChange={(phone) =>
+                                setForm({ ...form, contactNumber: phone })
+                              }
+                              containerClass="peer !w-full"
+                              inputClass="!w-full !pt-10 !pb-3 !pr-3 !pl-12
+                                !text-xs md:!text-sm
+                                !border !rounded-xl !bg-gray-100 !border-gray-200
+                                focus:!outline-none focus:!bg-white"
+                              buttonClass="!border-none !bg-transparent"
+                              placeholder=" "
+                            />
+
+                            {/* Floating Label */}
+                            <label
+                              className={`absolute left-12 text-gray-400 pointer-events-none
+                                transition-all duration-200
+                                ${
+                                  form.contactNumber
+                                    ? "top-2 text-xs"
+                                    : "top-3 text-[12px] md:text-sm peer-focus-within:top-2 peer-focus-within:text-xs"
+                                }`}
+                            >
+                              Contact Number
+                            </label>
+
+                            {/* Error */}
+                            {errors.contactNumber && (
+                              <p className="text-red-500 text-xs mt-1">
+                                {errors.contactNumber}
+                              </p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -458,49 +593,160 @@ export default function PickupInfoPage() {
                     {/* Additional Info */}
                     <div className="mb-2">
                       <p className="font-semibold text-sm md:text-base">Additional information</p>
-                      <small className="text-gray-500 text-[10px] md:text-xs">
+                      <small className="flex mt-1 text-gray-500 text-[10px] md:text-xs">
                         Enter your flight number to ensure your chauffeur can track your flight and adjust the pickup time.
                       </small>
                       <div className="mt-2 p-4 border border-gray-200 rounded-xl">
-                        <input
-                          type="text"
-                          value={form.flightNumber}
-                          onChange={(e) => setForm({ ...form, flightNumber: e.target.value })}
-                          placeholder="Flight number"
-                          className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
-                        />
+                        <div className="relative w-full">
+                          {/* Input */}
+                          <input
+                            type="text"
+                            value={form.flightNumber}
+                            onChange={(e) =>
+                              setForm({ ...form, flightNumber: e.target.value })
+                            }
+                            placeholder=" "
+                            className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
+                              border rounded-xl bg-gray-100 border-gray-200
+                              focus:outline-none focus:bg-white"
+                          />
+
+                          {/* Floating Label */}
+                          <label
+                            className={`absolute left-3 text-gray-400 pointer-events-none
+                              transition-all duration-200
+                              ${
+                                form.flightNumber
+                                  ? "top-2 text-xs"
+                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                              }`}
+                          >
+                            Flight number
+                          </label>
+
+                          {/* Helper text */}
+                          {!form.flightNumber && (
+                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 line-clamp-1">
+                              Enter your flight number
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className="mt-3 p-4 border border-gray-200 rounded-xl">
                       <div className="mb-3">
-                        <input
-                          type="text"
-                          value={form.pickupSign}
-                          onChange={(e) => setForm({ ...form, pickupSign: e.target.value })}
-                          placeholder="Pickup Sign"
-                          className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
-                        />
-                        <small className="text-gray-500 text-[10px] md:text-xs">It will appear on your chauffeur's pickup sign when they meet you.</small>
+                        <div className="relative w-full">
+                          {/* Input */}
+                          <input
+                            type="text"
+                            value={form.pickupSign}
+                            onChange={(e) =>
+                              setForm({ ...form, pickupSign: e.target.value })
+                            }
+                            placeholder=" "
+                            className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
+                              border rounded-xl bg-gray-100 border-gray-200
+                              focus:outline-none focus:bg-white"
+                          />
+
+                          {/* Floating Label */}
+                          <label
+                            className={`absolute left-3 text-gray-400 pointer-events-none
+                              transition-all duration-200
+                              ${
+                                form.pickupSign
+                                  ? "top-2 text-xs"
+                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                              }`}
+                          >
+                            Pickup Sign
+                          </label>
+
+                          {/* Helper text inside input */}
+                          {!form.pickupSign && (
+                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden md:block">
+                             It will appear on your chauffeur's pickup sign when they meet you.
+                            </span>
+                          )}
+                        </div>
+                        <small className="text-gray-500 text-[10px] flex md:hidden mt-1">
+                          It will appear on your chauffeur's pickup sign when they meet you.
+                        </small>
+                      </div>
+                      <div className="mb-2">
+                        <div className="relative w-full">
+                          {/* Textarea */}
+                          <textarea
+                            value={form.chauffeurNotes}
+                            onChange={(e) =>
+                              setForm({ ...form, chauffeurNotes: e.target.value })
+                            }
+                            placeholder=" "
+                            className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
+                              border rounded-xl bg-gray-100 border-gray-200
+                              focus:outline-none min-h-25 resize-none"
+                          ></textarea>
+
+                          {/* Floating Label */}
+                          <label
+                            className={`absolute left-3 text-gray-400 pointer-events-none
+                              transition-all duration-200
+                              ${
+                                form.chauffeurNotes
+                                  ? "top-2 text-xs"
+                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                              }`}
+                          >
+                            Notes for the chauffeur
+                          </label>
+
+                          {/* Helper text inside textarea */}
+                          {!form.chauffeurNotes && (
+                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden md:block">
+                              Add special requests, e.g. number of bags, child seats, etc. please do not include confidential information.
+                            </span>
+                          )}
+                        </div>
+                        <small className="text-gray-500 text-[10px] flex md:hidden mt-1">
+                          Add special requests, e.g. number of bags, child seats, etc. please do not include confidential information.
+                        </small>
                       </div>
                       <div className="mb-3">
-                        <textarea
-                          type="text"
-                          value={form.chauffeurNotes}
-                          onChange={(e) => setForm({ ...form, chauffeurNotes: e.target.value })}
-                          placeholder="Notes for the chauffeur"
-                          className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none min-h-25"
-                        ></textarea>
-                        <small className="text-gray-500 text-[10px] md:text-xs">Add special requests, e.g. number of bags, child seats, etc. please do not include confidential information.</small>
-                      </div>
-                      <div className="mb-3">
-                        <input
-                          type="text"
-                          value={form.referenceCode}
-                          onChange={(e) => setForm({ ...form, referenceCode: e.target.value })}
-                          placeholder="Reference code or cost center"
-                          className="w-full px-3 py-3 text-xs md:text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none"
-                        />
-                        <small className="text-gray-500 text-[10px] md:text-xs">Booking for business? what you enter above will appear on the invoice.</small>
+                        <div className="relative w-full">
+                          {/* Input */}
+                          <input
+                            type="text"
+                            value={form.referenceCode}
+                            onChange={(e) => setForm({ ...form, referenceCode: e.target.value })}
+                            placeholder=" "
+                            className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
+                              border rounded-xl bg-gray-100 border-gray-200
+                              focus:outline-none"
+                          />
+
+                          {/* Floating Label */}
+                          <label
+                            className={`absolute left-3 text-gray-400 pointer-events-none
+                              transition-all duration-200
+                              ${
+                                form.referenceCode
+                                  ? "top-2 text-xs"
+                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                              }`}
+                          >
+                            Reference code or cost center
+                          </label>
+
+                          {/* Helper text inside input */}
+                          {!form.referenceCode && (
+                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden md:block">
+                              Booking for business? what you enter above will appear on the invoice.
+                            </span>
+                          )}
+                        </div>
+                        <small className="text-gray-500 text-[10px] flex md:hidden mt-1">
+                          Booking for business? what you enter above will appear on the invoice.
+                        </small>
                       </div>
                     </div>
                   </div>
