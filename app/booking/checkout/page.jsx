@@ -175,7 +175,7 @@ export default function CheckoutPage() {
     <div className="min-h-screen">
       <div className="py-10 border-b webBorderColor">
         <div className="container mx-auto px-2">
-          <div className="flex flex-col md:flex-row space-x-5 mt-30 md:mt-40">
+          <div className="flex flex-col md:flex-row space-x-5 pt-[80px] md:pt-0 mt-0 md:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
               <div>
                 {/* Payment Card */}
@@ -275,11 +275,11 @@ export default function CheckoutPage() {
                     <div>
                         <h2 className="text-lg md:text-xl font-bold mb-4">Your ride</h2>
 
-                        <div className="border border-gray-200 rounded-xl p-4">
+                        <div className="border border-gray-200 rounded-xl p-3 md:p-4">
 
                             {/* Title row */}
                             <div className="flex justify-between items-center">
-                              <p className="font-semibold text-xs md:text-sm">
+                              <p className="font-semibold text-xs md:text-sm pr-5 md:pr-0">
                                   {formatDate(data?.pickupDate)} • {data?.pickupTimeLabel}
                               </p>
                               <button 
@@ -317,7 +317,7 @@ export default function CheckoutPage() {
                               {/* TO */}
                               {data.to && ( 
                               <div className="flex items-start gap-2">
-                                  <MapPinIcon className="w-4 h-4 mt-1 text-red-500" />
+                                  <MapPinIcon className="w-4 h-4 mt-1 text-red-500 flex-shrink-0" />
                                   <div>
                                   <p className="font-semibold text-xs md:text-base">{data.to?.name}</p>
                                   <p className="text-gray-600 text-xs md:text-sm">{data.to?.address}</p>
@@ -335,7 +335,7 @@ export default function CheckoutPage() {
                         </div>
 
                         {/* Vehicle Selection Block */}
-                        <div className="mt-6 border border-gray-200 rounded-xl p-4">
+                        <div className="mt-6 border border-gray-200 rounded-xl p-3 md:p-4">
                             <div className="flex justify-between">
                                 <div>
                                 <p className="font-semibold text-xs md:text-sm">{data.selectedVehicle.name}</p>
@@ -377,7 +377,7 @@ export default function CheckoutPage() {
                             <div className="border border-gray-200 rounded-xl bg-white overflow-hidden">
 
                                 {/* Guest Name */}
-                                <div className="p-5 flex justify-between items-start border-b border-gray-200">
+                                <div className="p-3 md:p-5 flex justify-between items-start border-b border-gray-200">
                                 <div>
                                     {/* {data.PickupInfo.bookingFor === "myself" && (
                                       <>
@@ -407,7 +407,7 @@ export default function CheckoutPage() {
                                 </div>
 
                                 {/* Flight Number */}
-                                <div className="p-5 flex justify-between items-center">
+                                <div className="p-3 md:p-5 flex justify-between items-center">
                                 <div>
                                     <p className="text-sm text-gray-500">Flight number</p>
                                     <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.flightNumber || "-"}</p>
@@ -417,7 +417,7 @@ export default function CheckoutPage() {
                                 </div>
 
                                 {/* Pickup Sign */}
-                                <div className="px-5 py-2 flex justify-between items-center">
+                                <div className="px-3 md:px-5 py-2 flex justify-between items-center">
                                 <div>
                                     <p className="text-sm text-gray-500">Pickup sign</p>
                                     <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.pickupSign || "-"}</p>
@@ -425,7 +425,7 @@ export default function CheckoutPage() {
                                 </div>
 
                                 {/* Notes */}
-                                <div className="px-5 py-2 flex justify-between items-center">
+                                <div className="px-3 md:px-5 py-2 flex justify-between items-center">
                                 <div>
                                     <p className="text-sm text-gray-500">Notes for the chauffeur</p>
                                     <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.chauffeurNotes || "-"}</p>
@@ -433,7 +433,7 @@ export default function CheckoutPage() {
                                 </div>
 
                                 {/* Reference code */}
-                                <div className="px-5 py-2 flex justify-between items-center">
+                                <div className="px-3 md:px-5 py-2 flex justify-between items-center">
                                 <div>
                                     <p className="text-sm text-gray-500">Reference code or cost center</p>
                                     <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.referenceCode || "-"}</p>
