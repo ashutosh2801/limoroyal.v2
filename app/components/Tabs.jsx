@@ -48,7 +48,7 @@ function Tabs({ activeStep }) {
         {/* Progress fill line */}
         <div className="absolute top-[30px] h-[2px] bg-black transition-all duration-500"
             style={{
-            width: `${(activeStep + 0.4 / (steps.length - 1)) * 100}%`,
+                width: `${(activeStep + 0.4 / (steps.length - 1)) * 100}%`,
             }}
         />
         </div>
