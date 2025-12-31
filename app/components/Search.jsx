@@ -33,6 +33,7 @@ export default function Search() {
   // Input values
   const [fromInput, setFromInput] = useState("");
   const [toInput, setToInput] = useState("");
+  const [timeInput, setTimeInput] = useState("");
 
   const directionsService = useRef(null);
   const autocompleteService = useRef(null);
@@ -289,8 +290,8 @@ export default function Search() {
           ),
 
           // Route info
-          distanceMiles: routeDetails.distanceMiles,
-          distanceKM: routeDetails.distanceKM,
+          distanceMiles: routeDetails.distanceMiles || 0,
+          distanceKM: routeDetails.distanceKM || 0,
           durationMinutes: routeDetails.durationMinutes,
           routeDescription: routeDetails.routeDescription,
           highlights: routeDetails.highlights,
@@ -377,8 +378,7 @@ export default function Search() {
         </button>
       </div>
     </div>
-  );
-
+  );  
 
   // ---------------- UI STYLES ----------------
   const inputClass =
@@ -674,14 +674,14 @@ export default function Search() {
                   </button>
                   <span className="text-xs md:text-sm w-full ml-2">Round Trip</span>
                 </div> */}
-                <div className="flex justify-end">
+                {/* <div className="flex justify-end">
                     <button
                       onClick={() => setAdditionalStops([...additionalStops, ""])}
                       className="text-xs px-2 md:px-4 py-2 rounded-full bg-gray-400 text-white cursor-pointer"
                     >
                       + Additional Stops
                     </button>
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -833,7 +833,7 @@ export default function Search() {
               />
 
               {/* Input */}
-              <input
+              {/* <input
                 ref={toInputRef}
                 value={toInput}
                 placeholder=" "
@@ -848,14 +848,32 @@ export default function Search() {
                     setToInput
                   );
                 }}
-              />
+              /> */}
+              <select
+                value={timeInput}
+                className={`${inputClass} peer pl-10 pt-6`}
+                onChange={(e) => {
+                  setTimeInput(e.target.value);
+                }}
+              >
+                <option value=""></option>
+                {Array.from({ length: 10 }, (_, i) => {
+                  const value = i + 3;
+                  const time = `${value}:00 hrs`;
+                  return (
+                    <option key={value} value={time}>
+                      {time}
+                    </option>
+                  );
+                })}
+              </select>
 
               {/* Floating label */}
               <label
                 className={`pointer-events-none absolute left-11
                   transition-all duration-200 text-gray-400
                   ${
-                    toInput
+                    timeInput
                       ? "top-2 text-xs"
                       : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
                   }`}
@@ -864,7 +882,7 @@ export default function Search() {
               </label>
 
               {/* Helper text */}
-              {!toInput && (
+              {!timeInput && (
                 <span
                   className="pointer-events-none absolute left-11 top-8
                     text-[13px] text-gray-500 transition-opacity
@@ -875,7 +893,7 @@ export default function Search() {
               )}
 
               {/* Clear button */}
-              {toInput && (
+              {timeInput && (
                 <XMarkIcon
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4
                     cursor-pointer text-gray-400 hover:text-gray-600"
@@ -968,14 +986,14 @@ export default function Search() {
                   </button>
                   <span className="text-xs md:text-sm w-full ml-2">Round Trip</span>
                 </div> */}
-                <div className="flex justify-end">
+                {/* <div className="flex justify-end">
                     <button
                       onClick={() => setAdditionalStops([...additionalStops, ""])}
                       className="text-xs px-2 md:px-4 py-2 rounded-full bg-gray-400 text-white cursor-pointer"
                     >
                       + Additional Stops
                     </button>
-                </div>
+                </div> */}
               </div>
             </div>
 
