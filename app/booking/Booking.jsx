@@ -284,7 +284,7 @@ export default function Booking() {
                   {/* <TripSummary trip={trip} /> */}
 
                   {/* Heading */}
-                  <h2 className="mt-6 text-lg md:text-xl font-bold">Select a vehicle class</h2>
+                  <h2 className="mt-2 text-lg md:text-xl font-bold">Select a vehicle class</h2>
                   <small className="text-gray-500 text-[10px] md:text-xs">All prices include estimated VAT, Fees, and Tolls</small>
 
                   {loading && (
