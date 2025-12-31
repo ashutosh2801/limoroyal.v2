@@ -63,7 +63,7 @@ export default function CheckoutPage() {
         pickup_date: data.pickupDate,
         pickup_time: data.pickupTime,
         from: data.from,
-        to: data.to?.name || "",
+        to: data.to || "",
         distance_km: data.distanceKM || "",
         distance_mile: data.distanceMiles,
         duration_minutes: data.tripType == 'oneway' ? data.durationMinutes : data.duration,
@@ -339,7 +339,7 @@ export default function CheckoutPage() {
 
                             {/* Time + Distance */}
                             <p className="mt-4 text-xs text-gray-600">
-                              {`${data.tripType == 'oneway' ? `${data.durationMinutes} minutes}` : `Duration: ${data.durationMinutes} hr`}`} 
+                              {`${data.tripType == 'oneway' ? `${data.durationMinutes} minutes` : `Duration: ${data.durationMinutes} hr`}`} 
                               
                               {data.distanceKM && (<> • {data.distanceKM} km</>)}
                             </p>

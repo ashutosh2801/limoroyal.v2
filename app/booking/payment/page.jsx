@@ -228,10 +228,10 @@ function PaymentForm() {
                   )}
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
+                  {/* <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
                     <FaCarSide className="w-5 h-5 text-gray-600" />
                     <span>Royale Stretch Limousines</span>
-                  </div>
+                  </div> */}
                   <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
                     <CalendarDaysIcon className="w-5 h-5 text-gray-600" />
                     <span>{trip.date}</span>
