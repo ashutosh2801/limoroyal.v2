@@ -83,12 +83,22 @@ export default function Booking() {
     console.log(data);
   }, []);  
 
-  const pricedVehicles = vehicles.map((v) => ({
-    ...v,
-    price: trip.tripType == 'oneway' ? 
-    `$${((parseFloat(v.priceKM) * trip.distanceKM)).toFixed(2)}` : 
-    `$${((parseFloat(v.priceHR) * trip.duration)).toFixed(2)}`,
-  }));
+  const pricedVehicles = vehicles.map((v) => {
+    const basePrice =
+      trip.tripType === 'oneway'
+        ? (Number(v.priceKM || 0) * Number(trip.distanceKM || 0)) +
+          Number(v.base_fare || 0)
+        : Number(v.priceHR || 0) * Number(trip.duration || 0);
+    
+    const offerPrice = basePrice * 1.10; // ✅ add 10%    
+
+    return {
+      ...v,
+      price: `$${basePrice.toFixed(2)}`,
+      offerPrice: `$${offerPrice.toFixed(2)}`,
+      numericPrice: basePrice, // optional but useful
+    };
+  });
 
   const selectVahicle = () => {
 
@@ -374,7 +384,7 @@ export default function Booking() {
 
                                 {/* price */}
                                 <div className="text-right md:w-40 mt-8 md:mt-0">
-                                  <div className="text-[10px] md:text-base font-bold text-red-400 line-through">{v.price}</div>
+                                  <div className="text-[10px] md:text-base font-medium text-red-300 line-through">{v.offerPrice}</div>
                                   <div className="text-xs md:text-2xl font-bold md:mt-1 md:mb-1">{v.price}</div>
                                   <div>
                                     <span className="hidden md:flex py-1 text-xs font-light md:justify-end items-center"><CheckCircleOutlineIcon className="w-5 h-5 text-green-600 mr-1
