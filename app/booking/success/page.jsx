@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { destroySearch } from "@/store/searchSlice";
 import { formatDate, formatTime } from "../../lib/functions";
 import Image from "next/image";
-import logo from "../../../public/assets/limo-royal.png";
+import logo from "../../../public/assets/limo-royale.png";
 import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
 import { getBookingData } from "../../lib/externalApi";
 
