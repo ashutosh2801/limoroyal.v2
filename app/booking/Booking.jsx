@@ -15,6 +15,8 @@ import {
 import {
   CheckCircleIcon as CheckCircleOutlineIcon,
 } from "@heroicons/react/24/outline";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faWallet, faFireFlameCurved } from "@fortawesome/free-solid-svg-icons";
 import { saveSearch } from "@/store/searchSlice";
 import TripSummary from "../components/TripSummary";
 import Tabs from "../components/Tabs";
@@ -334,11 +336,13 @@ export default function Booking() {
                               <div className="flex items-start justify-between">
                                 <div>
                                   {v.tag &&(
-                                  <div className="absolute left-2 md:left-48 right-0 -top-3 bg-white w-fit">
-                                    <span className="flex py-0.5 px-2 md:px-3 text-[10px] md:text-xs border rounded-2xl w-fit">
-                                      <CheckCircleIcon className="w-4 h-4 text-green-600 mr-1" /> {v.tag}
-                                    </span>
-                                  </div>
+                                    <div className="absolute left-2 md:left-48 right-0 -top-3 bg-white w-fit">
+                                      <span className="flex py-0.5 px-2 md:px-3 text-[10px] md:text-xs border rounded-2xl w-fit">
+                                        <FontAwesomeIcon icon={faCircleCheck} className="text-green-600 mr-1" /> {v.tag}
+                                        {/* <FontAwesomeIcon icon={faWallet} className="text-yellow-500 mr-1" /> {v.tag} */}
+                                        {/* <FontAwesomeIcon icon={faFireFlameCurved} className="text-red-500 mr-1" /> {v.tag} */}
+                                      </span>
+                                    </div>
                                   )}
                                   <div className="font-semibold text-xs md:text-xl mt-3 mb-2">{v.name}</div>
                                   <div className="hidden md:block text-xs text-gray-600 mt-1" dangerouslySetInnerHTML={{ __html: v.desc }} />
