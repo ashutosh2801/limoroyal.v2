@@ -18,7 +18,8 @@ import {
 import { saveSearch } from "@/store/searchSlice";
 import TripSummary from "../components/TripSummary";
 import Tabs from "../components/Tabs";
-
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { getPickupData } from "../lib/externalApi";
 
 export default function Booking() {
   const router = useRouter();
@@ -58,23 +59,12 @@ export default function Booking() {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/vehicles`,
-          {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-            },
-          }
-        );
-
-        if (!res.ok) {
-          throw new Error(`Failed to load pickups: ${res.status}`);
+        const json = await getPickupData();
+        
+        if (json.error) {
+          throw new Error(`Failed to load pickups:`);
         }
 
-        const json = await res.json();
-
-        // Laravel usually doesn't return "success"
         setPickups(json.data ?? json);
 
         console.log("Fetched pickups:", json.data ?? json);
@@ -88,6 +78,7 @@ export default function Booking() {
     };
 
     loadPickups();
+    console.log(data);
   }, []);  
 
   const pricedVehicles = vehicles.map((v) => ({
@@ -126,12 +117,9 @@ export default function Booking() {
         totalPrice, // optional numeric value for calculations
       };    
 
-      const durationMinutes = data.tripType == 'oneway' ? data.durationMinutes : data.duration
-
       dispatch(
         saveSearch({ 
           ...data, 
-          durationMinutes, 
           selectedVehicle, 
           selectedPassenger: vehicleData[selectedIdx]?.passengers || 1,
           selectedLuggage: vehicleData[selectedIdx]?.luggage || 0,
@@ -204,12 +192,12 @@ export default function Booking() {
                     ></iframe>
                 </div>
                 <div className="mt-4 mb-2 text-xs md:text-sm text-black flex gap-5 px-3"> 
-                  <p className="flex gap-1">
+                  {trip.distanceKM && (<p className="flex gap-1">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8 16C12.7882 16 14.4 14.3882 14.4 12.4L14.4 3.2L15.2 3.2C15.5235 3.2 15.8153 3.00512 15.9391 2.70616C16.0629 2.4072 15.9945 2.06312 15.7657 1.83432L14.1657 0.23432C13.8532 -0.0780794 13.3467 -0.0780795 13.0343 0.23432L11.4343 1.83432C11.2055 2.06312 11.137 2.4072 11.2609 2.70616C11.3847 3.00512 11.6764 3.2 12 3.2L12.8 3.2L12.8 12.4C12.8 13.5046 11.9045 14.4 10.8 14.4C9.69541 14.4 8.8 13.5046 8.8 12.4L8.8 3.6C8.8 1.61176 7.18824 -7.70349e-07 5.2 -9.44166e-07C3.21176 -1.11798e-06 1.6 1.61176 1.6 3.6L1.6 11.3366C0.667839 11.666 -1.60618e-06 12.555 -1.69753e-06 13.6C-1.81341e-06 14.9255 1.07448 16 2.4 16C3.72552 16 4.8 14.9255 4.8 13.6C4.8 12.555 4.13216 11.666 3.2 11.3366L3.2 3.6C3.2 2.49544 4.09544 1.6 5.2 1.6C6.30456 1.6 7.2 2.49544 7.2 3.6L7.2 12.4C7.2 14.3882 8.81176 16 10.8 16Z" fill="#ceb366"></path></svg> {trip.distanceKM} km
-                  </p>
+                  </p>)}
                   <p className="flex gap-1">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.3904 10.0572C10.1976 10.0572 10.0145 10.003 9.86024 9.89458L7.46988 8.21386C7.24819 8.06024 7.11325 7.80723 7.11325 7.54518V4.18373C7.11325 3.72289 7.50843 3.35241 8 3.35241C8.49157 3.35241 8.88675 3.72289 8.88675 4.18373V7.12952L10.9205 8.55723C11.1133 8.69277 11.2289 8.88253 11.2675 9.10843C11.2964 9.3253 11.2386 9.5512 11.094 9.72289C10.9301 9.93072 10.6699 10.0572 10.3807 10.0572H10.3904Z" fill="#ceb366"></path><path d="M8 15C3.58554 15 0 11.6386 0 7.5C0 3.36145 3.58554 0 8 0C12.4145 0 16 3.36145 16 7.5C16 11.6386 12.4145 15 8 15ZM8 1.66265C4.56867 1.66265 1.77349 4.28313 1.77349 7.5C1.77349 10.7169 4.56867 13.3373 8 13.3373C11.4313 13.3373 14.2265 10.7169 14.2265 7.5C14.2265 4.28313 11.4313 1.66265 8 1.66265Z" fill="#ceb366"></path></svg>
-                    {trip.durationMinutes} minutes
+                    {data.durationMinutes}
                   </p>
                 </div>
               </div>
@@ -227,8 +215,8 @@ export default function Booking() {
                   <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
                     <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
                     <div>
-                      <p className="font-semibold line-clamp-1">{trip.from.name}</p>
-                      <p className="text-gray-600">{trip.from.addr}</p>
+                      <p className="font-semibold line-clamp-1">{data.from.name}</p>
+                      <p className="text-gray-600">{data.from.address}</p>
                     </div>
                   </div>
 
@@ -237,8 +225,8 @@ export default function Booking() {
                     <div className="flex items-start gap-3 text-xs md:text-sm relative z-10">
                       <MapPinIcon className="w-5 h-5 text-red-500 flex-shrink-0" />
                       <div>
-                        <p className="font-semibold">{trip.to?.name}</p>
-                        <p className="text-gray-600">{trip.to?.addr}</p>
+                        <p className="font-semibold">{data.to?.name}</p>
+                        <p className="text-gray-600">{data.to?.address}</p>
                       </div>
                     </div>
                   )}
@@ -253,6 +241,7 @@ export default function Booking() {
                     <span>{trip.pickupTimeLabel}</span>
                   </div>
 
+                  {(
                   <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
                       <path fillRule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0Z" clipRule="evenodd"></path>
@@ -260,6 +249,7 @@ export default function Booking() {
                     </svg>
                     <span>{vehicleData[selectedIdx]?.passengers || 1} Passenger(s)</span>
                   </div>
+                  )}
 
                   {vehicleData[selectedIdx]?.luggage>0 && (
                   <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
@@ -510,8 +500,7 @@ export default function Booking() {
                       })}
                     </div>                  
                   </>
-
-                  )}
+                  )}                  
 
                   {/* MOBILE VEHICLE MODAL */}
                   {mobileModalOpen && selectedIdx !== null && (
@@ -684,6 +673,25 @@ export default function Booking() {
                       </div>
                     </div>
                   </div> 
+
+                  {/* Continue button */}
+                  <div className="mt-6 flex justify-between">
+                    <button
+                      onClick={(e) => {e.preventDefault(); router.back(); }}
+                      className="flex py-3 px-3 md:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs md:text-base w-auto transition"
+                    >
+                      <FaChevronLeft className="text-white text-sm mr-1 md:mt-1" />
+                      Back
+                    </button>
+                    {/* <button
+                      // onClick={handleContinue}
+                      className="flex py-3 px-2 md:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs md:text-base w-auto"
+                    >
+                      Continue to Payment
+                      <FaChevronRight className="text-white text-sm ml-1 md:mt-1" />
+                    </button> */}
+                  </div>
+
                 </div>
               </div>
             </div>

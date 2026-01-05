@@ -10,8 +10,9 @@ import {
   ExclamationCircleIcon,
   CheckCircleIcon
 } from "@heroicons/react/24/solid";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaCarSide, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import payment from '../../../public/assets/payment.png'
+import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   CardNumberElement,
@@ -20,11 +21,10 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import Tabs from "../../components/Tabs";
 import { useDispatch, useSelector } from "react-redux";
 import { saveSearch } from "@/store/searchSlice";
-import { createSetupIntent, getPaymentMethod } from "../../lib/externalApi";
-import { loadStripe } from "@stripe/stripe-js";
+import Tabs from "../../components/Tabs";
+import TripSummary from "../../components/TripSummary";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_KEY
@@ -53,14 +53,12 @@ function PaymentForm() {
   const [cardCvc, setCardCvc] = useState("");
   const [cvcFocused, setCvcFocused] = useState(false);
 
+
   useEffect(()=>{
     console.log(data);
   }, [data]);
 
-  if (!data || !data.selectedVehicle) {
-    router.push("/booknow");
-    return null;
-  }
+  if (!data || !data.selectedVehicle) return null;
 
   const stripeStyle = {
     style: {
@@ -77,6 +75,7 @@ function PaymentForm() {
       },
     },
   };
+
 
   // Trip data (should match previous pages)
   const trip = {
@@ -124,19 +123,27 @@ function PaymentForm() {
     setError("");
 
     try {
-      // 🔹 1. CREATE SETUP INTENT (EXTERNAL API)
-      const { clientSecret, customerId } = await createSetupIntent({
-        name: nameOnCard,
-        email: data?.PickupInfo?.email,
+      // 1️⃣ Create SetupIntent
+      const res = await fetch("/api/create-setup-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: nameOnCard, email: data?.PickupInfo?.email }),
       });
 
-      const cardElement = elements.getElement(CardNumberElement);
+      const { clientSecret, customerId } = await res.json();
 
-      // 🔹 2. CONFIRM CARD SETUP (STRIPE.JS)
+      const cardNumberElement = elements.getElement(CardNumberElement);
+
+      console.log("SetupIntent client secret:", clientSecret);
+      console.log("Customer ID:", customerId);
+
+      // 2️⃣ Confirm card setup (SAVE CARD)
       const result = await stripe.confirmCardSetup(clientSecret, {
         payment_method: {
-          card: cardElement,
-          billing_details: { name: nameOnCard },
+          card: cardNumberElement,
+          billing_details: {
+            name: nameOnCard,
+          },
         },
       });
 
@@ -146,10 +153,17 @@ function PaymentForm() {
         return;
       }
 
+      // 3️⃣ Saved payment method ID
       const paymentMethodId = result.setupIntent.payment_method;
+      
+      // 4️⃣ Fetch card details from backend
+      const pmRes = await fetch("/api/get-payment-method", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentMethodId }),
+      });
 
-      // 🔹 3. FETCH CARD DETAILS (EXTERNAL API)
-      const card = await getPaymentMethod(paymentMethodId);
+      const card = await pmRes.json();
 
       const cardData = {
         paymentMethodId,
@@ -160,12 +174,7 @@ function PaymentForm() {
       };
 
       dispatch(
-        saveSearch({
-          ...data, 
-          paymentType: "card", 
-          stripeCustomerId: customerId, 
-          cardData 
-        })
+        saveSearch({...data, paymentType: "card", 'stripeCustomerId': customerId, cardData })
       );
 
       console.log("Saved data:", data);

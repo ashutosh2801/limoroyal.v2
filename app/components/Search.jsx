@@ -15,6 +15,26 @@ import {
 import { FaCarSide } from "react-icons/fa";
 import { startSearch, saveSearch } from "@/store/searchSlice";
 
+const convertTime = (value, type) => {
+  if (!value || value < 0) return "0 mins";
+
+  if (type === "H") {
+    const hrs = value;
+    return `${hrs} hr${hrs > 1 ? "s" : ""}`;
+  }
+
+  if (type === "M") {
+    const hrs = Math.floor(value / 60);
+    const mins = value % 60;
+
+    if (hrs > 0 && mins > 0) return `${hrs} hr${hrs > 1 ? "s" : ""} ${mins} min`;
+    if (hrs > 0) return `${hrs} hr${hrs > 1 ? "s" : ""}`;
+    return `${mins} min`;
+  }
+
+  return "";
+};
+
 export default function Search() {
 
   const dispatch = useDispatch();
@@ -42,18 +62,13 @@ export default function Search() {
   // Selected places
   const [fromPlace, setFromPlace] = useState(null);
   const [toPlace, setToPlace] = useState(null);
-
   const [additionalStops, setAdditionalStops] = useState([]);
-
   const [duration, setDuration] = useState("");
   const [pickupDate, setPickupDate] = useState(new Date());
   const [pickupTime, setPickupTime] = useState(null);
-
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [passengers, setPassengers] = useState(1);
   const [luggage, setLuggage] = useState(0);
-
-
   const [googleReady, setGoogleReady] = useState(false);
 
   useEffect(() => {
@@ -77,7 +92,6 @@ export default function Search() {
 
     return () => clearInterval(interval);
   }, []);
-
 
   const getIcon = (types = []) => {
     if (types.includes("airport")) return "✈️";
@@ -167,7 +181,6 @@ export default function Search() {
     );
   };
 
-
   // ---------------- DISTANCE (MILES) ----------------
   const getRouteDetails = (from, to, pickupDateTime = null) => {
     return new Promise((resolve, reject) => {
@@ -223,7 +236,6 @@ export default function Search() {
     });
   };
 
-
   // ---------------- Combine Date And Time ----------------
   const combineDateAndTime = (date, time) => {
     const d = new Date(date);
@@ -243,7 +255,6 @@ export default function Search() {
     hour12: true,
   };
 
-
   // ---------------- SEARCH One Way HANDLER ----------------
   const handleSearchOneWay = async() => {
     if (!googleReady) {
@@ -251,7 +262,7 @@ export default function Search() {
       return;
     }
 
-    if (!fromPlace || !toPlace || !pickupDate || !pickupTime) {
+    if ((!fromPlace || !toPlace || !pickupDate || !pickupTime)) {
       alert("Please fill all fields");
       return;
     }
@@ -292,7 +303,7 @@ export default function Search() {
           // Route info
           distanceMiles: routeDetails.distanceMiles || 0,
           distanceKM: routeDetails.distanceKM || 0,
-          durationMinutes: routeDetails.durationMinutes,
+          durationMinutes: convertTime(routeDetails.durationMinutes, 'M'),
           routeDescription: routeDetails.routeDescription,
           highlights: routeDetails.highlights,
         })
@@ -317,7 +328,7 @@ export default function Search() {
       return;
     }
 
-    if (!fromPlace || !duration || !pickupDate || !pickupTime) {
+    if ((!fromPlace || !timeInput || !pickupDate || !pickupTime)) {
       alert("Please fill all fields");
       return;
     }
@@ -332,13 +343,14 @@ export default function Search() {
       const pickupDateTime = combineDateAndTime( pickupDate, pickupTime );
 
       // Estimated Arrival = pickup + duration
-      const estimatedTime = new Date( pickupDateTime.getTime() + (parseFloat(duration) * 60) );
+      const estimatedTime = new Date( pickupDateTime.getTime() + (parseFloat(timeInput) * 60) );
 
       dispatch(
         saveSearch({
           tripType: activeTab,
           from: fromPlace,
-          duration,
+          duration: timeInput,
+          durationMinutes: convertTime(timeInput, 'H'),
           pickupDate: pickupDate.toISOString(),
           pickupTime: pickupTime.toISOString(),
           pickupTimeLabel: pickupTime.toLocaleTimeString("en-US", time12HrOptions),
@@ -640,7 +652,7 @@ export default function Search() {
                 onChange={setPickupTime}
                 showTimeSelect
                 showTimeSelectOnly
-                timeIntervals={1}
+                timeIntervals={5}
                 dateFormat="hh:mm aa"
                 placeholderText="12:00 pm"
                 className={`${inputClass} pt-[30px] pb-[8px]`}
@@ -657,7 +669,7 @@ export default function Search() {
                       : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
                   }`}
               >
-                Pickup Date
+                Pickup Time
               </label>
             </div>
 
@@ -861,7 +873,7 @@ export default function Search() {
                   const value = i + 3;
                   const time = `${value}:00 hrs`;
                   return (
-                    <option key={value} value={time}>
+                    <option key={value} value={value}>
                       {time}
                     </option>
                   );
@@ -952,7 +964,7 @@ export default function Search() {
                 onChange={setPickupTime}
                 showTimeSelect
                 showTimeSelectOnly
-                timeIntervals={1}
+                timeIntervals={5}
                 dateFormat="hh:mm aa"
                 placeholderText="12:00 pm"
                 className={`${inputClass} pt-[30px] pb-[8px]`}
