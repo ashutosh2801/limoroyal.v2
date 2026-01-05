@@ -145,7 +145,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className='flex flex-col md:flex-row md:justify-between items-center py-3 border-t webBorderColor'>
-          <p className='webFontColor text-[13px] md:text-[16px] mb-2 md:mb-0'>© 2025 Limo Royal, All Rights Reserved</p>
+          <p className='webFontColor text-[13px] md:text-[16px] mb-2 md:mb-0'>© 2025 Limo Royale, All Rights Reserved</p>
           <div>
             <a href="https://web.facebook.com/LimoRoyalelux" target="_blank" className="p-2 text-lg mr-1 rounded-lg text-white social-icon inline-block">
               <FaFacebookF />

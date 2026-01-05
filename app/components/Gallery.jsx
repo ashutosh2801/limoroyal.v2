@@ -31,7 +31,7 @@ const Gallery = () => {
         {/* Heading */}
         <div data-aos="fade-up">
           <h2 className="text-white text-2xl lg:text-4xl leading-snug mb-5 font-medium">
-            Ride Fast, Ride First-Class
+            Ride Smooth, Ride First-Class
           </h2>
 
           <p className="text-base leading-relaxed webFontColor mb-5">

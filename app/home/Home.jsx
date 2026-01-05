@@ -225,7 +225,7 @@ export default function Home() {
           <div className='flex flex-col lg:flex-row lg:space-x-10 py-8' data-aos="fade-up">
             <div className='w-full lg:w-2/5'>
               <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-8 font-medium'>Elite Chauffeurs, Exceptional Standards</h2>
-              <p className='text-base leading-relaxed webFontColor'>Each Limo Royal chauffeur is hand-selected for professionalism, discretion, and proven driving expertise. Our chauffeurs undergo rigorous background checks, safety certification, and continuous training to ensure flawless service on every trip. They are specialists in luxury transportation—combining polished etiquette, local knowledge, and proactive client care. With every assignment, their focus remains the same: your comfort, your privacy, and your safety—delivered with absolute professionalism.</p>
+              <p className='text-base leading-relaxed webFontColor'>Each Limo Royale chauffeur is hand-selected for professionalism, discretion, and proven driving expertise. Our chauffeurs undergo rigorous background checks, safety certification, and continuous training to ensure flawless service on every trip. They are specialists in luxury transportation—combining polished etiquette, local knowledge, and proactive client care. With every assignment, their focus remains the same: your comfort, your privacy, and your safety—delivered with absolute professionalism.</p>
               <a href='/online-reservations' title='Luxury Limo & Airport Chauffeur Service Toronto' className='inline-block book-now-slide text-sm px-9 py-4 mt-10 uppercase'>Book Now</a>
             </div>
             <div className='w-full lg:w-3/5'>
@@ -361,8 +361,7 @@ export default function Home() {
       <div>
         <div className='mt-8 pb-10 lg:pb-0'>
           <div className='container mx-auto px-2 md:text-center'>
-            <small className='webColor uppercase'>Our Team</small>
-            <h2 className='text-white text-2xl lg:text-4xl leading-snug my-5 font-medium' data-aos="fade-up">Royale Excellence in Cleanliness and Vehicle Maintenance</h2>
+            <h2 className='text-white text-2xl lg:text-4xl leading-snug my-5 font-medium' data-aos="fade-up">Our Team</h2>
             <p className='text-base leading-relaxed webFontColor' data-aos="fade-up">At Limo Royale, we take pride in offering more than just a ride—we provide an exceptional travel experience, guided by our elite team of Royale Chauffeurs. With a minimum of 15-20 years of professional driving experience, each Royale Chauffeur is handpicked to ensure that your journey is both safe and smooth. Our chauffeurs are not only skilled drivers but also masters of service, trained to deliver the royal treatment you deserve.</p>
             <div data-aos="fade-up">
                 <h2 className='text-white text-2xl lg:text-3xl leading-snug mt-10 mb-8 font-medium'>Why Choose a Royale Chauffeur?</h2>
@@ -440,7 +439,7 @@ export default function Home() {
             </div>
             <div className='w-full lg:w-2/5' data-aos="fade-up">
               <small className='webColor uppercase'>Only the best</small>
-              <h2 className='text-white text-2xl lg:text-4xl leading-snug my-3 font-medium'>Why We Stand Apart</h2>
+              <h2 className='text-white text-2xl lg:text-4xl leading-snug my-3 font-medium'>Why We Stand Apart?</h2>
               <p className='text-base leading-relaxed webFontColor hidden md:block'>At Limo Royale, every ride will make you feel special. We promise to give you more than just transportation—we want every client to feel truly valued and cared for. We’re not about being the biggest name out there, but about being the one you can always trust for the best experience.<br></br><br></br> When you step into one of our vehicles, it’s all about comfort, ease, and a touch of luxury that makes the journey just as enjoyable as the destination. With decades of experience in both limo services and hospitality, we’ve learned exactly what it takes to make people feel looked after. That’s why we go the extra mile—to give you the kind of service that stands out and stays with you.</p>
             </div>
             <div className='block md:hidden'>
