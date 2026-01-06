@@ -12,7 +12,7 @@ import {
   AdjustmentsHorizontalIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
-import { FaCarSide } from "react-icons/fa";
+import { FaCarSide, FaPlane } from "react-icons/fa";
 import { startSearch, saveSearch } from "@/store/searchSlice";
 
 const convertTime = (value, type) => {
@@ -54,6 +54,7 @@ export default function Search() {
   const [fromInput, setFromInput] = useState("");
   const [toInput, setToInput] = useState("");
   const [timeInput, setTimeInput] = useState("");
+  const [flightNumber, setFlightNumber] = useState("");
 
   const directionsService = useRef(null);
   const autocompleteService = useRef(null);
@@ -402,7 +403,7 @@ export default function Search() {
   // ---------------- RENDER ----------------
   return (
     <div className="w-full px-4 relative z-52 mt-5">
-      <div className="bg-white w-full max-w-md shadow-xl relative md:absolute right-0 md:right-20 md:-top-130 mt-10 md:mt-0 rounded-md">
+      <div className="bg-white w-full max-w-lg shadow-xl relative md:absolute right-0 md:right-20 md:-top-135 mt-10 md:mt-0 rounded-md">
 
         {/* Tabs */}
         <div className="grid grid-cols-2 mt-1">
@@ -614,63 +615,151 @@ export default function Search() {
               />
             </div>
 
-            <div className="relative">
-              <CalendarDaysIcon className={iconStyle} />
-              <DatePicker
-                selected={pickupDate}
-                onChange={setPickupDate}
-                dateFormat="dd MMM yyyy"
-                minDate={new Date()}
-                placeholderText="Pickup date"
-                className={`${inputClass} pt-[30px] pb-[8px]`}
-                wrapperClassName="w-full"
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="relative">
+                {/* Icon */}
+                <FaPlane
+                  className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                />
 
-                showMonthDropdown
-                showYearDropdown
-                dropdownMode="select"
-                calendarClassName="large-datepicker"
-              />
-              
-              {/* Floating label */}
-              <label
-                className={`pointer-events-none absolute left-11
-                  transition-all duration-200 text-gray-400
-                  ${
-                    toInput
-                      ? "top-3 text-xs"
-                      : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
-                  }`}
-              >
-                Pickup Date
-              </label>
+                {/* Input */}
+                <input
+                  value=""
+                  placeholder=" "
+                  className={`${inputClass} peer pl-10 pt-6`}
+                  onChange={(e) => setFlightNumber(e.target.value.toUpperCase())}
+                />
+
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${
+                      flightNumber
+                        ? "top-2 text-xs"
+                        : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                    }`}
+                >
+                  Flight Number
+                </label>
+
+                {/* Helper text */}
+                {!flightNumber && (
+                  <span
+                    className="pointer-events-none absolute left-11 top-8
+                      text-[13px] text-gray-500 transition-opacity
+                      peer-focus:opacity-0"
+                  >
+                    EK202, UL225..
+                  </span>
+                )}
+
+                {/* Clear button */}
+                {flightNumber && (
+                  <XMarkIcon
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                    onClick={() => setFlightNumber("")}
+                  />
+                )}
+              </div>
+              <div className="relative">
+                {/* Icon */}
+                <FaPlane
+                  className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                />
+
+                {/* Select */}
+                <select
+                  value={flightNumber}
+                  className={`${inputClass} peer pl-10 pt-8 pb-2 appearance-none`}
+                  onChange={(e) => setFlightNumber(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select Flight
+                  </option>
+                  <option value="EK202">EK202</option>
+                  <option value="UL225">UL225</option>
+                  <option value="QR662">QR662</option>
+                  <option value="SQ468">SQ468</option>
+                </select>
+
+                {/* Dropdown arrow */}
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  ▼
+                </span>
+
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11 transition-all duration-200 text-gray-400
+                    ${
+                      flightNumber
+                        ? "top-2 text-xs"
+                        : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                    }`}
+                >
+                  Flight Number
+                </label>
+              </div>
             </div>
+            
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="relative">
+                <CalendarDaysIcon className={iconStyle} />
+                <DatePicker
+                  selected={pickupDate}
+                  onChange={setPickupDate}
+                  dateFormat="dd MMM yyyy"
+                  minDate={new Date()}
+                  placeholderText="Pickup date"
+                  className={`${inputClass} pt-[30px] pb-[8px]`}
+                  wrapperClassName="w-full"
 
-            <div className="relative">
-              <ClockIcon className={iconStyle} />
-              <DatePicker
-                selected={pickupTime}
-                onChange={setPickupTime}
-                showTimeSelect
-                showTimeSelectOnly
-                timeIntervals={5}
-                dateFormat="hh:mm aa"
-                placeholderText="12:00 pm"
-                className={`${inputClass} pt-[30px] pb-[8px]`}
-                wrapperClassName="w-full"
-                calendarClassName="large-timepicker"
-              />
-              {/* Floating label */}
-              <label
-                className={`pointer-events-none absolute left-11
-                  transition-all duration-200 text-gray-400
-                  ${
-                    toInput
-                      ? "top-3 text-xs"
-                      : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
-                  }`}
-              >
-                Pickup Time
-              </label>
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode="select"
+                  calendarClassName="large-datepicker"
+                />
+                
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${
+                      toInput
+                        ? "top-3 text-xs"
+                        : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                    }`}
+                >
+                  Pickup Date
+                </label>
+              </div>
+              <div className="relative">
+                <ClockIcon className={iconStyle} />
+                <DatePicker
+                  selected={pickupTime}
+                  onChange={setPickupTime}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={5}
+                  dateFormat="hh:mm aa"
+                  placeholderText="12:00 pm"
+                  className={`${inputClass} pt-[30px] pb-[8px]`}
+                  wrapperClassName="w-full"
+                  calendarClassName="large-timepicker"
+                />
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${
+                      toInput
+                        ? "top-3 text-xs"
+                        : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                    }`}
+                >
+                  Pickup Time
+                </label>
+              </div>
             </div>
 
             <div className="relative">
@@ -925,68 +1014,69 @@ export default function Search() {
                 className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-60 overflow-y-auto"
               />
             </div>
+            
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="relative">
+                <CalendarDaysIcon className={iconStyle} />
+                <DatePicker
+                  selected={pickupDate}
+                  onChange={setPickupDate}
+                  dateFormat="dd MMM yyyy"
+                  minDate={new Date()}
+                  placeholderText="Pickup date"
+                  className={`${inputClass} pt-[30px] pb-[8px]`}
+                  wrapperClassName="w-full"
 
-            <div className="relative">
-              <CalendarDaysIcon className={iconStyle} />
-              <DatePicker
-                selected={pickupDate}
-                onChange={setPickupDate}
-                dateFormat="dd MMM yyyy"
-                minDate={new Date()}
-                placeholderText="Pickup date"
-                className={`${inputClass} pt-[30px] pb-[8px]`}
-                wrapperClassName="w-full"
-
-                showMonthDropdown
-                showYearDropdown
-                dropdownMode="select"
-                calendarClassName="large-datepicker"
-              />
-              
-              {/* Floating label */}
-              <label
-                className={`pointer-events-none absolute left-11
-                  transition-all duration-200 text-gray-400
-                  ${
-                    toInput
-                      ? "top-3 text-xs"
-                      : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
-                  }`}
-              >
-                Pickup Date
-              </label>
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode="select"
+                  calendarClassName="large-datepicker"
+                />
+                
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${
+                      toInput
+                        ? "top-3 text-xs"
+                        : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                    }`}
+                >
+                  Pickup Date
+                </label>
+              </div>
+              <div className="relative">
+                <ClockIcon className={iconStyle} />
+                <DatePicker
+                  selected={pickupTime}
+                  onChange={setPickupTime}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={5}
+                  dateFormat="hh:mm aa"
+                  placeholderText="12:00 pm"
+                  className={`${inputClass} pt-[30px] pb-[8px]`}
+                  wrapperClassName="w-full"
+                  calendarClassName="large-timepicker"
+                />
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${
+                      toInput
+                        ? "top-3 text-xs"
+                        : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                    }`}
+                >
+                  Pickup Date
+                </label>
+              </div>
             </div>
 
             <div className="relative">
-              <ClockIcon className={iconStyle} />
-              <DatePicker
-                selected={pickupTime}
-                onChange={setPickupTime}
-                showTimeSelect
-                showTimeSelectOnly
-                timeIntervals={5}
-                dateFormat="hh:mm aa"
-                placeholderText="12:00 pm"
-                className={`${inputClass} pt-[30px] pb-[8px]`}
-                wrapperClassName="w-full"
-                calendarClassName="large-timepicker"
-              />
-              {/* Floating label */}
-              <label
-                className={`pointer-events-none absolute left-11
-                  transition-all duration-200 text-gray-400
-                  ${
-                    toInput
-                      ? "top-3 text-xs"
-                      : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
-                  }`}
-              >
-                Pickup Date
-              </label>
-            </div>
-
-            <div className="relative">
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center">
                   <button
                     onClick={() => setIsRoundTrip(!isRoundTrip)}
