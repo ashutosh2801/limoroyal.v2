@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { destroySearch } from "@/store/searchSlice";
 import Image from "next/image";
-import logo from "../../../public/assets/limo-royal.png";
+import logo from "../../../public/assets/limo-royale.png";
 
 export default function BookingSuccess() {
   const router = useRouter();
