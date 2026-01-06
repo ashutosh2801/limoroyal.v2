@@ -109,7 +109,7 @@ export default function Search() {
       {
         input: value,
         // types: ["establishment", ""],
-        // componentRestrictions: { country: "ca" },
+        componentRestrictions: { country: ["ca", "us"] },
       },
       (predictions, status) => {
         if (
@@ -127,10 +127,26 @@ export default function Search() {
           const div = document.createElement("div");
           div.className = "p-3 cursor-pointer hover:bg-gray-100";
 
+          const icon = getIcon(p.types);
+
           div.innerHTML = `
-            <div class="font-semibold">${p.structured_formatting.main_text}</div>
-            <div class="text-xs text-gray-500">${p.description}</div>
+            <div class="flex items-start gap-2">
+              <span class="text-lg">${icon}</span>
+              <div>
+                <div class="font-semibold">
+                  ${p.structured_formatting.main_text}
+                </div>
+                <div class="text-xs text-gray-500">
+                  ${p.description}
+                </div>
+              </div>
+            </div>
           `;
+
+          // div.innerHTML = `
+          //   <div class="font-semibold">${p.structured_formatting.main_text}</div>
+          //   <div class="text-xs text-gray-500">${p.description}</div>
+          // `;
 
           div.onclick = () =>
             selectPlace(
@@ -157,7 +173,14 @@ export default function Search() {
     placesService.current.getDetails(
       {
         placeId,
-        fields: ["name", "formatted_address", "geometry", "place_id"],
+        fields: [
+                  "name",
+                  "formatted_address",
+                  "geometry",
+                  "place_id",
+                  "types",
+                  "address_components"
+                ],
       },
       (place, status) => {
         if (status !== window.google.maps.places.PlacesServiceStatus.OK) return;
@@ -177,6 +200,28 @@ export default function Search() {
           lng: place.geometry.location.lng(),
           placeId: place.place_id,
         });
+
+
+        // Detect country
+        const countryComponent = place.address_components?.find(c =>
+          c.types.includes("country")
+        );
+
+        const countryCode = countryComponent?.short_name;
+
+        // Airport alert only for CA & US
+        if (
+          place.types?.includes("airport") &&
+          (countryCode === "CA" || countryCode === "US")
+        ) {
+          alert(
+            "✈️ Airport selected.\nPlease make sure flight details are entered correctly."
+          );
+        }
+
+
+
+
       }
     );
   };
@@ -446,6 +491,17 @@ export default function Search() {
                     setFromInput
                   );
                 }}
+
+                onFocus={(e) => {
+                  setFromInput(e.target.value);
+                  setFromPlace(null);
+                  fetchPredictions(
+                    e.target.value,
+                    fromListRef,
+                    fromInputRef,
+                    setFromInput
+                  );
+                }}
               />
 
               {/* Floating label */}
@@ -458,7 +514,7 @@ export default function Search() {
                       : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
                   }`}
               >
-                From
+                Pickup Location
               </label>
 
               {/* Helper text */}
@@ -578,7 +634,7 @@ export default function Search() {
                       : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
                   }`}
               >
-                To
+                Drop-off Location
               </label>
 
               {/* Helper text */}
@@ -614,6 +670,7 @@ export default function Search() {
               />
             </div>
 
+            <div className="grid grid-cols-2 gap-4 mt-1">
             <div className="relative">
               <CalendarDaysIcon className={iconStyle} />
               <DatePicker
@@ -672,6 +729,7 @@ export default function Search() {
                 Pickup Time
               </label>
             </div>
+            </div>
 
             <div className="relative">
               <div className="grid grid-cols-2 gap-4">
@@ -689,7 +747,7 @@ export default function Search() {
                 <div className="flex justify-end">
                     <button
                       onClick={() => setAdditionalStops([...additionalStops, ""])}
-                      className="text-xs px-2 md:px-4 py-2 rounded-full bg-gray-400 text-white cursor-pointer"
+                      className="text-xs px-2 md:px-4 py-2 rounded-full bg-gray-600 text-white cursor-pointer"
                     >
                       + Additional Stops
                     </button>
@@ -752,7 +810,7 @@ export default function Search() {
                       : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
                   }`}
               >
-                From
+                Pickup Location
               </label>
 
               {/* Helper text */}
@@ -840,12 +898,12 @@ export default function Search() {
             {/* TO */}
             <div className="relative">
               {/* Icon */}
-              <AdjustmentsHorizontalIcon
+              <MapPinIcon
                 className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
               />
 
               {/* Input */}
-              {/* <input
+              <input
                 ref={toInputRef}
                 value={toInput}
                 placeholder=" "
@@ -860,7 +918,62 @@ export default function Search() {
                     setToInput
                   );
                 }}
-              /> */}
+              />
+
+              {/* Floating label */}
+              <label
+                className={`pointer-events-none absolute left-11
+                  transition-all duration-200 text-gray-400
+                  ${
+                    toInput
+                      ? "top-2 text-xs"
+                      : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                  }`}
+              >
+                Drop-off Location
+              </label>
+
+              {/* Helper text */}
+              {!toInput && (
+                <span
+                  className="pointer-events-none absolute left-11 top-8
+                    text-[13px] text-gray-500 transition-opacity
+                    peer-focus:opacity-0"
+                >
+                  Address, Airport, Hotel...
+                </span>
+              )}
+
+              {/* Clear button */}
+              {toInput && (
+                <XMarkIcon
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4
+                    cursor-pointer text-gray-400 hover:text-gray-600"
+                  onClick={() => {
+                    setToInput("");
+                    setToPlace(null);
+                    if (toListRef.current) {
+                      toListRef.current.style.display = "none";
+                    }
+                  }}
+                />
+              )}
+
+              {/* Predictions dropdown */}
+              <div
+                ref={toListRef}
+                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-60 overflow-y-auto"
+              />
+            </div>
+
+            {/* Duration */}
+            <div className="relative">
+              {/* Icon */}
+              <AdjustmentsHorizontalIcon
+                className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+              />
+
+              {/* Select */}              
               <select
                 value={timeInput}
                 className={`${inputClass} peer pl-10 pt-6`}
@@ -986,7 +1099,7 @@ export default function Search() {
             </div>
 
             <div className="relative">
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center">
                   <button
                     onClick={() => setIsRoundTrip(!isRoundTrip)}
@@ -1007,14 +1120,7 @@ export default function Search() {
                     </button>
                 </div>
               </div>
-            </div>
-
-            {/* <div className="relative">
-              <div className="grid grid-cols-2 gap-8">
-              <QuantitySelector label="Passengers" value={passengers} setValue={setPassengers} min={1} />
-              <QuantitySelector label="Luggage" value={luggage} setValue={setLuggage} />
-              </div>
-            </div> */}
+            </div>            
 
             {/* Search Button */}
             <div>
