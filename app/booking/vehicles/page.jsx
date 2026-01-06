@@ -1,10 +1,10 @@
 import React from 'react'
-import Booking from "./Booking"
+import Vehicles from "./Vehicles"
 
 const page = () => {
   return (
     <div>
-        <Booking />
+        <Vehicles />
     </div>
   )
 }

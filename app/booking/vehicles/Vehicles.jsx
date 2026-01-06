@@ -12,17 +12,14 @@ import {
   ClockIcon,
   CalendarDaysIcon
 } from "@heroicons/react/24/solid";
-import {
-  CheckCircleIcon as CheckCircleOutlineIcon,
-} from "@heroicons/react/24/outline";
+import { CheckCircleIcon as CheckCircleOutlineIcon } from "@heroicons/react/24/outline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faWallet, faFireFlameCurved } from "@fortawesome/free-solid-svg-icons";
 import { saveSearch } from "@/store/searchSlice";
-import TripSummary from "../components/TripSummary";
-import Tabs from "../components/Tabs";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { getPickupData } from "../lib/externalApi";
-import RouteMap from "../components/RouteMap";
+import { getPickupData } from "@/app/lib/externalApi";
+import Tabs from "@/app/components/Tabs";
+import RouteMap from "@/app/components/RouteMap";
 
 export default function Booking() {
   const router = useRouter();
