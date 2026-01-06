@@ -1,58 +1,69 @@
-import React from 'react'
+import React from "react";
+
+const steps = [
+  "Service Class",
+  "Pickup Info",
+  "Payment",
+  "Checkout",
+];
 
 function Tabs({ activeStep }) {
-
-    const steps = ["Service Class", "Pickup Info", "Payment", "Checkout"];
-
   return (
-    <div className="relative">
+    <div className="relative w-full max-w-3xl mx-auto pb-5">
+      
+      {/* Background line */}
+      <div className="absolute top-8 left-0 right-0 h-[2px] bg-black" />
 
-        {/* Connector Line */}
-        <div className="absolute left-0 right-0 top-[30px] h-[2px] bg-gray-300" />
+      {/* Progress line */}
+      {/* <div
+        className="absolute top-6 left-0 h-[2px] bg-black transition-all duration-300"
+        style={{
+          width: `${(activeStep / (steps.length - 1)) * 100}%`,
+        }}
+      /> */}
 
-        <div className="relative flex justify-between">
+      <div className="relative flex justify-between">
+        {steps.map((label, index) => {
+          const isCompleted = index < activeStep;
+          const isActive = index === activeStep;
 
-            {steps.map((label, i) => {
-            const isActive = i === activeStep;          // current page step
-            const isCompleted = i < activeStep;         // passed steps
+          return (
+            <div
+              key={label}
+              className="flex flex-col items-center text-center w-full"
+            >
+              {/* Step Label */}
+              <span
+                className={`mb-5 text-[9px] md:text-sm font-semibold ${
+                  isCompleted || isActive
+                    ? "text-black"
+                    : "text-gray-400"
+                }`}
+              >
+                {label}
+              </span>
 
-            return (
-                <div key={label} className="flex flex-col items-center w-full">
-
-                {/* Label */}
-                <div
-                    className={`
-                    mb-2 text-[9px] md:text-xs font-semibold
-                    ${isActive || isCompleted ? "text-black" : "text-gray-400"}
-                    `}
-                >
-                    {label}
-                </div>
-                
-                {/* Circle */}
-                <div
-                    className={`
-                    w-4 h-4 rounded-full border-[3px] z-10
-                    ${isActive ? "bg-white border-black" : ""}
-                    ${isCompleted ? "bg-black border-black" : ""}
-                    ${!isActive && !isCompleted ? "bg-white border-gray-400" : ""}
-                    `}
-                />
-                
-                </div>
-            );
-            })}
-
-        </div>
-
-        {/* Progress fill line */}
-        <div className="absolute top-[30px] h-[2px] bg-black transition-all duration-500"
-            style={{
-                width: `${(activeStep + 0.4 / (steps.length - 1)) * 100}%`,
-            }}
-        />
-        </div>
-  )
+              {/* Step Circle */}
+              <div
+                className={`
+                  w-5 h-5 md:w-6 md:h-6 text-xs md:text-base flex items-center justify-center rounded-full z-10 mt-[-10px] md:mt-[-18px]
+                  ${
+                    isCompleted
+                      ? "webBG text-white"
+                      : isActive
+                      ? "bg-white border-2 border-black text-black"
+                      : "bg-white border-2 border-gray-300 text-gray-400"
+                  }
+                `}
+              >
+                {isCompleted ? "✓" : index + 1}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
-export default Tabs
+export default Tabs;

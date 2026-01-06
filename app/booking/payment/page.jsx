@@ -10,9 +10,8 @@ import {
   ExclamationCircleIcon,
   CheckCircleIcon
 } from "@heroicons/react/24/solid";
-import { FaCarSide, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import payment from '../../../public/assets/payment.png'
-import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   CardNumberElement,
@@ -21,10 +20,11 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import Tabs from "../../components/Tabs";
 import { useDispatch, useSelector } from "react-redux";
 import { saveSearch } from "@/store/searchSlice";
-import Tabs from "../../components/Tabs";
-import TripSummary from "../../components/TripSummary";
+import { createSetupIntent, getPaymentMethod } from "../../lib/externalApi";
+import { loadStripe } from "@stripe/stripe-js";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_KEY
@@ -53,12 +53,14 @@ function PaymentForm() {
   const [cardCvc, setCardCvc] = useState("");
   const [cvcFocused, setCvcFocused] = useState(false);
 
-
   useEffect(()=>{
     console.log(data);
   }, [data]);
 
-  if (!data || !data.selectedVehicle) return null;
+  if (!data || !data.selectedVehicle) {
+    router.push("/booknow");
+    return null;
+  }
 
   const stripeStyle = {
     style: {
@@ -75,7 +77,6 @@ function PaymentForm() {
       },
     },
   };
-
 
   // Trip data (should match previous pages)
   const trip = {
@@ -123,27 +124,19 @@ function PaymentForm() {
     setError("");
 
     try {
-      // 1️⃣ Create SetupIntent
-      const res = await fetch("/api/create-setup-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: nameOnCard, email: data?.PickupInfo?.email }),
+      // 🔹 1. CREATE SETUP INTENT (EXTERNAL API)
+      const { clientSecret, customerId } = await createSetupIntent({
+        name: nameOnCard,
+        email: data?.PickupInfo?.email,
       });
 
-      const { clientSecret, customerId } = await res.json();
+      const cardElement = elements.getElement(CardNumberElement);
 
-      const cardNumberElement = elements.getElement(CardNumberElement);
-
-      console.log("SetupIntent client secret:", clientSecret);
-      console.log("Customer ID:", customerId);
-
-      // 2️⃣ Confirm card setup (SAVE CARD)
+      // 🔹 2. CONFIRM CARD SETUP (STRIPE.JS)
       const result = await stripe.confirmCardSetup(clientSecret, {
         payment_method: {
-          card: cardNumberElement,
-          billing_details: {
-            name: nameOnCard,
-          },
+          card: cardElement,
+          billing_details: { name: nameOnCard },
         },
       });
 
@@ -153,17 +146,10 @@ function PaymentForm() {
         return;
       }
 
-      // 3️⃣ Saved payment method ID
       const paymentMethodId = result.setupIntent.payment_method;
-      
-      // 4️⃣ Fetch card details from backend
-      const pmRes = await fetch("/api/get-payment-method", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paymentMethodId }),
-      });
 
-      const card = await pmRes.json();
+      // 🔹 3. FETCH CARD DETAILS (EXTERNAL API)
+      const card = await getPaymentMethod(paymentMethodId);
 
       const cardData = {
         paymentMethodId,
@@ -174,7 +160,12 @@ function PaymentForm() {
       };
 
       dispatch(
-        saveSearch({...data, paymentType: "card", 'stripeCustomerId': customerId, cardData })
+        saveSearch({
+          ...data, 
+          paymentType: "card", 
+          stripeCustomerId: customerId, 
+          cardData 
+        })
       );
 
       console.log("Saved data:", data);
@@ -197,6 +188,7 @@ function PaymentForm() {
         <div className="container mx-auto px-2">
           <div className="flex flex-col md:flex-row space-x-5 pt-[80px] md:pt-0 mt-0 md:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
+            <div className="sticky top-5 z-50">
               <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4">
                 <div>
                   <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Booking Summary</h4>
@@ -211,8 +203,8 @@ function PaymentForm() {
                   <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
                     <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
                     <div>
-                      <p className="font-semibold line-clamp-1">{trip.from.name}</p>
-                      <p className="text-gray-600">{trip.from.addr}</p>
+                      <p className="font-semibold line-clamp-1">{data.from.name}</p>
+                      <p className="text-gray-600">{data.from.address}</p>
                     </div>
                   </div>
 
@@ -221,8 +213,8 @@ function PaymentForm() {
                     <div className="flex items-start gap-3 text-xs md:text-sm relative z-10">
                       <MapPinIcon className="w-5 h-5 text-red-500 flex-shrink-0" />
                       <div>
-                        <p className="font-semibold">{trip.to?.name}</p>
-                        <p className="text-gray-600">{trip.to?.addr}</p>
+                        <p className="font-semibold">{data.to?.name}</p>
+                        <p className="text-gray-600">{data.to?.address}</p>
                       </div>
                     </div>
                   )}
@@ -249,7 +241,7 @@ function PaymentForm() {
                     <span>{data.selectedPassenger} Passenger(s)</span>
                   </div>
                   )}
-                  {data.selectedLuggage && (
+                  {data.selectedLuggage>0 && (
                   <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
                       <path fillRule="evenodd" d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd"></path>
@@ -291,6 +283,7 @@ function PaymentForm() {
                     </div>
                   </div>
               </div>
+            </div>
             </div>
             <div className="w-full md:w-2/3 order-1 md:order-2">
               <div className="bg-white rounded-md shadow-xl overflow-hidden text-black mb-5 md:mb-0">
@@ -349,17 +342,19 @@ function PaymentForm() {
                                 <path fillRule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0Z" clipRule="evenodd"></path>
                                 <path d="M6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"></path>
                               </svg>
-                              <small className="text-sm text-black">{data.selectedVehicle?.passengers}</small>
+                              <small className="text-sm text-black">{data.selectedPassenger}</small>
                             </li>
-  
+
+                            {data.selectedLuggage>0 && (
                             <li className="flex items-center gap-2">
                               {/* luggage icon */}
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
                                 <path fillRule="evenodd" d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd"></path>
                                 <path d="M3 18.4v-2.796a4.3 4.3 0 0 0 .713.31A26.226 26.226 0 0 0 12 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 0 1-6.477-.427C4.047 21.128 3 19.852 3 18.4Z"></path>
                               </svg>
-                              <small className="text-sm text-black">{data.selectedVehicle?.luggage}</small>
+                              <small className="text-sm text-black">{data.selectedLuggage}</small>
                             </li>
+                            )}
   
                             {/* {data.selectedVehicle?.features?.length > 0 & data.selectedVehicle?.features?.map((f, i)=>{
                               <li className="flex items-center gap-2">Free WiFi</li>
