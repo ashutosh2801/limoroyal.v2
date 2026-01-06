@@ -20,7 +20,9 @@ import { faCircleCheck, faWallet, faFireFlameCurved } from "@fortawesome/free-so
 import { saveSearch } from "@/store/searchSlice";
 import TripSummary from "../components/TripSummary";
 import Tabs from "../components/Tabs";
-
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { getPickupData } from "../lib/externalApi";
+import RouteMap from "../components/RouteMap";
 
 export default function Booking() {
   const router = useRouter();
@@ -31,6 +33,9 @@ export default function Booking() {
   const [selectedIdx, setSelectedIdx] = useState(null);
 
   const { data } = useSelector((state) => state.search);
+  if (!data || !data.pickupDate) {
+    router.push("/booknow"); return;
+  }
 
   const trip = {
     date: new Date(data.pickupDate).toDateString(),
@@ -60,23 +65,12 @@ export default function Booking() {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/vehicles`,
-          {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-            },
-          }
-        );
-
-        if (!res.ok) {
-          throw new Error(`Failed to load pickups: ${res.status}`);
+        const json = await getPickupData();
+        
+        if (json.error) {
+          throw new Error(`Failed to load pickups:`);
         }
 
-        const json = await res.json();
-
-        // Laravel usually doesn't return "success"
         setPickups(json.data ?? json);
 
         console.log("Fetched pickups:", json.data ?? json);
@@ -90,14 +84,26 @@ export default function Booking() {
     };
 
     loadPickups();
+
   }, []);  
 
-  const pricedVehicles = vehicles.map((v) => ({
-    ...v,
-    price: trip.tripType == 'oneway' ? 
-    `$${((parseFloat(v.priceKM) * trip.distanceKM)).toFixed(2)}` : 
-    `$${((parseFloat(v.priceHR) * trip.duration)).toFixed(2)}`,
-  }));
+
+  const pricedVehicles = vehicles.map((v) => {
+    const basePrice =
+      trip.tripType === 'oneway'
+        ? (Number(v.priceKM || 0) * Number(trip.distanceKM || 0)) +
+          Number(v.baseFare || 0)
+        : Number(v.priceHR || 0) * Number(trip.duration || 0);
+    
+    const offerPrice = basePrice * 1.10; // ✅ add 10%    
+
+    return {
+      ...v,
+      price: `$${basePrice.toFixed(2)}`,
+      offerPrice: `$${offerPrice.toFixed(2)}`,
+      numericPrice: basePrice, // optional but useful
+    };
+  });
 
   const selectVahicle = () => {
 
@@ -128,12 +134,9 @@ export default function Booking() {
         totalPrice, // optional numeric value for calculations
       };    
 
-      const durationMinutes = data.tripType == 'oneway' ? data.durationMinutes : data.duration
-
       dispatch(
         saveSearch({ 
           ...data, 
-          durationMinutes, 
           selectedVehicle, 
           selectedPassenger: vehicleData[selectedIdx]?.passengers || 1,
           selectedLuggage: vehicleData[selectedIdx]?.luggage || 0,
@@ -193,85 +196,90 @@ export default function Booking() {
         <div className="container mx-auto px-2">
           <div className="flex flex-col md:flex-row space-x-5 pt-[80px] md:pt-0 mt-0 md:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
-              <div className="bg-white rounded-md shadow-xl overflow-hidden text-black p-1">
-                <div className="h-80 w-full rounded-xl overflow-hidden">
-                    <iframe
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        loading="lazy"
-                        allowFullScreen
-                        referrerPolicy="no-referrer-when-downgrade"
-                        src={data.to ? `https://www.google.com/maps?q=${data.from.name}+to+${data.to?.name}&output=embed` : `https://www.google.com/maps?q=${data.from.name}&output=embed`}
-                    ></iframe>
-                </div>
-                <div className="mt-4 mb-2 text-xs md:text-sm text-black flex gap-5 px-3"> 
-                  <p className="flex gap-1">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8 16C12.7882 16 14.4 14.3882 14.4 12.4L14.4 3.2L15.2 3.2C15.5235 3.2 15.8153 3.00512 15.9391 2.70616C16.0629 2.4072 15.9945 2.06312 15.7657 1.83432L14.1657 0.23432C13.8532 -0.0780794 13.3467 -0.0780795 13.0343 0.23432L11.4343 1.83432C11.2055 2.06312 11.137 2.4072 11.2609 2.70616C11.3847 3.00512 11.6764 3.2 12 3.2L12.8 3.2L12.8 12.4C12.8 13.5046 11.9045 14.4 10.8 14.4C9.69541 14.4 8.8 13.5046 8.8 12.4L8.8 3.6C8.8 1.61176 7.18824 -7.70349e-07 5.2 -9.44166e-07C3.21176 -1.11798e-06 1.6 1.61176 1.6 3.6L1.6 11.3366C0.667839 11.666 -1.60618e-06 12.555 -1.69753e-06 13.6C-1.81341e-06 14.9255 1.07448 16 2.4 16C3.72552 16 4.8 14.9255 4.8 13.6C4.8 12.555 4.13216 11.666 3.2 11.3366L3.2 3.6C3.2 2.49544 4.09544 1.6 5.2 1.6C6.30456 1.6 7.2 2.49544 7.2 3.6L7.2 12.4C7.2 14.3882 8.81176 16 10.8 16Z" fill="#ceb366"></path></svg> {trip.distanceKM} km
-                  </p>
-                  <p className="flex gap-1">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.3904 10.0572C10.1976 10.0572 10.0145 10.003 9.86024 9.89458L7.46988 8.21386C7.24819 8.06024 7.11325 7.80723 7.11325 7.54518V4.18373C7.11325 3.72289 7.50843 3.35241 8 3.35241C8.49157 3.35241 8.88675 3.72289 8.88675 4.18373V7.12952L10.9205 8.55723C11.1133 8.69277 11.2289 8.88253 11.2675 9.10843C11.2964 9.3253 11.2386 9.5512 11.094 9.72289C10.9301 9.93072 10.6699 10.0572 10.3807 10.0572H10.3904Z" fill="#ceb366"></path><path d="M8 15C3.58554 15 0 11.6386 0 7.5C0 3.36145 3.58554 0 8 0C12.4145 0 16 3.36145 16 7.5C16 11.6386 12.4145 15 8 15ZM8 1.66265C4.56867 1.66265 1.77349 4.28313 1.77349 7.5C1.77349 10.7169 4.56867 13.3373 8 13.3373C11.4313 13.3373 14.2265 10.7169 14.2265 7.5C14.2265 4.28313 11.4313 1.66265 8 1.66265Z" fill="#ceb366"></path></svg>
-                    {trip.durationMinutes} minutes
-                  </p>
-                </div>
-              </div>
-              <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mt-5">
-                <div>
-                  <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Pickup Trip Details</h4>
-                </div>
-                <div className="relative">
-                  {/* Vertical connector */}
-                  {data.to && (
-                    <div className="absolute left-[9px] top-[19px] h-[calc(100%-35px)] border-r-3 border-dotted border-black" />
-                  )}
-
-                  {/* FROM */}
-                  <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
-                    <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold line-clamp-1">{trip.from.name}</p>
-                      <p className="text-gray-600">{trip.from.addr}</p>
-                    </div>
+              <div className="sticky top-5 z-50">
+                <div className=" bg-white rounded-md shadow-xl overflow-hidden text-black p-1">
+                  <div className="h-80 w-full rounded-xl overflow-hidden">
+                    <RouteMap className="z-50" />
+                      {/* <iframe
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          loading="lazy"
+                          allowFullScreen
+                          referrerPolicy="no-referrer-when-downgrade"
+                          src={data.to ? `https://www.google.com/maps?q=${data.from.name}+to+${data.to?.name}&output=embed` : `https://www.google.com/maps?q=${data.from.name}&output=embed`}
+                      ></iframe> */}
                   </div>
+                  <div className="mt-4 mb-2 text-xs md:text-sm text-black flex gap-5 px-3"> 
+                    {trip.distanceKM && (<p className="flex gap-1">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8 16C12.7882 16 14.4 14.3882 14.4 12.4L14.4 3.2L15.2 3.2C15.5235 3.2 15.8153 3.00512 15.9391 2.70616C16.0629 2.4072 15.9945 2.06312 15.7657 1.83432L14.1657 0.23432C13.8532 -0.0780794 13.3467 -0.0780795 13.0343 0.23432L11.4343 1.83432C11.2055 2.06312 11.137 2.4072 11.2609 2.70616C11.3847 3.00512 11.6764 3.2 12 3.2L12.8 3.2L12.8 12.4C12.8 13.5046 11.9045 14.4 10.8 14.4C9.69541 14.4 8.8 13.5046 8.8 12.4L8.8 3.6C8.8 1.61176 7.18824 -7.70349e-07 5.2 -9.44166e-07C3.21176 -1.11798e-06 1.6 1.61176 1.6 3.6L1.6 11.3366C0.667839 11.666 -1.60618e-06 12.555 -1.69753e-06 13.6C-1.81341e-06 14.9255 1.07448 16 2.4 16C3.72552 16 4.8 14.9255 4.8 13.6C4.8 12.555 4.13216 11.666 3.2 11.3366L3.2 3.6C3.2 2.49544 4.09544 1.6 5.2 1.6C6.30456 1.6 7.2 2.49544 7.2 3.6L7.2 12.4C7.2 14.3882 8.81176 16 10.8 16Z" fill="#ceb366"></path></svg> {trip.distanceKM} km
+                    </p>)}
+                    <p className="flex gap-1">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.3904 10.0572C10.1976 10.0572 10.0145 10.003 9.86024 9.89458L7.46988 8.21386C7.24819 8.06024 7.11325 7.80723 7.11325 7.54518V4.18373C7.11325 3.72289 7.50843 3.35241 8 3.35241C8.49157 3.35241 8.88675 3.72289 8.88675 4.18373V7.12952L10.9205 8.55723C11.1133 8.69277 11.2289 8.88253 11.2675 9.10843C11.2964 9.3253 11.2386 9.5512 11.094 9.72289C10.9301 9.93072 10.6699 10.0572 10.3807 10.0572H10.3904Z" fill="#ceb366"></path><path d="M8 15C3.58554 15 0 11.6386 0 7.5C0 3.36145 3.58554 0 8 0C12.4145 0 16 3.36145 16 7.5C16 11.6386 12.4145 15 8 15ZM8 1.66265C4.56867 1.66265 1.77349 4.28313 1.77349 7.5C1.77349 10.7169 4.56867 13.3373 8 13.3373C11.4313 13.3373 14.2265 10.7169 14.2265 7.5C14.2265 4.28313 11.4313 1.66265 8 1.66265Z" fill="#ceb366"></path></svg>
+                      {data.durationMinutes}
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mt-5">
+                  <div>
+                    <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Pickup Trip Details</h4>
+                  </div>
+                  <div className="relative">
+                    {/* Vertical connector */}
+                    {data.to && (
+                      <div className="absolute left-[9px] top-[19px] h-[calc(100%-35px)] border-r-3 border-dotted border-black" />
+                    )}
 
-                  {/* TO */}
-                  {data.to && (
-                    <div className="flex items-start gap-3 text-xs md:text-sm relative z-10">
-                      <MapPinIcon className="w-5 h-5 text-red-500 flex-shrink-0" />
+                    {/* FROM */}
+                    <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
+                      <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
                       <div>
-                        <p className="font-semibold">{trip.to?.name}</p>
-                        <p className="text-gray-600">{trip.to?.addr}</p>
+                        <p className="font-semibold line-clamp-1">{data.from.name}</p>
+                        <p className="text-gray-600">{data.from.address}</p>
                       </div>
                     </div>
-                  )}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
-                    <CalendarDaysIcon className="w-5 h-5 text-gray-600" />
-                    <span>{trip.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
-                    <ClockIcon className="w-5 h-5 text-gray-600" />
-                    <span>{trip.pickupTimeLabel}</span>
-                  </div>
 
-                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
-                      <path fillRule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0Z" clipRule="evenodd"></path>
-                      <path d="M6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"></path>
-                    </svg>
-                    <span>{vehicleData[selectedIdx]?.passengers || 1} Passenger(s)</span>
+                    {/* TO */}
+                    {data.to && (
+                      <div className="flex items-start gap-3 text-xs md:text-sm relative z-10">
+                        <MapPinIcon className="w-5 h-5 text-red-500 flex-shrink-0" />
+                        <div>
+                          <p className="font-semibold">{data.to?.name}</p>
+                          <p className="text-gray-600">{data.to?.address}</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
+                  <div>
+                    <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
+                      <CalendarDaysIcon className="w-5 h-5 text-gray-600" />
+                      <span>{trip.date}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
+                      <ClockIcon className="w-5 h-5 text-gray-600" />
+                      <span>{trip.pickupTimeLabel}</span>
+                    </div>
 
-                  {vehicleData[selectedIdx]?.luggage>0 && (
-                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
-                      <path fillRule="evenodd" d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd"></path>
-                      <path d="M3 18.4v-2.796a4.3 4.3 0 0 0 .713.31A26.226 26.226 0 0 0 12 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 0 1-6.477-.427C4.047 21.128 3 19.852 3 18.4Z"></path>
-                    </svg>
-                    <span>{vehicleData[selectedIdx]?.luggage || 0} Luggage(s)</span>
+                    {(
+                    <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
+                        <path fillRule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0Z" clipRule="evenodd"></path>
+                        <path d="M6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"></path>
+                      </svg>
+                      <span>{vehicleData[selectedIdx]?.passengers || 1} Passenger(s)</span>
+                    </div>
+                    )}
+
+                    {vehicleData[selectedIdx]?.luggage>0 && (
+                    <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
+                        <path fillRule="evenodd" d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd"></path>
+                        <path d="M3 18.4v-2.796a4.3 4.3 0 0 0 .713.31A26.226 26.226 0 0 0 12 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 0 1-6.477-.427C4.047 21.128 3 19.852 3 18.4Z"></path>
+                      </svg>
+                      <span>{vehicleData[selectedIdx]?.luggage || 0} Luggage(s)</span>
+                    </div>
+                    )}
                   </div>
-                  )}
                 </div>
               </div>
             </div>
@@ -384,7 +392,7 @@ export default function Booking() {
 
                                 {/* price */}
                                 <div className="text-right md:w-40 mt-8 md:mt-0">
-                                  <div className="text-[10px] md:text-base font-bold text-red-400 line-through">{v.price}</div>
+                                  <div className="text-[10px] md:text-base font-medium text-red-300 line-through">{v.offerPrice}</div>
                                   <div className="text-xs md:text-2xl font-bold md:mt-1 md:mb-1">{v.price}</div>
                                   <div>
                                     <span className="hidden md:flex py-1 text-xs font-light md:justify-end items-center"><CheckCircleOutlineIcon className="w-5 h-5 text-green-600 mr-1
@@ -514,8 +522,7 @@ export default function Booking() {
                       })}
                     </div>                  
                   </>
-
-                  )}
+                  )}                  
 
                   {/* MOBILE VEHICLE MODAL */}
                   {mobileModalOpen && selectedIdx !== null && (
@@ -688,6 +695,25 @@ export default function Booking() {
                       </div>
                     </div>
                   </div> 
+
+                  {/* Continue button */}
+                  <div className="mt-6 flex justify-between">
+                    <button
+                      onClick={(e) => {e.preventDefault(); router.back(); }}
+                      className="flex py-3 px-3 md:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs md:text-base w-auto transition"
+                    >
+                      <FaChevronLeft className="text-white text-sm mr-1 md:mt-1" />
+                      Back
+                    </button>
+                    {/* <button
+                      // onClick={handleContinue}
+                      className="flex py-3 px-2 md:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs md:text-base w-auto"
+                    >
+                      Continue to Payment
+                      <FaChevronRight className="text-white text-sm ml-1 md:mt-1" />
+                    </button> */}
+                  </div>
+
                 </div>
               </div>
             </div>
