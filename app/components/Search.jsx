@@ -674,8 +674,8 @@ export default function Search() {
             </div>
 
             <div className="relative">
-              <div className="grid grid-cols-1 gap-4">
-                {/* <div className="flex items-center">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center">
                   <button
                     onClick={() => setIsRoundTrip(!isRoundTrip)}
                     className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
@@ -685,15 +685,15 @@ export default function Search() {
                     <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
                   </button>
                   <span className="text-xs md:text-sm w-full ml-2">Round Trip</span>
-                </div> */}
-                {/* <div className="flex justify-end">
+                </div>
+                <div className="flex justify-end">
                     <button
                       onClick={() => setAdditionalStops([...additionalStops, ""])}
                       className="text-xs px-2 md:px-4 py-2 rounded-full bg-gray-400 text-white cursor-pointer"
                     >
                       + Additional Stops
                     </button>
-                </div> */}
+                </div>
               </div>
             </div>
 
@@ -987,7 +987,7 @@ export default function Search() {
 
             <div className="relative">
               <div className="grid grid-cols-1 gap-4">
-                {/* <div className="flex items-center">
+                <div className="flex items-center">
                   <button
                     onClick={() => setIsRoundTrip(!isRoundTrip)}
                     className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
@@ -997,15 +997,15 @@ export default function Search() {
                     <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
                   </button>
                   <span className="text-xs md:text-sm w-full ml-2">Round Trip</span>
-                </div> */}
-                {/* <div className="flex justify-end">
+                </div>
+                <div className="flex justify-end">
                     <button
                       onClick={() => setAdditionalStops([...additionalStops, ""])}
                       className="text-xs px-2 md:px-4 py-2 rounded-full bg-gray-400 text-white cursor-pointer"
                     >
                       + Additional Stops
                     </button>
-                </div> */}
+                </div>
               </div>
             </div>
 
@@ -1028,11 +1028,11 @@ export default function Search() {
         )}
       </div>
 
-      <script
+      {/* <script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
         async
         defer
-      />
+      /> */}
     </div>
   );
 }

@@ -63,7 +63,7 @@ export default function BookingSuccess() {
         //     "Pickup date": data?.pickupDate,
         //     "Pickup time": data?.pickupTime,
         // });
-        const qrValue = `http://limoroyal.com/booking/success?booking_id=${bookingId}`;
+        const qrValue = `${NEXT_PUBLIC_APP_URL}/booking/success?booking_id=${bookingId}`;
         setQRData(qrValue);
     }, [bookingId]);
 

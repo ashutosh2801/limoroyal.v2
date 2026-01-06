@@ -161,7 +161,7 @@ export default function CheckoutPage() {
         <div className="container mx-auto px-2">
           <div className="flex flex-col md:flex-row space-x-5 pt-[80px] md:pt-0 mt-0 md:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
-              <div>
+              <div className="sticky top-5 z-50">
                 {/* Payment Card */}
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-5">
                   <h2 className="mb-4 text-lg md:text-lg font-bold border-b border-gray-200 pb-1">Payment details</h2>

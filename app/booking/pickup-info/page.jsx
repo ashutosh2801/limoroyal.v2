@@ -155,6 +155,7 @@ export default function PickupInfoPage() {
         <div className="container mx-auto px-2">
           <div className="flex flex-col md:flex-row space-x-5 pt-[80px] md:pt-0 mt-0 md:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
+            <div className="sticky top-5 z-50">
               <div className="bg-white rounded-md shadow-xl overflow-hidden text-black p-1">
                 <div className="h-80 w-full rounded-xl overflow-hidden">
                     <iframe
@@ -236,6 +237,7 @@ export default function PickupInfoPage() {
                   )}
                 </div>
               </div>
+            </div>
             </div>
             {/* Centered white content card */}
             <div className="w-full md:w-2/3 order-1 md:order-2">
