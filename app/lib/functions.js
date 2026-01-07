@@ -58,3 +58,10 @@ export function convertTime(value, type) {
 
   return "";
 };
+
+export function canAddAnotherStop(additionalStops) {
+  if (additionalStops?.length === 0) return true;
+
+  const lastStop = additionalStops[additionalStops?.length - 1];
+  return lastStop.input && lastStop.input.trim().length > 0;
+};
