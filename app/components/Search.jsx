@@ -14,7 +14,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { FaCarSide, FaPlane } from "react-icons/fa";
 import { startSearch, saveSearch } from "@/store/searchSlice";
-import { extractAirportData, convertTime } from "@/app/lib/functions";
+import { extractAirportData, convertTime, canAddAnotherStop } from "@/app/lib/functions";
 import { showAlert } from "@/app/lib/alert";
 
 export default function Search() {
@@ -43,17 +43,16 @@ export default function Search() {
   const directionsService = useRef(null);
   const autocompleteService = useRef(null);
   const placesService = useRef(null);
+  const stopInputRefs = useRef([]);
+  const stopListRefs = useRef([]);
 
   // Selected places
   const [fromPlace, setFromPlace] = useState(null);
   const [toPlace, setToPlace] = useState(null);
   const [additionalStops, setAdditionalStops] = useState([]);
-  const [duration, setDuration] = useState("");
   const [pickupDate, setPickupDate] = useState(new Date());
   const [pickupTime, setPickupTime] = useState(null);
   const [isRoundTrip, setIsRoundTrip] = useState(false);
-  const [passengers, setPassengers] = useState(1);
-  const [luggage, setLuggage] = useState(0);
   const [googleReady, setGoogleReady] = useState(false);
 
   useEffect(() => {
@@ -84,9 +83,12 @@ export default function Search() {
     return "📍";
   };
 
-  const fetchPredictions = (value, listRef, inputRef, setInput) => {
+  const fetchPredictions = (value, listRef, inputRef, setInput, stopIndex = null) => {
+
+    const listEl = listRef?.current || listRef;
+
     if (!autocompleteService.current || value.length < 2) {
-      listRef.current.style.display = "none";
+      if (listEl) listEl.style.display = "none";
       return;
     }
 
@@ -101,12 +103,17 @@ export default function Search() {
           status !== window.google.maps.places.PlacesServiceStatus.OK ||
           !predictions
         ) {
-          listRef.current.style.display = "none";
+          //listRef.current.style.display = "none";
+          if (listEl) {
+            listEl.style.display = "none";
+          }
           return;
         }
 
-        listRef.current.innerHTML = "";
-        listRef.current.style.display = "block";
+        if (!listEl) return;
+
+        listEl.innerHTML = "";
+        listEl.style.display = "block";
 
         predictions.forEach((p) => {
           const div = document.createElement("div");
@@ -137,12 +144,15 @@ export default function Search() {
             selectPlace(
               p.place_id,
               inputRef,
-              listRef,
+              listEl,
               setInput,
-              setInput === setFromInput ? setFromPlace : setToPlace
+              stopIndex === null ? 
+                (setInput === setFromInput ? setFromPlace : setToPlace)
+                : null,
+              stopIndex
             );
 
-          listRef.current.appendChild(div);
+          listEl.appendChild(div);
         });
       }
     );
@@ -153,7 +163,8 @@ export default function Search() {
     inputRef,
     listRef,
     setInput,
-    setPlace
+    setPlace,
+    stopIndex = null
   ) => {
     placesService.current.getDetails(
       {
@@ -170,15 +181,33 @@ export default function Search() {
       (place, status) => {
         if (status !== window.google.maps.places.PlacesServiceStatus.OK) return;
 
-        const value = `${place.name}`;
-
-        setInput(value);
-        inputRef.current.value = value;
-
-        listRef.current.innerHTML = "";
-        listRef.current.style.display = "none";
+        const listEl = listRef?.current || listRef;
+        if (listEl) listEl.style.display = "none";
 
         const airportData = extractAirportData(place);
+        const fullAddress = `${place.name}`;
+
+        if (stopIndex !== null) {
+          const updated = [...additionalStops];
+          updated[stopIndex] = {
+            input: fullAddress,
+            place: {
+              name: place.name,
+              address: place.formatted_address,
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng(),
+            },
+          };
+          setAdditionalStops(updated);
+          listEl.style.display = "none";
+          return;
+        }
+
+        setInput(fullAddress);
+        inputRef.current.value = place.name;
+
+        listEl.innerHTML = "";
+        listEl.style.display = "none";
 
         setPlace({
           name: place.name,
@@ -357,6 +386,8 @@ export default function Search() {
             }
           : null,
 
+          additionalStops: additionalStops.filter(s => s.place).map(s => s.place),
+
           // Route info
           distanceMiles: routeDetails.distanceMiles || 0,
           distanceKM: routeDetails.distanceKM || 0,
@@ -532,7 +563,7 @@ export default function Search() {
 
               <div
                 ref={fromListRef}
-                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-60 overflow-y-auto"
+                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
               />
             </div>
 
@@ -549,8 +580,10 @@ export default function Search() {
                 {/* Input */}
                 <input
                   id="fromFlightNumber"
-                  value={fromFlightNumber}
+                  value={fromFlightNumber.toUpperCase()}
+                  type="text"
                   placeholder=" "
+                  maxLength={6}
                   className={`${inputClass} peer pl-10 pt-6`}
                   onChange={(e) => setFromFlightNumber(e.target.value.toUpperCase())}
                 />                
@@ -635,27 +668,58 @@ export default function Search() {
 
                 {/* Input */}
                 <input
-                  value={stop}
-                  onChange={(e) => {
-                    const newStops = [...additionalStops];
-                    newStops[index] = e.target.value;
-                    setAdditionalStops(newStops);
-                  }}
+                  ref={(el) => (stopInputRefs.current[index] = el)}
+                  value={stop.input}               
                   placeholder=" "
                   className={`${inputClass} peer pl-10 pr-10 pt-6`}
+
+                  onChange={(e) => {
+                    const updated = [...additionalStops];
+                    updated[index].input = e.target.value;
+                    updated[index].place = null;
+                    setAdditionalStops(updated);
+
+                    const listEl = stopListRefs.current[index];
+                    const inputEl = stopInputRefs.current[index];
+
+                    if (listEl && inputEl) {
+                      fetchPredictions(
+                        e.target.value,
+                        listEl,
+                        inputEl,
+                        null,
+                        index
+                      );
+                    }
+                  }}
+                  onFocus={(e) => {
+                    if (e.target.value.length >= 2) {
+                      const listEl = stopListRefs.current[index];
+                      const inputEl = stopInputRefs.current[index];
+                      if (listEl && inputEl) {
+                        fetchPredictions(
+                          e.target.value,
+                          listEl,
+                          inputEl,
+                          null,
+                          index
+                        );
+                      }
+                    }
+                  }}
                 />
 
                 {/* Floating label */}
                 <label
                   className={`pointer-events-none absolute left-11
                     transition-all duration-200 text-gray-400
-                    ${stop ? "top-2 text-xs" : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"}`}
+                    ${stop.input ? "top-2 text-xs" : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"}`}
                 >
                   Stop {index + 1}
                 </label>
 
                 {/* Helper text */}
-                {!stop && (
+                {!stop.input && (
                   <span
                     className="pointer-events-none absolute left-11 top-8
                       text-[13px] text-gray-500 transition-opacity
@@ -665,7 +729,7 @@ export default function Search() {
                   </span>
                 )}
 
-                {/* ❌ Remove Stop Icon */}
+                {/*  Remove Stop Icon */}
                 <XMarkIcon
                   className="absolute right-3 top-1/2 -translate-y-1/2
                     w-4 h-4 cursor-pointer text-gray-400 hover:text-red-500"
@@ -675,6 +739,11 @@ export default function Search() {
                       prev.filter((_, i) => i !== index)
                     );
                   }}
+                />
+
+                <div
+                  ref={(el) => (stopListRefs.current[index] = el)}
+                  className="absolute z-[9999] bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
                 />
               </div>
             ))}
@@ -757,7 +826,7 @@ export default function Search() {
               {/* Predictions dropdown */}
               <div
                 ref={toListRef}
-                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-60 overflow-y-auto"
+                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
               />
             </div>
 
@@ -877,8 +946,8 @@ export default function Search() {
             </div>
 
             <div className="relative">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center">
+              <div className="grid grid-cols-1 gap-4">
+                {/* <div className="flex items-center">
                   <button
                     onClick={() => setIsRoundTrip(!isRoundTrip)}
                     className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
@@ -888,11 +957,38 @@ export default function Search() {
                     <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
                   </button>
                   <span className="text-xs md:text-sm w-full ml-2">Round Trip</span>
-                </div>
+                </div> */}
                 <div className="flex justify-end">
                     <button
-                      onClick={() => setAdditionalStops([...additionalStops, ""])}
-                      className="text-xs px-2 md:px-4 py-2 rounded-full bg-gray-600 text-white cursor-pointer"
+                      onClick={() => {
+                        if (!canAddAnotherStop(additionalStops)) { 
+                          if(additionalStops.length >= 3) {
+                            showAlert({
+                              text: "Maximum of 3 additional stops allowed.",
+                              icon: "warning",
+                            });
+                          }
+                          else {
+                            showAlert({
+                              text: "Please enter a additional stop.",
+                              icon: "warning",
+                            });
+                          }
+                          return;
+                        }
+
+                        setAdditionalStops([
+                          ...additionalStops,
+                          { input: "", place: null }
+                        ]);
+                      }}
+                      disabled={!canAddAnotherStop(additionalStops)}
+                      className={`text-xs px-2 md:px-4 py-2 rounded-full text-white
+                      ${
+                        canAddAnotherStop(additionalStops)
+                          ? "bg-gray-600"
+                          : "bg-gray-400 cursor-not-allowed"
+                      } cursor-pointer`}
                     >
                       + Additional Stops
                     </button>
@@ -902,6 +998,7 @@ export default function Search() {
 
             <button
               onClick={handleSearchOneWay}
+              disabled={loading}
               className="w-full py-3 rounded-xl search-btn cursor-pointer text-base transition"
             >
               {loading ? 'Searching...' : 'Search'}
@@ -986,7 +1083,7 @@ export default function Search() {
 
               <div
                 ref={fromListRef}
-                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-60 overflow-y-auto"
+                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
               />
             </div>
 
@@ -1000,27 +1097,58 @@ export default function Search() {
 
                 {/* Input */}
                 <input
-                  value={stop}
-                  onChange={(e) => {
-                    const newStops = [...additionalStops];
-                    newStops[index] = e.target.value;
-                    setAdditionalStops(newStops);
-                  }}
+                  ref={(el) => (stopInputRefs.current[index] = el)}
+                  value={stop.input}               
                   placeholder=" "
                   className={`${inputClass} peer pl-10 pr-10 pt-6`}
+
+                  onChange={(e) => {
+                    const updated = [...additionalStops];
+                    updated[index].input = e.target.value;
+                    updated[index].place = null;
+                    setAdditionalStops(updated);
+
+                    const listEl = stopListRefs.current[index];
+                    const inputEl = stopInputRefs.current[index];
+
+                    if (listEl && inputEl) {
+                      fetchPredictions(
+                        e.target.value,
+                        listEl,
+                        inputEl,
+                        null,
+                        index
+                      );
+                    }
+                  }}
+                  onFocus={(e) => {
+                    if (e.target.value.length >= 2) {
+                      const listEl = stopListRefs.current[index];
+                      const inputEl = stopInputRefs.current[index];
+                      if (listEl && inputEl) {
+                        fetchPredictions(
+                          e.target.value,
+                          listEl,
+                          inputEl,
+                          null,
+                          index
+                        );
+                      }
+                    }
+                  }}
                 />
 
                 {/* Floating label */}
                 <label
                   className={`pointer-events-none absolute left-11
                     transition-all duration-200 text-gray-400
-                    ${stop ? "top-2 text-xs" : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"}`}
+                    ${stop.input ? "top-2 text-xs" : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"}`}
                 >
                   Stop {index + 1}
                 </label>
 
                 {/* Helper text */}
-                {!stop && (
+                {!stop.input && (
                   <span
                     className="pointer-events-none absolute left-11 top-8
                       text-[13px] text-gray-500 transition-opacity
@@ -1030,7 +1158,7 @@ export default function Search() {
                   </span>
                 )}
 
-                {/* ❌ Remove Stop Icon */}
+                {/*  Remove Stop Icon */}
                 <XMarkIcon
                   className="absolute right-3 top-1/2 -translate-y-1/2
                     w-4 h-4 cursor-pointer text-gray-400 hover:text-red-500"
@@ -1040,6 +1168,11 @@ export default function Search() {
                       prev.filter((_, i) => i !== index)
                     );
                   }}
+                />
+
+                <div
+                  ref={(el) => (stopListRefs.current[index] = el)}
+                  className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
                 />
               </div>
             ))}
@@ -1122,7 +1255,7 @@ export default function Search() {
               {/* Predictions dropdown */}
               <div
                 ref={toListRef}
-                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-60 overflow-y-auto"
+                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
               />
             </div>
 
@@ -1195,7 +1328,7 @@ export default function Search() {
               {/* Predictions dropdown */}
               <div
                 ref={toListRef}
-                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-60 overflow-y-auto"
+                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
               />
             </div>
 
@@ -1259,8 +1392,8 @@ export default function Search() {
             </div>
 
             <div className="relative">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center">
+              <div className="grid grid-cols-1 gap-4">
+                {/* <div className="flex items-center">
                   <button
                     onClick={() => setIsRoundTrip(!isRoundTrip)}
                     className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
@@ -1270,11 +1403,38 @@ export default function Search() {
                     <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
                   </button>
                   <span className="text-xs md:text-sm w-full ml-2">Round Trip</span>
-                </div>
+                </div> */}
                 <div className="flex justify-end">
                     <button
-                      onClick={() => setAdditionalStops([...additionalStops, ""])}
-                      className="text-xs px-2 md:px-4 py-2 rounded-full bg-gray-400 text-white cursor-pointer"
+                      onClick={() => {
+                        if (!canAddAnotherStop(additionalStops)) { 
+                          if(additionalStops.length >= 3) {
+                            showAlert({
+                              text: "Maximum of 3 additional stops allowed.",
+                              icon: "warning",
+                            });
+                          }
+                          else {
+                            showAlert({
+                              text: "Please enter a additional stop.",
+                              icon: "warning",
+                            });
+                          }
+                          return;
+                        }
+
+                        setAdditionalStops([
+                          ...additionalStops,
+                          { input: "", place: null }
+                        ]);
+                      }}
+                      disabled={!canAddAnotherStop(additionalStops)}
+                      className={`text-xs px-2 md:px-4 py-2 rounded-full text-white
+                      ${
+                        canAddAnotherStop(additionalStops)
+                          ? "bg-gray-600"
+                          : "bg-gray-400 cursor-not-allowed"
+                      } cursor-pointer`}
                     >
                       + Additional Stops
                     </button>
