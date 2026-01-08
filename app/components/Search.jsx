@@ -469,7 +469,7 @@ export default function Search() {
   // ---------------- RENDER ----------------
   return (
     <div className="w-full px-4 relative z-52 mt-5">
-      <div className="bg-white w-full max-w-lg shadow-xl relative md:absolute right-0 md:right-20 md:-top-130 mt-10 md:mt-0 rounded-md">
+      <div className="bg-white w-full md:max-w-md lg:max-w-sm xl:max-w-lg shadow-xl relative lg:absolute right-0 lg:right-5 xl:right-20 lg:-top-150 xl:-top-130 mt-10 lg:mt-0 rounded-md">
 
         {/* Tabs */}
         <div className="grid grid-cols-2 mt-1">
@@ -629,7 +629,7 @@ export default function Search() {
                 {/* Select */}
                 <select
                   value={flightCat}
-                  className={`${inputClass} peer pl-10 pt-8 pb-2 appearance-none`}
+                  className={`${inputClass} peer pl-10 pt-6 appearance-none`}
                   onChange={(e) => setFlightCat(e.target.value)}
                 >
                   <option value="">Select</option>

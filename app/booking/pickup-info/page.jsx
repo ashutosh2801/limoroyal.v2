@@ -8,6 +8,7 @@ import {
   ClockIcon,
   CheckCircleIcon,
   MapPinIcon,
+  Squares2X2Icon
 } from "@heroicons/react/24/solid";
 import {
   CheckCircleIcon as CheckCircleOutlineIcon,
@@ -153,11 +154,11 @@ export default function PickupInfoPage() {
     <div className="min-h-screen">
       <div className="py-10 border-b webBorderColor">
         <div className="container mx-auto px-2">
-          <div className="flex flex-col md:flex-row space-x-5 pt-[80px] md:pt-0 mt-0 md:mt-40">
+          <div className="flex flex-col md:flex-row space-x-5 pt-[90px] md:pt-[20px] xl:pt-0 mt-0 md:mt-20 xl:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
             <div className="sticky top-5 z-50">
               <div className="bg-white rounded-md shadow-xl overflow-hidden text-black p-1">
-                <div className="h-80 w-full rounded-xl overflow-hidden">
+                <div className="h-80 md:h-50 xl:h-80 w-full rounded-xl overflow-hidden">
                     <iframe
                         width="100%"
                         height="100%"
@@ -168,7 +169,7 @@ export default function PickupInfoPage() {
                         src={data.to ? `https://www.google.com/maps?q=${data.from.name}+to+${data.to?.name}&output=embed` : `https://www.google.com/maps?q=${data.from.name}&output=embed`}
                     ></iframe>
                 </div>
-                <div className="mt-4 mb-2 text-xs md:text-sm text-black flex gap-5 px-3"> 
+                <div className="mt-4 mb-2 text-xs xl:text-sm text-black flex gap-5 px-3">
                   {data.distanceKM && (<p className="flex gap-1">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8 16C12.7882 16 14.4 14.3882 14.4 12.4L14.4 3.2L15.2 3.2C15.5235 3.2 15.8153 3.00512 15.9391 2.70616C16.0629 2.4072 15.9945 2.06312 15.7657 1.83432L14.1657 0.23432C13.8532 -0.0780794 13.3467 -0.0780795 13.0343 0.23432L11.4343 1.83432C11.2055 2.06312 11.137 2.4072 11.2609 2.70616C11.3847 3.00512 11.6764 3.2 12 3.2L12.8 3.2L12.8 12.4C12.8 13.5046 11.9045 14.4 10.8 14.4C9.69541 14.4 8.8 13.5046 8.8 12.4L8.8 3.6C8.8 1.61176 7.18824 -7.70349e-07 5.2 -9.44166e-07C3.21176 -1.11798e-06 1.6 1.61176 1.6 3.6L1.6 11.3366C0.667839 11.666 -1.60618e-06 12.555 -1.69753e-06 13.6C-1.81341e-06 14.9255 1.07448 16 2.4 16C3.72552 16 4.8 14.9255 4.8 13.6C4.8 12.555 4.13216 11.666 3.2 11.3366L3.2 3.6C3.2 2.49544 4.09544 1.6 5.2 1.6C6.30456 1.6 7.2 2.49544 7.2 3.6L7.2 12.4C7.2 14.3882 8.81176 16 10.8 16Z" fill="#ceb366"></path></svg> {trip.distanceKM} km
                   </p>)}
@@ -180,17 +181,26 @@ export default function PickupInfoPage() {
               </div>
               <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mt-5">
                 <div>
-                  <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Pickup Trip Details</h4>
+                  <h4 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Pickup Trip Details</h4>
                 </div>
                 <div className="relative">
                   {/* Vertical connector */}
                   {data.to && (
-                    <div className="absolute left-[9px] top-[19px] h-[calc(100%-35px)] border-r-3 border-dotted border-black" />
+                    <div className="absolute left-[9px] top-[19px] h-[calc(100%-55px)] xl:h-[calc(100%-40px)] border-r-3 border-dotted border-black" />
                   )}
 
                   {/* FROM */}
-                  <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
+                  <div className="flex items-start gap-3 text-xs xl:text-sm mb-3 relative z-10">
                     <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                    <div>
+                      <p className="font-semibold line-clamp-1">{data.from.name}</p>
+                      <p className="text-gray-600">{data.from.address}</p>
+                    </div>
+                  </div>
+
+                  {/* STOP */}
+                  <div className="flex items-start gap-3 text-xs xl:text-sm mb-3 relative z-10">
+                    <Squares2X2Icon className="w-5 h-5 text-yellow-900 flex-shrink-0" />
                     <div>
                       <p className="font-semibold line-clamp-1">{data.from.name}</p>
                       <p className="text-gray-600">{data.from.address}</p>
@@ -199,7 +209,7 @@ export default function PickupInfoPage() {
 
                   {/* TO */}
                   {data.to && (
-                    <div className="flex items-start gap-3 text-xs md:text-sm relative z-10">
+                    <div className="flex items-start gap-3 text-xs xl:text-sm relative z-10">
                       <MapPinIcon className="w-5 h-5 text-red-500 flex-shrink-0" />
                       <div>
                         <p className="font-semibold">{data.to?.name}</p>
@@ -209,16 +219,16 @@ export default function PickupInfoPage() {
                   )}
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
+                  <div className="flex items-center gap-2 text-xs xl:text-sm text-gray-600 mt-3">
                     <CalendarDaysIcon className="w-5 h-5 text-gray-600" />
                     <span>{trip.date}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
+                  <div className="flex items-center gap-2 text-xs xl:text-sm text-gray-600 mt-3">
                     <ClockIcon className="w-5 h-5 text-gray-600" />
                     <span>{trip.pickupTimeLabel}</span>
                   </div>
                   {data.selectedPassenger > 0 && (
-                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
+                  <div className="flex items-center gap-2 text-xs xl:text-sm text-gray-600 mt-3">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
                       <path fillRule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0Z" clipRule="evenodd"></path>
                       <path d="M6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"></path>
@@ -227,7 +237,7 @@ export default function PickupInfoPage() {
                   </div>
                   )}
                   {data.selectedLuggage > 0 && (
-                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
+                  <div className="flex items-center gap-2 text-xs xl:text-sm text-gray-600 mt-3">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
                       <path fillRule="evenodd" d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd"></path>
                       <path d="M3 18.4v-2.796a4.3 4.3 0 0 0 .713.31A26.226 26.226 0 0 0 12 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 0 1-6.477-.427C4.047 21.128 3 19.852 3 18.4Z"></path>
@@ -242,7 +252,7 @@ export default function PickupInfoPage() {
             {/* Centered white content card */}
             <div className="w-full md:w-2/3 order-1 md:order-2">
               <div className="bg-white rounded-md shadow-xl overflow-hidden text-black mb-5 md:mb-0">
-                <div className="p-4 md:p-8">
+                <div className="p-4 xl:p-8">
 
                   {/* Blacklane Stepper */}
                   <Tabs activeStep={activeStep} />              
@@ -255,7 +265,7 @@ export default function PickupInfoPage() {
                     className="w-full relative md:flex md:items-center flex-wrap gap-4 p-4 mt-2 rounded-xl text-left transition-shadow border bg-amber-50"
                   >
                     {/* left: image */}
-                    <div className="flex w-full md:w-42 h-20 relative items-center mb-3 md:mb-0">
+                    <div className="flex w-[30%] h-10 md:w-35 md:h-15 xl:w-42 xl:h-20 relative items-center mb-0">
                       <Image
                         src={data.selectedVehicle?.img}
                         alt={data.selectedVehicle?.name}
@@ -268,15 +278,14 @@ export default function PickupInfoPage() {
                     {/* center: details */}
                     <div className="flex-1">
 
-
                       <div className="block md:flex items-start justify-between">
                         <div>
-                          <div className="font-semibold text-sm md:text-xl mt-2 mb-2">{data.selectedVehicle?.name}</div>
+                          <div className="font-semibold text-xs md:text-sm xl:text-xl mt-3 mb-2">{data.selectedVehicle?.name}</div>
                           <div className="text-xs text-gray-600 my-1 hidden md:block" dangerouslySetInnerHTML={{ __html: data.selectedVehicle?.desc }} />
                         </div>
 
                         {/* price */}
-                        <div className="md:text-right md:w-40">
+                        <div className="md:text-right w-full md:w-70 xl:w-40 mt-0 md:mt-2">
                           <div className="inline-block md:flex md:justify-end"> 
                             <span className="flex items-center text-xs rounded-full bg-green-400 text-white py-1 px-2 gap-1">
                               <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 6L5 10L14 1" stroke="white" strokeWidth={2}></path></svg> Selected
@@ -288,7 +297,7 @@ export default function PickupInfoPage() {
                               router.back();
                             }} className="inline-block float-right md:flex text-xs mt-2 mb-3 flex md:justify-end underline text-gray-700">Change Vehicle
                           </a>
-                          <div className="text-sm md:text-2xl font-bold my-1">{data.payment?.subTotalLabel}</div>
+                          <div className="text-sm md:text-lg xl:text-2xl font-bold my-1">{data.payment?.subTotalLabel}</div>
                         </div>
                       </div>
                       <div className="flex justify-between items-center gap-6">
@@ -319,10 +328,9 @@ export default function PickupInfoPage() {
                       </div>
                     </div>
                   </div>
-                      
 
                   {/* Heading */}
-                  <h2 ref={refMsg} className="mt-6 text-lg md:text-xl font-bold">Pickup Information</h2>
+                  <h2 ref={refMsg} className="mt-6 text-lg xl:text-xl font-bold">Pickup Information</h2>
                   <small className="text-gray-500 text-[10px] md:text-xs">
                     Provide details your chauffeur should know
                   </small>
@@ -332,10 +340,10 @@ export default function PickupInfoPage() {
 
                     {/* Booking For */}
                     <div className="mb-6">
-                      <p className="font-semibold mb-2 text-sm md:text-base">Select Who you are booking for?</p>
+                      <p className="font-semibold mb-2 text-sm xl:text-base">Select Who you are booking for?</p>
 
                       <div className="flex flex-col gap-4 p-3 md:p-4 border border-gray-200 rounded-xl">
-                        <label className="flex items-center gap-2 text-xs md:text-sm">
+                        <label className="flex items-center gap-2 text-xs xl:text-sm">
                           <input
                             type="radio"
                             name="bookingFor"
@@ -346,7 +354,7 @@ export default function PickupInfoPage() {
                           Book for myself
                         </label>
 
-                        <label className="flex items-center gap-2 text-xs md:text-sm">
+                        <label className="flex items-center gap-2 text-xs xl:text-sm">
                           <input
                             type="radio"
                             name="bookingFor"
@@ -359,8 +367,8 @@ export default function PickupInfoPage() {
                       </div>
                     </div>
 
-                    <div className="mb-6 p-3 md:p-4 md:p-6 md:!pr-6 lg:!pr-20 border border-gray-200 rounded-xl space-y-4">
-                      <p className="font-semibold mb-2 text-sm md:text-base">Passenger Details</p>
+                    <div className="mb-6 p-3 lg:p-4 lg:p-6 lg:!pr-6 lg:!pr-20 border border-gray-200 rounded-xl space-y-4">
+                      <p className="font-semibold mb-2 text-sm xl:text-base">Passenger Details</p>
 
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="relative w-full md:w-50">
@@ -388,7 +396,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.title
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             Title
@@ -432,7 +440,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.firstName
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             First Name
@@ -474,7 +482,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.lastName
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             Last Name
@@ -518,7 +526,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.email
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             Email Address
@@ -562,7 +570,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.contactNumber
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus-within:top-2 peer-focus-within:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus-within:top-2 peer-focus-within:text-xs"
                               }`}
                           >
                             Contact Number
@@ -579,8 +587,8 @@ export default function PickupInfoPage() {
                     </div>
 
                     {(form.bookingFor === "someoneElse") && (
-                      <div className="mb-6 p-3 md:p-4 md:p-6 md:!pr-6 lg:!pr-20 border border-gray-200 rounded-xl space-y-4">
-                        <p className="font-semibold mb-2 text-sm md:text-base">Booker Details</p>
+                      <div className="mb-6 p-3 lg:p-4 lg:p-6 lg:!pr-6 lg:!pr-20 border border-gray-200 rounded-xl space-y-4">
+                        <p className="font-semibold mb-2 text-sm xl:text-base">Booker Details</p>
 
                         <div className="grid md:grid-cols-2 gap-4">
                           <div className="relative w-full md:w-50">
@@ -608,7 +616,7 @@ export default function PickupInfoPage() {
                                 ${
                                   form.booker_title
                                     ? "top-2 text-xs"
-                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                    : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                                 }`}
                             >
                               Title
@@ -652,7 +660,7 @@ export default function PickupInfoPage() {
                                 ${
                                   form.booker_firstName
                                     ? "top-2 text-xs"
-                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                    : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                                 }`}
                             >
                               First Name
@@ -694,7 +702,7 @@ export default function PickupInfoPage() {
                                 ${
                                   form.booker_lastName
                                     ? "top-2 text-xs"
-                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                    : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                                 }`}
                             >
                               Last Name
@@ -738,7 +746,7 @@ export default function PickupInfoPage() {
                                 ${
                                   form.booker_email
                                     ? "top-2 text-xs"
-                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                    : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                                 }`}
                             >
                               Email Address
@@ -782,7 +790,7 @@ export default function PickupInfoPage() {
                                 ${
                                   form.booker_contactNumber
                                     ? "top-2 text-xs"
-                                    : "top-3 text-[12px] md:text-sm peer-focus-within:top-2 peer-focus-within:text-xs"
+                                    : "top-3 text-[12px] xl:text-sm peer-focus-within:top-2 peer-focus-within:text-xs"
                                 }`}
                             >
                               Contact Number
@@ -801,7 +809,7 @@ export default function PickupInfoPage() {
 
                     {/* Additional Info */}
                     <div className="mb-2">
-                      <p className="font-semibold text-sm md:text-base">Additional information</p>
+                      <p className="font-semibold text-sm xl:text-base">Additional information</p>
                       <small className="flex mt-1 text-gray-500 text-[10px] md:text-xs">
                         Enter your flight number to ensure your chauffeur can track your flight and adjust the pickup time.
                       </small>
@@ -827,7 +835,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.flightNumber
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             Flight number
@@ -865,7 +873,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.pickupSign
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             Pickup Sign
@@ -873,12 +881,12 @@ export default function PickupInfoPage() {
 
                           {/* Helper text inside input */}
                           {!form.pickupSign && (
-                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden md:block">
+                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden xl:block">
                              It will appear on your chauffeur's pickup sign when they meet you.
                             </span>
                           )}
                         </div>
-                        <small className="text-gray-500 text-[10px] flex md:hidden mt-1">
+                        <small className="text-gray-500 text-[10px] flex xl:hidden mt-1">
                           It will appear on your chauffeur's pickup sign when they meet you.
                         </small>
                       </div>
@@ -903,7 +911,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.chauffeurNotes
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             Notes for the chauffeur
@@ -911,12 +919,12 @@ export default function PickupInfoPage() {
 
                           {/* Helper text inside textarea */}
                           {!form.chauffeurNotes && (
-                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden md:block">
+                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden xl:block">
                               Add special requests, e.g. number of bags, child seats, etc. please do not include confidential information.
                             </span>
                           )}
                         </div>
-                        <small className="text-gray-500 text-[10px] flex md:hidden mt-1">
+                        <small className="text-gray-500 text-[10px] flex xl:hidden mt-1">
                           Add special requests, e.g. number of bags, child seats, etc. please do not include confidential information.
                         </small>
                       </div>
@@ -940,7 +948,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.referenceCode
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             Reference code or cost center
@@ -948,12 +956,12 @@ export default function PickupInfoPage() {
 
                           {/* Helper text inside input */}
                           {!form.referenceCode && (
-                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden md:block">
+                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden xl:block">
                               Booking for business? what you enter above will appear on the invoice.
                             </span>
                           )}
                         </div>
-                        <small className="text-gray-500 text-[10px] flex md:hidden mt-1">
+                        <small className="text-gray-500 text-[10px] flex xl:hidden mt-1">
                           Booking for business? what you enter above will appear on the invoice.
                         </small>
                       </div>
@@ -964,17 +972,17 @@ export default function PickupInfoPage() {
                   <div className="mt-6 flex justify-between">
                     <button
                       onClick={(e) => {e.preventDefault(); router.back(); }}
-                      className="flex py-3 px-3 md:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs md:text-base w-auto transition"
+                      className="flex py-3 px-3 xl:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs xl:text-base w-auto transition"
                     >
-                      <FaChevronLeft className="text-white text-sm mr-1 md:mt-1" />
+                      <FaChevronLeft className="text-white text-xs xl:text-sm mr-1 mt-[2px] xl:mt-1" />
                       Back
                     </button>
                     <button
                       onClick={handleContinue}
-                      className="flex py-3 px-2 md:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs md:text-base w-auto"
+                      className="flex py-3 px-2 xl:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs xl:text-base w-auto"
                     >
                       Continue to Payment
-                      <FaChevronRight className="text-white text-sm ml-1 md:mt-1" />
+                      <FaChevronRight className="text-white text-xs xl:text-sm ml-1 mt-[2px] xl:mt-1" />
                     </button>
                   </div>
 

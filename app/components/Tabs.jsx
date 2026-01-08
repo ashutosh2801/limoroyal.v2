@@ -34,7 +34,7 @@ function Tabs({ activeStep }) {
             >
               {/* Step Label */}
               <span
-                className={`mb-5 text-[9px] md:text-sm font-semibold ${
+                className={`mb-5 text-[9px] lg:text-base xl:text-sm font-semibold ${
                   isCompleted || isActive
                     ? "text-black"
                     : "text-gray-400"
