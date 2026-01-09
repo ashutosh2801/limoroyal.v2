@@ -2,7 +2,7 @@ import React from "react";
 
 const steps = [
   "Service Class",
-  "Pickup Info",
+  "Passenger Details",
   "Payment",
   "Checkout",
 ];

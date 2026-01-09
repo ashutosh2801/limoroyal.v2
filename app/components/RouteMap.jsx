@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import { getAlphabetLabel } from "../lib/functions";
 
 export default function RouteMap() {
   const mapRef = useRef(null);
@@ -11,15 +12,22 @@ export default function RouteMap() {
   const { data } = useSelector((state) => state.search);
 
   useEffect(() => {
+    if (!data) return;
+
     const interval = setInterval(() => {
-        if (window.google && mapRef.current) {
-            clearInterval(interval);
-            initMap();
-        }
+      if (
+        window.google &&
+        window.google.maps &&
+        typeof window.google.maps.Map === "function" &&
+        mapRef.current
+      ) {
+        clearInterval(interval);
+        initMap();
+      }
     }, 100);
 
     return () => clearInterval(interval);
-    }, [data]);
+  }, [data]);
 
   function initMap() {
 
@@ -34,16 +42,10 @@ export default function RouteMap() {
     }
 
     const pointA = { lat: data?.from?.lat, lng: data?.from?.lng };
-    const pointB = { lat: data?.to?.lat, lng: data?.to?.lng };
-
-    // data.additionalStops = [
-    //   { lat: xx.x, lng: yy.y },
-    //   { lat: aa.a, lng: bb.b }
-    // ];
-
     const stops = Array.isArray(data.additionalStops)
-    ? data.additionalStops.filter(s => s?.lat && s?.lng)
-    : [];
+                  ? data.additionalStops.filter(s => s?.lat && s?.lng)
+                  : [];
+    const pointB = { lat: data?.to?.lat, lng: data?.to?.lng };
 
     const map = new window.google.maps.Map(mapRef.current, {
       zoom: 14,
@@ -51,15 +53,15 @@ export default function RouteMap() {
 
       // Remove UI & interaction
       disableDefaultUI: true,
-      zoomControl: false,
+      zoomControl: true,
       mapTypeControl: false,
       scaleControl: false,
       streetViewControl: false,
-      rotateControl: false,
+      rotateControl: true,
       fullscreenControl: false,
-      draggable: false,
-      scrollwheel: false,
-      gestureHandling: "none",
+      draggable: true,
+      scrollwheel: true,
+      gestureHandling: "greedy",
 
       // Plain map (no POIs / labels)
       styles: [
@@ -84,11 +86,17 @@ export default function RouteMap() {
       ],
     });
 
+    let markerIndex = 0;
+
     // Marker A
     new window.google.maps.Marker({
       position: pointA,
       map,
-      label: "A",
+      label: {
+        text: getAlphabetLabel(markerIndex++),
+        color: "#fff",
+        fontWeight: "bold",
+      }
     });
 
     // Stop Markers
@@ -96,7 +104,11 @@ export default function RouteMap() {
       new window.google.maps.Marker({
         position: stop,
         map,
-        label: `${i + 1}`,
+        label: {
+          text: getAlphabetLabel(markerIndex++),
+          color: "#fff",
+          fontWeight: "bold",
+        }
       });
     });
 
@@ -104,7 +116,11 @@ export default function RouteMap() {
     new window.google.maps.Marker({
       position: pointB,
       map,
-      label: "B",
+      label: {
+        text: getAlphabetLabel(markerIndex++),
+        color: "#fff",
+        fontWeight: "bold",
+      }
     });
 
     const directionsService = new window.google.maps.DirectionsService();
@@ -112,11 +128,11 @@ export default function RouteMap() {
     directionsService.route(
       {
         origin: pointA,
-        destination: pointB,
         waypoints: stops.map((s) => ({
           location: s,
           stopover: true,
         })),
+        destination: pointB,
         optimizeWaypoints: false,
         travelMode: window.google.maps.TravelMode.DRIVING,
       },

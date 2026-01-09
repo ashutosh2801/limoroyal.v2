@@ -34,6 +34,7 @@ export default function Booking() {
   if (!data || !data.pickupDate) {
     router.push("/booknow"); return;
   }
+  console.log("Vehicles page:", data);
 
   const trip = {
     date: new Date(data.pickupDate).toDateString(),
@@ -145,7 +146,7 @@ export default function Booking() {
       //console.log("Saved data:", payment);
 
       // For example, navigate to the next step
-      router.push("/booking/pickup-info");
+      router.push("/booking/passengers-info");
     }
     catch (err) {
       console.error(err);
@@ -237,14 +238,15 @@ export default function Booking() {
                       </div>
                     </div>
 
-                    {/* STOP */}
-                    <div className="flex items-start gap-3 text-xs xl:text-sm mb-3 relative z-10">
-                      <Squares2X2Icon className="w-5 h-5 text-yellow-900 flex-shrink-0" />
-                      <div>
-                        <p className="font-semibold line-clamp-1">{data.from.name}</p>
-                        <p className="text-gray-600">{data.from.address}</p>
+                    {data.additionalStops && data.additionalStops.length > 0 && (
+                      <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
+                        <Squares2X2Icon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                        <div>
+                          <p className="font-semibold line-clamp-1">{data.additionalStops[0].name}</p>
+                          <p className="text-gray-600">{data.additionalStops[0].address}</p>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* TO */}
                     {data.to && (

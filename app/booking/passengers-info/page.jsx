@@ -6,30 +6,105 @@ import { useRouter } from "next/navigation";
 import {
   CalendarDaysIcon,
   ClockIcon,
-  CheckCircleIcon,
+  ArrowPathIcon,
   MapPinIcon,
   Squares2X2Icon
 } from "@heroicons/react/24/solid";
 import {
   CheckCircleIcon as CheckCircleOutlineIcon,
 } from "@heroicons/react/24/outline";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronDown, FaChevronLeft, FaChevronRight, FaPlane } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { saveSearch } from "@/store/searchSlice";
+import { getPickupData } from "@/app/lib/externalApi";
+import { showAlert } from "@/app/lib/alert";
 import "react-phone-input-2/lib/style.css";
 import PhoneInput from "react-phone-input-2";
-import Tabs from "../../components/Tabs";
-import TripSummary from "../../components/TripSummary";
-import { getPickupData } from "../../lib/externalApi";
+import Tabs from "@/app/components/Tabs";
+import TripSummary from "@/app/components/TripSummary";
+import RouteMap from "@/app/components/RouteMap";
+import VehiclesGrid from "@/app/components/VehiclesGrid";
+import ReturnTrip from "@/app/components/RetrunTrip";
+import PriceBreakdown from "@/app/components/PriceBreakdown";
+import Locations from "@/app/components/Locations";
 
 export default function PickupInfoPage() {
   const router = useRouter();
   const refMsg = useRef(null);
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.search);
-  const [bookingFor, setBookingFor] = useState("myself");
   const activeStep = 1; // Pickup Info
-  const [selectedIdx, setSelectedIdx] = useState(null);
+  const { data } = useSelector((state) => state.search);
+
+  const requiredSeats = data?.requiredSeats || 2; // dynamic (2 or 3)
+  const childCost = data?.childCost || 25;
+  const [seats, setSeats] = useState({
+    infant: data?.seats?.infant || 0,
+    toddler: data?.seats?.toddler || 0,
+    booster: data?.seats?.booster || 0,
+  });
+  const totalSelected = seats.infant + seats.toddler + seats.booster;
+
+  const [payment, setPayment] = useState({
+    subTotalPrice: data.payment?.subTotalPrice || 0,
+    taxPrice: data.payment?.taxPrice || 0,
+    totalPrice: data.payment?.totalPrice || 0,
+    childPrice: data.payment?.childPrice || 0,
+
+    subTotalLabel: `${data.payment?.subTotalLabel}`,
+    taxLabel: `${data.payment?.taxLabel}`,
+    totalLabel: `${data.payment?.totalLabel}`,
+    childLabel: `${data.payment?.childLabel || 0}`,
+    
+    childSeats: data?.payment?.childSeats || 0,
+    totalSelected: data?.payment?.totalSelected || 0,
+
+  });
+
+  const handleSeatChange = (type, value) => {
+    const newValue = Number(value);
+
+    const newTotal = totalSelected - seats[type] + newValue;
+    // Block if exceeds required seats
+    if (newTotal > requiredSeats) { 
+      showAlert({ text: `You can select a maximum of ${requiredSeats} seats.`});
+      return; 
+    }
+
+    let childPrice = parseInt(newTotal) * parseFloat(childCost);
+    let subTotalPrice = parseFloat(payment?.subTotalPrice);
+    let taxPrice = (subTotalPrice + childPrice) * (13/100);
+    let totalPrice = subTotalPrice + childPrice + taxPrice;
+
+    subTotalPrice = Number(subTotalPrice).toFixed(2);
+    childPrice = Number(childPrice).toFixed(2);
+    taxPrice = Number(taxPrice).toFixed(2);
+    totalPrice = Number(totalPrice).toFixed(2);
+
+    setPayment({
+      subTotalPrice,
+      childPrice,
+      taxPrice,
+      totalPrice,
+      subTotalLabel: `$${subTotalPrice}`,
+      childLabel: `$${childPrice}`,
+      taxLabel: `Tax (13%) $${taxPrice}`,
+      totalLabel: `$${totalPrice}`,
+
+      childSeats: form?.childSeats,
+      totalSelected: newTotal,
+    });
+
+    setForm((prev) => ({
+      ...prev,
+      totalSelected: newTotal,
+    }));
+
+    setSeats((prev) => ({
+      ...prev,
+      [type]: newValue,
+    }));
+  };
+  const isDisabled = (type) => totalSelected >= requiredSeats && seats[type] === 0;
 
   const trip = {
     date: new Date(data.pickupDate).toDateString(),
@@ -44,65 +119,28 @@ export default function PickupInfoPage() {
     duration: data.duration || ""
   };
 
-  useEffect(() => {
-    const loadPickups = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const res = await getPickupData();
-
-        if (res.error) {
-          throw new Error(`Failed to load pickups: ${res.status}`);
-        }
-
-        // Laravel usually doesn't return "success"
-        setPickups(res.data ?? res);
-
-        console.log("Fetched pickups:", json.data ?? json);
-      } catch (err) {
-        console.error(err);
-        console.error("Pickup fetch error:", err);
-      }
-      finally {
-        setLoading(false);
-      }
-    };
-
-    // loadPickups();
-  }, []); 
-
-  // const [vehicles, setPickups] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
-  // const [expandedIdx, setExpandedIdx] = useState(null);
-  // const [passengers, setPassengers] = useState(1);
-  // const [luggage, setLuggage] = useState(0);
-  // const [vehicleData, setVehicleData] = useState({});
-
-  // const pricedVehicles = vehicles.map((v) => ({
-  //   ...v,
-  //   price: trip.tripType == 'oneway' ? 
-  //   `$${((parseFloat(v.priceKM) * trip.distanceKM)).toFixed(2)}` : 
-  //   `$${((parseFloat(v.priceHR) * trip.duration)).toFixed(2)}`,
-  // }));
-
   const [form, setForm] = useState({
-    bookingFor: "myself",
+    bookingFor: data?.PickupInfo?.bookingFor || "myself",
     title: data?.PickupInfo?.title || "",
     firstName: data?.PickupInfo?.firstName || "",
     lastName: data?.PickupInfo?.lastName || "",
     email: data?.PickupInfo?.email || "",
     contactNumber: data?.PickupInfo?.contactNumber || "",
+    createAccount: data?.PickupInfo?.createAccount,
+    // Booker Information
     booker_title: data?.PickupInfo?.booker_title || "",
     booker_firstName: data?.PickupInfo?.booker_firstName || "",
     booker_lastName: data?.PickupInfo?.booker_lastName || "",
     booker_email: data?.PickupInfo?.booker_email || "",
     booker_contactNumber: data?.PickupInfo?.booker_contactNumber || "",
-    flightNumber: data?.PickupInfo?.flightNumber || "",
-    pickupSign: data?.PickupInfo?.pickupSign || "",
-    chauffeurNotes: data?.PickupInfo?.chauffeurNotes || "",
-    referenceCode: data?.PickupInfo?.referenceCode || "",
+    // Additional Information
+    childSeats: data?.PickupInfo?.childSeats || "",
+    totalSelected,
+    seats: data?.seats || seats,
+    // Return Trip
+    returnTrip: data?.PickupInfo?.returnTrip || "",
+    // Special Requests
+    tripPurpose: data?.PickupInfo?.tripPurpose || "",
   });
 
   const [errors, setErrors] = useState({});
@@ -114,24 +152,46 @@ export default function PickupInfoPage() {
   const validate = () => {
     const newErrors = {};
 
-    //if (bookingFor === "someoneElse") {
-      if (!form.title) newErrors.title = "Title is required";
-      if (!form.firstName.trim()) newErrors.firstName = "First name is required";
-      if (!form.lastName.trim()) newErrors.lastName = "Last name is required";
+    if (!form.title) newErrors.title = "Title is required";
+    if (!form.firstName.trim()) newErrors.firstName = "First name is required";
+    if (!form.lastName.trim()) newErrors.lastName = "Last name is required";
 
-      if (!form.email) {
-        newErrors.email = "Email is required";
-      } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
-        newErrors.email = "Invalid email address";
+    if (!form.email) {
+      newErrors.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+      newErrors.email = "Invalid email address";
+    }
+
+    if (!form.contactNumber.trim()) {
+      newErrors.contactNumber = "Contact number is required";
+    }
+    else if (form.contactNumber.replace(/\D/g, "").length < 10) {
+      newErrors.contactNumber = "Invalid phone number";
+    }
+
+    if (form.bookingFor === "someoneElse") {
+      if (!form.booker_title) newErrors.booker_title = "Title is required";
+      if (!form.booker_firstName.trim()) newErrors.booker_firstName = "First name is required";
+      if (!form.booker_lastName.trim()) newErrors.booker_lastName = "Last name is required";
+
+      if (!form.booker_email) {
+        newErrors.booker_email = "Email is required";
+      } else if (!/^\S+@\S+\.\S+$/.test(form.booker_email)) {
+        newErrors.booker_email = "Invalid email address";
       }
 
-      if (!form.contactNumber.trim()) {
-        newErrors.contactNumber = "Contact number is required";
+      if (!form.booker_contactNumber.trim()) {
+        newErrors.booker_contactNumber = "Contact number is required";
       }
-      else if (form.contactNumber.replace(/\D/g, "").length < 10) {
-        newErrors.contactNumber = "Invalid phone number";
+      else if (form.booker_contactNumber.replace(/\D/g, "").length < 10) {
+        newErrors.booker_contactNumber = "Invalid phone number";
       }
-    //}
+    }
+
+    if (form.childSeats) {
+      if (totalSelected === 0)
+      newErrors.childSeats = "Child seats are required";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -143,7 +203,7 @@ export default function PickupInfoPage() {
 
     dispatch(
       saveSearch({ 
-        ...data, PickupInfo: { ...form }
+        ...data, PickupInfo: { ...form }, payment, seats
       })
     );
 
@@ -156,98 +216,35 @@ export default function PickupInfoPage() {
         <div className="container mx-auto px-2">
           <div className="flex flex-col md:flex-row space-x-5 pt-[90px] md:pt-[20px] xl:pt-0 mt-0 md:mt-20 xl:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
-            <div className="sticky top-5 z-50">
-              <div className="bg-white rounded-md shadow-xl overflow-hidden text-black p-1">
-                <div className="h-80 md:h-50 xl:h-80 w-full rounded-xl overflow-hidden">
-                    <iframe
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        loading="lazy"
-                        allowFullScreen
-                        referrerPolicy="no-referrer-when-downgrade"
-                        src={data.to ? `https://www.google.com/maps?q=${data.from.name}+to+${data.to?.name}&output=embed` : `https://www.google.com/maps?q=${data.from.name}&output=embed`}
-                    ></iframe>
+              <div className="sticky top-5 z-50">
+                <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-5">
+                  <div>
+                    <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Pickup Trip Details</h4>
+                  </div>
+
+                  <Locations data={data} seats={seats} display="" />
+
                 </div>
-                <div className="mt-4 mb-2 text-xs xl:text-sm text-black flex gap-5 px-3">
-                  {data.distanceKM && (<p className="flex gap-1">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8 16C12.7882 16 14.4 14.3882 14.4 12.4L14.4 3.2L15.2 3.2C15.5235 3.2 15.8153 3.00512 15.9391 2.70616C16.0629 2.4072 15.9945 2.06312 15.7657 1.83432L14.1657 0.23432C13.8532 -0.0780794 13.3467 -0.0780795 13.0343 0.23432L11.4343 1.83432C11.2055 2.06312 11.137 2.4072 11.2609 2.70616C11.3847 3.00512 11.6764 3.2 12 3.2L12.8 3.2L12.8 12.4C12.8 13.5046 11.9045 14.4 10.8 14.4C9.69541 14.4 8.8 13.5046 8.8 12.4L8.8 3.6C8.8 1.61176 7.18824 -7.70349e-07 5.2 -9.44166e-07C3.21176 -1.11798e-06 1.6 1.61176 1.6 3.6L1.6 11.3366C0.667839 11.666 -1.60618e-06 12.555 -1.69753e-06 13.6C-1.81341e-06 14.9255 1.07448 16 2.4 16C3.72552 16 4.8 14.9255 4.8 13.6C4.8 12.555 4.13216 11.666 3.2 11.3366L3.2 3.6C3.2 2.49544 4.09544 1.6 5.2 1.6C6.30456 1.6 7.2 2.49544 7.2 3.6L7.2 12.4C7.2 14.3882 8.81176 16 10.8 16Z" fill="#ceb366"></path></svg> {trip.distanceKM} km
-                  </p>)}
-                  <p className="flex gap-1">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.3904 10.0572C10.1976 10.0572 10.0145 10.003 9.86024 9.89458L7.46988 8.21386C7.24819 8.06024 7.11325 7.80723 7.11325 7.54518V4.18373C7.11325 3.72289 7.50843 3.35241 8 3.35241C8.49157 3.35241 8.88675 3.72289 8.88675 4.18373V7.12952L10.9205 8.55723C11.1133 8.69277 11.2289 8.88253 11.2675 9.10843C11.2964 9.3253 11.2386 9.5512 11.094 9.72289C10.9301 9.93072 10.6699 10.0572 10.3807 10.0572H10.3904Z" fill="#ceb366"></path><path d="M8 15C3.58554 15 0 11.6386 0 7.5C0 3.36145 3.58554 0 8 0C12.4145 0 16 3.36145 16 7.5C16 11.6386 12.4145 15 8 15ZM8 1.66265C4.56867 1.66265 1.77349 4.28313 1.77349 7.5C1.77349 10.7169 4.56867 13.3373 8 13.3373C11.4313 13.3373 14.2265 10.7169 14.2265 7.5C14.2265 4.28313 11.4313 1.66265 8 1.66265Z" fill="#ceb366"></path></svg>
-                    {data.durationMinutes}
-                  </p>
+
+                <div className="bg-white rounded-md shadow-xl overflow-hidden text-black p-1 mb-5">
+                  {/* <div className="h-80 w-full rounded-xl overflow-hidden">
+                    <RouteMap />                     
+                  </div> */}
+                  <div className="mt-4 mb-2 text-xs md:text-sm text-gray-600 flex gap-5 px-3"> 
+                    {data.distanceKM && (<p className="flex gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M10.8 16C12.7882 16 14.4 14.3882 14.4 12.4L14.4 3.2L15.2 3.2C15.5235 3.2 15.8153 3.00512 15.9391 2.70616C16.0629 2.4072 15.9945 2.06312 15.7657 1.83432L14.1657 0.23432C13.8532 -0.0780794 13.3467 -0.0780795 13.0343 0.23432L11.4343 1.83432C11.2055 2.06312 11.137 2.4072 11.2609 2.70616C11.3847 3.00512 11.6764 3.2 12 3.2L12.8 3.2L12.8 12.4C12.8 13.5046 11.9045 14.4 10.8 14.4C9.69541 14.4 8.8 13.5046 8.8 12.4L8.8 3.6C8.8 1.61176 7.18824 -7.70349e-07 5.2 -9.44166e-07C3.21176 -1.11798e-06 1.6 1.61176 1.6 3.6L1.6 11.3366C0.667839 11.666 -1.60618e-06 12.555 -1.69753e-06 13.6C-1.81341e-06 14.9255 1.07448 16 2.4 16C3.72552 16 4.8 14.9255 4.8 13.6C4.8 12.555 4.13216 11.666 3.2 11.3366L3.2 3.6C3.2 2.49544 4.09544 1.6 5.2 1.6C6.30456 1.6 7.2 2.49544 7.2 3.6L7.2 12.4C7.2 14.3882 8.81176 16 10.8 16Z"></path></svg> {trip.distanceKM} km
+                    </p>)}
+                    <p className="flex gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M10.3904 10.0572C10.1976 10.0572 10.0145 10.003 9.86024 9.89458L7.46988 8.21386C7.24819 8.06024 7.11325 7.80723 7.11325 7.54518V4.18373C7.11325 3.72289 7.50843 3.35241 8 3.35241C8.49157 3.35241 8.88675 3.72289 8.88675 4.18373V7.12952L10.9205 8.55723C11.1133 8.69277 11.2289 8.88253 11.2675 9.10843C11.2964 9.3253 11.2386 9.5512 11.094 9.72289C10.9301 9.93072 10.6699 10.0572 10.3807 10.0572H10.3904Z"></path><path d="M8 15C3.58554 15 0 11.6386 0 7.5C0 3.36145 3.58554 0 8 0C12.4145 0 16 3.36145 16 7.5C16 11.6386 12.4145 15 8 15ZM8 1.66265C4.56867 1.66265 1.77349 4.28313 1.77349 7.5C1.77349 10.7169 4.56867 13.3373 8 13.3373C11.4313 13.3373 14.2265 10.7169 14.2265 7.5C14.2265 4.28313 11.4313 1.66265 8 1.66265Z"></path></svg>
+                      {data.durationMinutes}
+                    </p>
+                  </div>
                 </div>
+
+                {/* Price breakdown */}
+                <PriceBreakdown paymentData={payment} />                
+
               </div>
-              <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mt-5">
-                <div>
-                  <h4 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Pickup Trip Details</h4>
-                </div>
-                <div className="relative">
-                  {/* Vertical connector */}
-                  {data.to && (
-                    <div className="absolute left-[9px] top-[19px] h-[calc(100%-55px)] xl:h-[calc(100%-40px)] border-r-3 border-dotted border-black" />
-                  )}
-
-                  {/* FROM */}
-                  <div className="flex items-start gap-3 text-xs xl:text-sm mb-3 relative z-10">
-                    <MapPinIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold line-clamp-1">{data.from.name}</p>
-                      <p className="text-gray-600">{data.from.address}</p>
-                    </div>
-                  </div>
-
-                  {/* STOP */}
-                  <div className="flex items-start gap-3 text-xs xl:text-sm mb-3 relative z-10">
-                    <Squares2X2Icon className="w-5 h-5 text-yellow-900 flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold line-clamp-1">{data.from.name}</p>
-                      <p className="text-gray-600">{data.from.address}</p>
-                    </div>
-                  </div>
-
-                  {/* TO */}
-                  {data.to && (
-                    <div className="flex items-start gap-3 text-xs xl:text-sm relative z-10">
-                      <MapPinIcon className="w-5 h-5 text-red-500 flex-shrink-0" />
-                      <div>
-                        <p className="font-semibold">{data.to?.name}</p>
-                        <p className="text-gray-600">{data.to?.address}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 text-xs xl:text-sm text-gray-600 mt-3">
-                    <CalendarDaysIcon className="w-5 h-5 text-gray-600" />
-                    <span>{trip.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs xl:text-sm text-gray-600 mt-3">
-                    <ClockIcon className="w-5 h-5 text-gray-600" />
-                    <span>{trip.pickupTimeLabel}</span>
-                  </div>
-                  {data.selectedPassenger > 0 && (
-                  <div className="flex items-center gap-2 text-xs xl:text-sm text-gray-600 mt-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
-                      <path fillRule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0Z" clipRule="evenodd"></path>
-                      <path d="M6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"></path>
-                    </svg>
-                    <span>{data.selectedPassenger} Passenger(s)</span>
-                  </div>
-                  )}
-                  {data.selectedLuggage > 0 && (
-                  <div className="flex items-center gap-2 text-xs xl:text-sm text-gray-600 mt-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
-                      <path fillRule="evenodd" d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd"></path>
-                      <path d="M3 18.4v-2.796a4.3 4.3 0 0 0 .713.31A26.226 26.226 0 0 0 12 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 0 1-6.477-.427C4.047 21.128 3 19.852 3 18.4Z"></path>
-                    </svg>
-                    <span>{data.selectedLuggage} Luggage(s)</span>
-                  </div>
-                  )}
-                </div>
-              </div>
-            </div>
             </div>
             {/* Centered white content card */}
             <div className="w-full md:w-2/3 order-1 md:order-2">
@@ -257,80 +254,11 @@ export default function PickupInfoPage() {
                   {/* Blacklane Stepper */}
                   <Tabs activeStep={activeStep} />              
 
-                  {/* Trip summary (date,time,from,to) */}
-                  {/* <TripSummary trip={trip} /> */}
-
                   {/* Vehicles grid */}                  
-                  <div role="button"                          
-                    className="w-full relative md:flex md:items-center flex-wrap gap-4 p-4 mt-2 rounded-xl text-left transition-shadow border bg-amber-50"
-                  >
-                    {/* left: image */}
-                    <div className="flex w-[30%] h-10 md:w-35 md:h-15 xl:w-42 xl:h-20 relative items-center mb-0">
-                      <Image
-                        src={data.selectedVehicle?.img}
-                        alt={data.selectedVehicle?.name}
-                        fill
-                        sizes="128px"
-                        className="object-contain rounded-md"
-                      />
-                    </div>
-
-                    {/* center: details */}
-                    <div className="flex-1">
-
-                      <div className="block md:flex items-start justify-between">
-                        <div>
-                          <div className="font-semibold text-xs md:text-sm xl:text-xl mt-3 mb-2">{data.selectedVehicle?.name}</div>
-                          <div className="text-xs text-gray-600 my-1 hidden md:block" dangerouslySetInnerHTML={{ __html: data.selectedVehicle?.desc }} />
-                        </div>
-
-                        {/* price */}
-                        <div className="md:text-right w-full md:w-70 xl:w-40 mt-0 md:mt-2">
-                          <div className="inline-block md:flex md:justify-end"> 
-                            <span className="flex items-center text-xs rounded-full bg-green-400 text-white py-1 px-2 gap-1">
-                              <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 6L5 10L14 1" stroke="white" strokeWidth={2}></path></svg> Selected
-                            </span>
-                          </div>
-                          <a href=""
-                            onClick={(e) => {
-                              e.preventDefault();
-                              router.back();
-                            }} className="inline-block float-right md:flex text-xs mt-2 mb-3 flex md:justify-end underline text-gray-700">Change Vehicle
-                          </a>
-                          <div className="text-sm md:text-lg xl:text-2xl font-bold my-1">{data.payment?.subTotalLabel}</div>
-                        </div>
-                      </div>
-                      <div className="flex justify-between items-center gap-6">
-                        {/* icons list */}
-                        <ul className="flex justify-center gap-5 rounded-xl px-2 py-1 bg-white border border-gray-300">
-                          <li className="flex items-center gap-2">
-                            {/* passenger icon (svg as in user's snippet) */}
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
-                              <path fillRule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0Z" clipRule="evenodd"></path>
-                              <path d="M6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"></path>
-                            </svg>
-                            <small className="text-sm text-black">{data.selectedPassenger}</small>
-                          </li>
-
-                          <li className="flex items-center gap-2">
-                            {/* luggage icon */}
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 webColor">
-                              <path fillRule="evenodd" d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.357-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm7.5 0v.09a49.488 49.488 0 0 0-6 0v-.09a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5Zm-3 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd"></path>
-                              <path d="M3 18.4v-2.796a4.3 4.3 0 0 0 .713.31A26.226 26.226 0 0 0 12 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 0 1-6.477-.427C4.047 21.128 3 19.852 3 18.4Z"></path>
-                            </svg>
-                            <small className="text-sm text-black">{data.selectedLuggage}</small>
-                          </li>
-
-                          {/* {data.selectedVehicle?.features?.length > 0 & data.selectedVehicle?.features?.map((f, i)=>{
-                            <li className="flex items-center gap-2">Free WiFi</li>
-                          })} */}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+                  {/* <VehiclesGrid />                       */}
 
                   {/* Heading */}
-                  <h2 ref={refMsg} className="mt-6 text-lg xl:text-xl font-bold">Pickup Information</h2>
+                  <h2 ref={refMsg} className="mt-6 text-lg md:text-xl font-bold">Passenger Information</h2>
                   <small className="text-gray-500 text-[10px] md:text-xs">
                     Provide details your chauffeur should know
                   </small>
@@ -340,10 +268,41 @@ export default function PickupInfoPage() {
 
                     {/* Booking For */}
                     <div className="mb-6">
-                      <p className="font-semibold mb-2 text-sm xl:text-base">Select Who you are booking for?</p>
+                      {/* <p className="font-semibold mb-2 text-sm md:text-base">Select Who you are booking for?</p> */}
 
-                      <div className="flex flex-col gap-4 p-3 md:p-4 border border-gray-200 rounded-xl">
-                        <label className="flex items-center gap-2 text-xs xl:text-sm">
+                      <div className="flex gap-2">                        
+
+                        {/* Toggle */}
+                        <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          value="someoneElse"
+                          checked={form.bookingFor === "someoneElse"}
+                          onChange={() =>
+                            setForm((prev) => ({
+                              ...prev,
+                              bookingFor:
+                                prev.bookingFor === "someoneElse" ? "myself" : "someoneElse",
+                            }))
+                          }
+                          className="sr-only peer"
+                        />
+                        <div className="w-10 h-6 bg-gray-300 peer-checked:bg-yellow-600 rounded-full
+                                        after:content-[''] after:absolute after:top-1 after:left-1
+                                        after:bg-white after:w-4 after:h-4 after:rounded-full
+                                        after:transition-all peer-checked:after:translate-x-4" />
+                        </label>
+
+                        <div className="flex items-center gap-2 md:w-[260px]">
+                          
+                          <span className="font-semibold text-sm md:text-base">
+                              Book for someone else
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* <div className="flex flex-col gap-4 p-3 md:p-4 border border-gray-200 rounded-xl">
+                        <label className="flex items-center gap-2 text-xs md:text-sm">
                           <input
                             type="radio"
                             name="bookingFor"
@@ -364,7 +323,7 @@ export default function PickupInfoPage() {
                           />
                           Book for someone else
                         </label>
-                      </div>
+                      </div> */}
                     </div>
 
                     <div className="mb-6 p-3 lg:p-4 lg:p-6 lg:!pr-6 lg:!pr-20 border border-gray-200 rounded-xl space-y-4">
@@ -583,6 +542,37 @@ export default function PickupInfoPage() {
                             </p>
                           )}
                         </div>
+                      </div>
+
+                      <div className="relative w-full">
+                        {/* Checkbox */}
+                        <div className="flex gap-2">
+                          {/* <input
+                            type="checkbox"
+                            checked={form.createAccount || true}
+                            onChange={(e) =>
+                              setForm({ ...form, createAccount: e.target.checked })
+                            }
+                          /> */}
+                          {/* Toggle */}
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={form.createAccount}
+                                onChange={() => setForm({ ...form, createAccount: !form.createAccount })}
+                                className="sr-only peer"
+                            />
+                            <div className="w-10 h-6 bg-gray-300 peer-checked:bg-yellow-600 rounded-full
+                                            after:content-[''] after:absolute after:top-1 after:left-1
+                                            after:bg-white after:w-4 after:h-4 after:rounded-full
+                                            after:transition-all peer-checked:after:translate-x-4" />
+                          </label>
+                          <span className="text-sm font-medium animate-pulse pt-1">
+                          Check this box to securely create an account for faster bookings next time.
+                          </span>
+                        </div>
+
+                        
                       </div>
                     </div>
 
@@ -809,162 +799,274 @@ export default function PickupInfoPage() {
 
                     {/* Additional Info */}
                     <div className="mb-2">
-                      <p className="font-semibold text-sm xl:text-base">Additional information</p>
-                      <small className="flex mt-1 text-gray-500 text-[10px] md:text-xs">
-                        Enter your flight number to ensure your chauffeur can track your flight and adjust the pickup time.
-                      </small>
-                      <div className="mt-2 p-3 md:p-4 border border-gray-200 rounded-xl">
-                        <div className="relative w-full">
-                          {/* Input */}
-                          <input
-                            type="text"
-                            value={form.flightNumber}
-                            onChange={(e) =>
-                              setForm({ ...form, flightNumber: e.target.value })
-                            }
-                            placeholder=" "
-                            className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
-                              border rounded-xl bg-gray-100 border-gray-200
-                              focus:outline-none focus:bg-white"
-                          />
+                      <p className="font-semibold text-sm md:text-base">Additional Information</p>
 
-                          {/* Floating Label */}
-                          <label
-                            className={`absolute left-3 text-gray-400 pointer-events-none
-                              transition-all duration-200
-                              ${
-                                form.flightNumber
-                                  ? "top-2 text-xs"
-                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
-                              }`}
-                          >
-                            Flight number
-                          </label>
+                      <div className="w-full mt-5 space-y-4">
+                      
+                        {/* CHILD SEATS */}
+                        <div className="flex flex-col md:flex-row md:items-center gap-3">
+                          <div className="flex gap-2">
+                            <div className="flex items-center gap-2 md:w-[260px]">
+                              <span className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full">
+                                  👶
+                              </span>
+                              <span className="text-sm font-medium">
+                                  Do you want Child Seats?
+                              </span>
+                            </div>
+    
+                            {/* Toggle */}
+                            <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={form.childSeats}
+                                onChange={() => {
+                                  setSeats({
+                                    infant: 0,
+                                    toddler: 0,
+                                    booster: 0,
+                                  });
+                                  setPayment({
+                                    subTotalPrice: data.payment?.subTotalPrice || 0,
+                                    taxPrice: data.payment?.taxPrice || 0,
+                                    totalPrice: data.payment?.totalPrice || 0,
+                                    childPrice: data.payment?.childPrice || 0,
 
-                          {/* Helper text */}
-                          {!form.flightNumber && (
-                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 line-clamp-1">
-                              Enter your flight number
-                            </span>
-                          )}
+                                    subTotalLabel: `${data.payment?.subTotalLabel}`,
+                                    taxLabel: `${data.payment?.taxLabel}`,
+                                    totalLabel: `${data.payment?.totalLabel}`,
+                                    childLabel: `${data.payment?.childLabel}`,
+
+                                    childSeats: data.payment?.childSeats,
+                                    totalSelected: 0,
+                                  });
+                                  setForm({ ...form, childSeats: !form.childSeats })
+                                }}
+                                className="sr-only peer"
+                            />
+                            <div className="w-10 h-6 bg-gray-300 peer-checked:bg-yellow-600 rounded-full
+                                            after:content-[''] after:absolute after:top-1 after:left-1
+                                            after:bg-white after:w-4 after:h-4 after:rounded-full
+                                            after:transition-all peer-checked:after:translate-x-4" />
+                            </label>
+                          </div>
+
+                          {/* Child seat selects (SHOW ONLY IF ON) */}
+                          {form.childSeats && (
+                            <>
+                            <div className="grid md:grid-cols-3 gap-2 md:ml-auto md:w-[60%]">
+                              <div className="relative">
+                                {/* Select infant */}
+                                <select
+                                  value={seats.infant}
+                                  onChange={(e) => handleSeatChange("infant", e.target.value)}
+                                  disabled={isDisabled("infant")}
+                                  className="peer w-full px-2 pt-7 pb-2 text-sm border rounded-xl
+                                            bg-gray-100 border-gray-200 focus:outline-none
+                                              appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                  
+                                >
+                                  <option value="" disabled hidden />
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                </select>
+    
+                                {/* Dropdown Icon */}
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                  <FaChevronDown className="text-gray-500 text-sm" />
+                                </div>
+    
+                                {/* Floating label */}
+                                <label
+                                  className="pointer-events-none absolute left-2
+                                            transition-all duration-200 text-gray-400
+                                            top-3 text-xs
+                                            peer-focus:top-2 peer-focus:text-xs
+                                            peer-valid:top-2 peer-valid:text-xs"
+                                >
+                                  Infant
+                                </label>
+    
+                                {/* Helper text */}
+                                {/* <span
+                                  className="pointer-events-none absolute left-2 top-7
+                                            text-[12px] text-gray-500 transition-opacity
+                                            peer-focus:opacity-0 peer-valid:opacity-0"
+                                >
+                                  Select infant seats
+                                </span> */}
+                              </div>
+
+                              <div className="relative">
+                                {/* Select toddler */}
+                                <select
+                                  value={seats.toddler}
+                                  onChange={(e) => handleSeatChange("toddler", e.target.value)}
+                                  disabled={isDisabled("toddler")}
+                                  className="peer w-full px-2 pt-7 pb-2 text-sm border rounded-xl
+                                            bg-gray-100 border-gray-200 focus:outline-none
+                                            appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  <option value="" disabled hidden />
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                </select>
+    
+                                {/* Dropdown Icon */}
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                  <FaChevronDown className="text-gray-500 text-sm" />
+                                </div>
+    
+                                {/* Floating label */}
+                                <label
+                                  className="pointer-events-none absolute left-2
+                                            transition-all duration-200 text-gray-400
+                                            top-3 text-xs
+                                            peer-focus:top-2 peer-focus:text-xs
+                                            peer-valid:top-2 peer-valid:text-xs"
+                                >
+                                  Toddler
+                                </label>
+    
+                                {/* Helper text */}
+                                {/* <span
+                                  className="pointer-events-none absolute left-2 top-7
+                                            text-[12px] text-gray-500 transition-opacity
+                                            peer-focus:opacity-0 peer-valid:opacity-0"
+                                >
+                                  Select toddler seats
+                                </span> */}
+                              </div>
+
+                              <div className="relative">
+                                {/* Select booster */}
+                                <select
+                                  value={seats.booster}
+                                  onChange={(e) => handleSeatChange("booster", e.target.value)}
+                                  disabled={isDisabled("booster")}
+                                  className="peer w-full px-2 pt-7 pb-2 text-sm border rounded-xl
+                                            bg-gray-100 border-gray-200 focus:outline-none
+                                            appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  <option value="" disabled hidden />
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                </select>
+    
+                                {/* Dropdown Icon */}
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                  <FaChevronDown className="text-gray-500 text-sm" />
+                                </div>
+    
+                                {/* Floating label */}
+                                <label
+                                  className="pointer-events-none absolute left-2
+                                            transition-all duration-200 text-gray-400
+                                            top-3 text-xs
+                                            peer-focus:top-2 peer-focus:text-xs
+                                            peer-valid:top-2 peer-valid:text-xs"
+                                >
+                                  Booster
+                                </label>
+    
+                                {/* Helper text */}
+                                {/* <span
+                                  className="pointer-events-none absolute left-2 top-7
+                                            text-[12px] text-gray-500 transition-opacity
+                                            peer-focus:opacity-0 peer-valid:opacity-0"
+                                >
+                                  Select booster seats
+                                </span> */}
+                              </div>
+                              
+                            </div>                            
+                            </>                            
+                            )}
                         </div>
+                        {/* Error */}
+                        {errors.childSeats && (
+                          <div className="grid md:grid-cols-1 gap-2 md:ml-auto md:w-[100%]">
+                          <p className="text-red-500 text-xs mt-1 text-center md:text-right">
+                            {errors.childSeats}
+                          </p>
+                          </div>
+                        )}
+                        
+    
+                        {/* RETURN TRIP */}
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2 md:w-[260px]">
+                            <span className="w-6 h-6 flex items-center justify-center bg-yellow-600 rounded-full">
+                                <ArrowPathIcon className="w-4 h-4 text-white" />
+                            </span>
+                            <span className="text-sm font-medium">
+                                Do you want a Return Trip?
+                            </span>
+                            </div>
+    
+                            <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={form.returnTrip}
+                                onChange={() => setForm({ ...form, returnTrip: !form.returnTrip })}
+                                className="sr-only peer"
+                            />
+                            <div className="w-10 h-6 bg-gray-300 peer-checked:bg-yellow-600 rounded-full
+                                            after:content-[''] after:absolute after:top-1 after:left-1
+                                            after:bg-white after:w-4 after:h-4 after:rounded-full
+                                            after:transition-all peer-checked:after:translate-x-4" />
+                            </label>
+                        </div>
+    
+                        {/* RETURN TRIP FIELDS (SHOW ONLY IF ON) */}
+                        {form.returnTrip && (
+                          <ReturnTrip form={form} setForm={setForm} errors={errors} />
+                        )}
                       </div>
+                      
                     </div>
-                    <div className="mt-3 p-3 md:p-4 border border-gray-200 rounded-xl">
-                      <div className="mb-3">
-                        <div className="relative w-full">
-                          {/* Input */}
-                          <input
-                            type="text"
-                            value={form.pickupSign}
-                            onChange={(e) =>
-                              setForm({ ...form, pickupSign: e.target.value })
-                            }
-                            placeholder=" "
-                            className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
-                              border rounded-xl bg-gray-100 border-gray-200
-                              focus:outline-none focus:bg-white"
-                          />
 
-                          {/* Floating Label */}
-                          <label
-                            className={`absolute left-3 text-gray-400 pointer-events-none
-                              transition-all duration-200
-                              ${
-                                form.pickupSign
-                                  ? "top-2 text-xs"
-                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
-                              }`}
-                          >
-                            Pickup Sign
-                          </label>
 
-                          {/* Helper text inside input */}
-                          {!form.pickupSign && (
-                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden xl:block">
-                             It will appear on your chauffeur's pickup sign when they meet you.
-                            </span>
-                          )}
-                        </div>
-                        <small className="text-gray-500 text-[10px] flex xl:hidden mt-1">
-                          It will appear on your chauffeur's pickup sign when they meet you.
-                        </small>
+                    <h2 className="mt-10 font-semibold text-sm md:text-base">Trip Notes <span className="text-gray-500 font-medium text-xs md:text-sm">(Any special requirements or requests for your trip e.g. business visit, child car seats, etc.)</span></h2>
+                    <div className="mt-3">
+                      <div className="relative w-full">
+                        {/* Input */}
+                        <input
+                          type="text"
+                          value={form.tripPurpose}
+                          onChange={(e) => setForm({ ...form, tripPurpose: e.target.value })}
+                          placeholder=" "
+                          className="peer w-full px-3 pt-8 pb-5 text-xs md:text-sm
+                            border rounded-xl bg-gray-100 border-gray-200
+                            focus:outline-none"
+                        />
+
+                        {/* Floating Label */}
+                        <label
+                          className={`absolute left-3 text-gray-400 pointer-events-none
+                            transition-all duration-200
+                            ${
+                              form.tripPurpose
+                                ? "top-2 text-xs"
+                                : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                            }`}
+                        >
+                          Trip Purpose
+                        </label>
+
+                        {/* Helper text inside input */}
+                        {!form.tripPurpose && (
+                          <span className="pointer-events-none absolute left-3 top-10 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden md:block">
+                            Enter any special requirements or requests for your trip e.g. business visit, child car seats, etc.
+                          </span>
+                        )}
                       </div>
-                      <div className="mb-2">
-                        <div className="relative w-full">
-                          {/* Textarea */}
-                          <textarea
-                            value={form.chauffeurNotes}
-                            onChange={(e) =>
-                              setForm({ ...form, chauffeurNotes: e.target.value })
-                            }
-                            placeholder=" "
-                            className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
-                              border rounded-xl bg-gray-100 border-gray-200
-                              focus:outline-none min-h-25 resize-none"
-                          ></textarea>
-
-                          {/* Floating Label */}
-                          <label
-                            className={`absolute left-3 text-gray-400 pointer-events-none
-                              transition-all duration-200
-                              ${
-                                form.chauffeurNotes
-                                  ? "top-2 text-xs"
-                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
-                              }`}
-                          >
-                            Notes for the chauffeur
-                          </label>
-
-                          {/* Helper text inside textarea */}
-                          {!form.chauffeurNotes && (
-                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden xl:block">
-                              Add special requests, e.g. number of bags, child seats, etc. please do not include confidential information.
-                            </span>
-                          )}
-                        </div>
-                        <small className="text-gray-500 text-[10px] flex xl:hidden mt-1">
-                          Add special requests, e.g. number of bags, child seats, etc. please do not include confidential information.
-                        </small>
-                      </div>
-                      <div className="mb-3">
-                        <div className="relative w-full">
-                          {/* Input */}
-                          <input
-                            type="text"
-                            value={form.referenceCode}
-                            onChange={(e) => setForm({ ...form, referenceCode: e.target.value })}
-                            placeholder=" "
-                            className="peer w-full px-3 pt-6 pb-2 text-xs md:text-sm
-                              border rounded-xl bg-gray-100 border-gray-200
-                              focus:outline-none"
-                          />
-
-                          {/* Floating Label */}
-                          <label
-                            className={`absolute left-3 text-gray-400 pointer-events-none
-                              transition-all duration-200
-                              ${
-                                form.referenceCode
-                                  ? "top-2 text-xs"
-                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
-                              }`}
-                          >
-                            Reference code or cost center
-                          </label>
-
-                          {/* Helper text inside input */}
-                          {!form.referenceCode && (
-                            <span className="pointer-events-none absolute left-3 top-8 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden xl:block">
-                              Booking for business? what you enter above will appear on the invoice.
-                            </span>
-                          )}
-                        </div>
-                        <small className="text-gray-500 text-[10px] flex xl:hidden mt-1">
-                          Booking for business? what you enter above will appear on the invoice.
-                        </small>
-                      </div>
+                      <small className="text-gray-500 text-[10px] flex md:hidden mt-1">
+                        Enter any special requirements or requests for your trip e.g. business visit, child car seats, etc.
+                      </small>
                     </div>
                   </div>
 
@@ -981,8 +1083,8 @@ export default function PickupInfoPage() {
                       onClick={handleContinue}
                       className="flex py-3 px-2 xl:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs xl:text-base w-auto"
                     >
-                      Continue to Payment
-                      <FaChevronRight className="text-white text-xs xl:text-sm ml-1 mt-[2px] xl:mt-1" />
+                      Continue to Payment/Quote
+                      <FaChevronRight className="text-white text-sm ml-1 md:mt-1" />
                     </button>
                   </div>
 
