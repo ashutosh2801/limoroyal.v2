@@ -13,11 +13,14 @@ import vClass from "../../../public/assets/sedan/mercedes-benz-s-class.png";
 import visaIcon from "../../../public/assets/mastercard.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import Tabs from "../../components/Tabs";
 import { saveSearch } from "@/store/searchSlice";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { chargeSavedCard, createBooking } from "../../lib/externalApi";
-import { formatDate } from "../../lib/functions";
+import { chargeSavedCard, createBooking } from "@/app/lib/externalApi";
+import { formatDate } from "@/app/lib/functions";
+import Tabs from "@/app/components/Tabs";
+import PriceBreakdown from "@/app/components/PriceBreakdown";
+import RouteMap from "@/app/components/RouteMap";
+import Locations from "../../components/Locations";
 
 export default function CheckoutPage() {
 
@@ -129,7 +132,8 @@ export default function CheckoutPage() {
           const chargePayload = { 
             paymentMethodId: data.cardData.paymentMethodId, 
             customerId: data.stripeCustomerId, 
-            amount: data.payment.totalPrice
+            amount: data.payment.totalPrice,
+            orderId: result.order_id
           }
           const res = await chargeSavedCard(chargePayload);
 
@@ -194,37 +198,10 @@ export default function CheckoutPage() {
                         <b className="text-xs md:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
                     </div>
                 </div>
+
                 {/* Price breakdown */}
-                <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-2">
-                    <h2 className="mb-4 text-lg md:text-lg font-bold border-b border-gray-200 pb-1">Price breakdown</h2>
-                    <div className="text-sm">
-                      <div className="flex justify-between py-1">
-                          <span className="text-gray-700">Price excl. tax</span>
-                          <span>{data.payment.subTotalLabel}</span>
-                      </div>
+                <PriceBreakdown paymentData={data.payment} /> 
 
-                      <div className="flex justify-between py-1">
-                          <span className="text-gray-700">Estimated tax</span>
-                          <span>{data.payment.taxLabel}</span>
-                      </div>
-
-                      {/* Promo */}
-                      {/* <details className="mt-4 cursor-pointer">
-                          <summary className="text-sm font-medium">Add promotion</summary>
-                          <input
-                          type="text"
-                          placeholder="Enter code"
-                          className="w-full px-3 py-3 text-sm border rounded-xl bg-gray-100 border-gray-200 focus:outline-none mt-2"
-                          />
-                      </details> */}
-
-                      {/* Total */}
-                      <div className="flex justify-between items-center pt-4 border-t border-gray-300 mt-4">
-                          <span className="font-normal text-md">Total price</span>
-                          <span className="font-bold text-lg">{data.payment.totalLabel}</span>
-                      </div>
-                    </div>
-                </div>
                 {/* Book now button */}
                 <div>
                     <button
@@ -272,8 +249,9 @@ export default function CheckoutPage() {
 
                           {/* Map */}
                           <div className="mt-4">
-                              <div className="mt-4 h-64 w-full rounded-xl overflow-hidden border border-gray-200">
-                                  <iframe
+                              <div className="mt-4 w-full rounded-xl border border-gray-200">
+                                <RouteMap />
+                                  {/* <iframe
                                       width="100%"
                                       height="100%"
                                       style={{ border: 0 }}
@@ -281,44 +259,12 @@ export default function CheckoutPage() {
                                       allowFullScreen
                                       referrerPolicy="no-referrer-when-downgrade"
                                       src={data.to ? `https://www.google.com/maps?q=${data.from.name}+to+${data.to?.name}&output=embed` : `https://www.google.com/maps?q=${data.from.name}&output=embed`}
-                                  ></iframe>
+                                  ></iframe> */}
                               </div>
                           </div>
 
                           {/* Locations */}
-                          <div className="relative mt-6 space-y-4 text-xs md:text-sm">
-
-                            {/* Vertical connector */}
-                            {data.to && (
-                              <div
-                                className="absolute left-[7px] top-[20px] h-[calc(100%-55px)] border-l-2 border-dotted border-gray-500 pointer-events-none"
-                              />
-                            )}
-
-                            {/* FROM */}
-                            <div className="flex items-start gap-2 relative z-10">
-                              <MapPinIcon className="w-4 h-4 mt-1 text-gray-600 flex-shrink-0" />
-                              <div>
-                                <p className="font-semibold">{data.from.name}</p>
-                                <p className="text-gray-600">{data.from.address}</p>
-                              </div>
-                            </div>
-
-                            {/* TO */}
-                            {data.to && (
-                              <div className="flex items-start gap-2 relative z-10">
-                                <MapPinIcon className="w-4 h-4 mt-1 text-red-500 flex-shrink-0" />
-                                <div>
-                                  <p className="font-semibold text-xs md:text-base">
-                                    {data.to?.name}
-                                  </p>
-                                  <p className="text-gray-600 text-xs md:text-sm">
-                                    {data.to?.address}
-                                  </p>
-                                </div>
-                              </div>
-                            )}
-                          </div>
+                          <Locations data={data} />
 
                           {/* Time + Distance */}
                           <div className="flex gap-4 mt-4 text-xs text-gray-600">

@@ -65,3 +65,12 @@ export function canAddAnotherStop(additionalStops) {
   const lastStop = additionalStops[additionalStops?.length - 1];
   return lastStop.input && lastStop.input.trim().length > 0;
 };
+
+export function getAlphabetLabel(index) {
+  let label = "";
+  while (index >= 0) {
+    label = String.fromCharCode((index % 26) + 65) + label;
+    index = Math.floor(index / 26) - 1;
+  }
+  return label;
+};

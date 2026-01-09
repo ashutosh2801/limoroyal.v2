@@ -11,6 +11,7 @@ import {
   ClockIcon,
   AdjustmentsHorizontalIcon,
   XMarkIcon,
+  PencilIcon,
 } from "@heroicons/react/24/solid";
 import { FaCarSide, FaPlane } from "react-icons/fa";
 import { startSearch, saveSearch } from "@/store/searchSlice";
@@ -31,28 +32,36 @@ export default function Search() {
   const toInputRef = useRef(null);
   const fromListRef = useRef(null);
   const toListRef = useRef(null);
-
-  // Input values
-  const [fromInput, setFromInput] = useState("");
-  const [toInput, setToInput] = useState("");
-  const [timeInput, setTimeInput] = useState("");
-  const [fromFlightNumber, setFromFlightNumber] = useState("");
-  const [toFlightNumber, setToFlightNumber] = useState("");
-  const [flightCat, setFlightCat] = useState("");
-
   const directionsService = useRef(null);
   const autocompleteService = useRef(null);
   const placesService = useRef(null);
   const stopInputRefs = useRef([]);
   const stopListRefs = useRef([]);
 
+  // Input values
+  const [fromInput, setFromInput] = useState( data?.from?.address || "");
+  const [toInput, setToInput] = useState(data?.to?.address || "");
+  const [timeInput, setTimeInput] = useState( data?.timeInput || "");
+  const [fromFlightNumber, setFromFlightNumber] = useState(data?.airportFrom?.fromFlightNumber || "");
+  const [toFlightNumber, setToFlightNumber] = useState( data?.airportTo?.toFlightNumber || "" );
+  const [flightCat, setFlightCat] = useState( data?.airportFrom?.meetAndGreet || "" );
+
   // Selected places
-  const [fromPlace, setFromPlace] = useState(null);
-  const [toPlace, setToPlace] = useState(null);
-  const [additionalStops, setAdditionalStops] = useState([]);
-  const [pickupDate, setPickupDate] = useState(new Date());
-  const [pickupTime, setPickupTime] = useState(null);
-  const [isRoundTrip, setIsRoundTrip] = useState(false);
+  const [fromPlace, setFromPlace] = useState( data?.from || null);
+  const [toPlace, setToPlace] = useState(data?.to || null);
+  const [additionalStops, setAdditionalStops] = useState( data?.additionalStops || []);
+  const [pickupDate, setPickupDate] = useState(() => {
+    if (data?.pickupDate) {
+      return new Date(data.pickupDate);
+    }
+    return null;
+  });
+  const [pickupTime, setPickupTime] = useState(() => {
+    if (data?.pickupTime) {
+      return new Date(data.pickupTime);
+    }
+    return null;
+  });
   const [googleReady, setGoogleReady] = useState(false);
 
   useEffect(() => {
@@ -185,7 +194,7 @@ export default function Search() {
         if (listEl) listEl.style.display = "none";
 
         const airportData = extractAirportData(place);
-        const fullAddress = `${place.name}`;
+        const fullAddress = `${place.formatted_address ? place.formatted_address : place.name}`;
 
         if (stopIndex !== null) {
           const updated = [...additionalStops];
@@ -310,11 +319,20 @@ export default function Search() {
       return;
     }
 
-    if ((!fromPlace || !toPlace || !pickupDate || !pickupTime)) {
-      showAlert({
-        text: "Please fill all fields!",
-        icon: "warning",
-      });
+    if ((!fromPlace)) {
+      showAlert({text: "Please select pickup address from dropdown list!"});
+      return;
+    }
+    if ((!toPlace)) {
+      showAlert({text: "Please select drop-off address from dropdown list!"});
+      return;
+    }
+    if ((!pickupDate)) {
+      showAlert({text: "Please select pickup date!"});
+      return;
+    }
+    if ((!pickupTime)) {
+      showAlert({text: "Please select pickup time!"});
       return;
     }
 
@@ -401,7 +419,7 @@ export default function Search() {
     } catch (err) {
       setLoading(false);
       console.error(err);
-      alert("Unable to calculate route. Please try again.");
+      showAlert({ text: `Unable to calculate route. Please try again. ${err.message}` });
     }
     finally {
       setLoading(false);
@@ -447,11 +465,11 @@ export default function Search() {
         })
       );
 
-      router.push("/booking");
+      router.push("/booking/vehicles");
     } catch (err) {
       setLoading(false);
       console.error(err);
-      alert("Unable to calculate route. Please try again.");
+      showAlert({ text: `Unable to calculate route. Please try again. ${err.message}` });
     }
     finally {
       setLoading(false);
@@ -660,42 +678,29 @@ export default function Search() {
 
             {/* ADDITIONAL STOP */}
             {additionalStops.map((stop, index) => (
-              <div key={index} className="relative">
-                {/* Icon */}
-                <FaCarSide
-                  className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
-                />
+              <div key={index} className="p-2 bg-gray-100 border border-gray-200 rounded-lg">
+                <div className="relative mb-3">
+                  {/* Icon */}
+                  <FaCarSide
+                    className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                  />
 
-                {/* Input */}
-                <input
-                  ref={(el) => (stopInputRefs.current[index] = el)}
-                  value={stop.input}               
-                  placeholder=" "
-                  className={`${inputClass} peer pl-10 pr-10 pt-6`}
+                  {/* Input */}
+                  <input
+                    ref={(el) => (stopInputRefs.current[index] = el)}
+                    value={stop.input}               
+                    placeholder=" "
+                    className={`${inputClass} !bg-gray-50 peer pl-10 pr-10 pt-6`}
 
-                  onChange={(e) => {
-                    const updated = [...additionalStops];
-                    updated[index].input = e.target.value;
-                    updated[index].place = null;
-                    setAdditionalStops(updated);
+                    onChange={(e) => {
+                      const updated = [...additionalStops];
+                      updated[index].input = e.target.value;
+                      updated[index].place = null;
+                      setAdditionalStops(updated);
 
-                    const listEl = stopListRefs.current[index];
-                    const inputEl = stopInputRefs.current[index];
-
-                    if (listEl && inputEl) {
-                      fetchPredictions(
-                        e.target.value,
-                        listEl,
-                        inputEl,
-                        null,
-                        index
-                      );
-                    }
-                  }}
-                  onFocus={(e) => {
-                    if (e.target.value.length >= 2) {
                       const listEl = stopListRefs.current[index];
                       const inputEl = stopInputRefs.current[index];
+
                       if (listEl && inputEl) {
                         fetchPredictions(
                           e.target.value,
@@ -705,46 +710,139 @@ export default function Search() {
                           index
                         );
                       }
-                    }
-                  }}
-                />
+                    }}
+                    onFocus={(e) => {
+                      if (e.target.value.length >= 2) {
+                        const listEl = stopListRefs.current[index];
+                        const inputEl = stopInputRefs.current[index];
+                        if (listEl && inputEl) {
+                          fetchPredictions(
+                            e.target.value,
+                            listEl,
+                            inputEl,
+                            null,
+                            index
+                          );
+                        }
+                      }
+                    }}
+                  />
 
-                {/* Floating label */}
-                <label
-                  className={`pointer-events-none absolute left-11
-                    transition-all duration-200 text-gray-400
-                    ${stop.input ? "top-2 text-xs" : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"}`}
-                >
-                  Stop {index + 1}
-                </label>
-
-                {/* Helper text */}
-                {!stop.input && (
-                  <span
-                    className="pointer-events-none absolute left-11 top-8
-                      text-[13px] text-gray-500 transition-opacity
-                      peer-focus:opacity-0"
+                  {/* Floating label */}
+                  <label
+                    className={`pointer-events-none absolute left-11
+                      transition-all duration-200 text-gray-400
+                      ${stop.input ? "top-2 text-xs" : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"}`}
                   >
-                    Address, Airport, Hotel...
-                  </span>
-                )}
+                    Stop {index + 1}
+                  </label>
 
-                {/*  Remove Stop Icon */}
-                <XMarkIcon
-                  className="absolute right-3 top-1/2 -translate-y-1/2
-                    w-4 h-4 cursor-pointer text-gray-400 hover:text-red-500"
-                  onClick={(e) => {
-                    e.stopPropagation(); // 🔥 IMPORTANT
-                    setAdditionalStops((prev) =>
-                      prev.filter((_, i) => i !== index)
-                    );
-                  }}
-                />
+                  {/* Helper text */}
+                  {!stop.input && (
+                    <span
+                      className="pointer-events-none absolute left-11 top-8
+                        text-[13px] text-gray-500 transition-opacity
+                        peer-focus:opacity-0"
+                    >
+                      Address, Airport, Hotel...
+                    </span>
+                  )}
 
-                <div
-                  ref={(el) => (stopListRefs.current[index] = el)}
-                  className="absolute z-[9999] bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
-                />
+                  {/*  Remove Stop Icon */}
+                  <XMarkIcon
+                    className="absolute right-3 top-1/2 -translate-y-1/2
+                      w-4 h-4 cursor-pointer text-gray-400 hover:text-red-500"
+                    onClick={(e) => {
+                      e.stopPropagation(); // 🔥 IMPORTANT
+                      setAdditionalStops((prev) =>
+                        prev.filter((_, i) => i !== index)
+                      );
+                    }}
+                  />
+
+                  <div
+                    ref={(el) => (stopListRefs.current[index] = el)}
+                    className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="relative">
+                    <ClockIcon className={iconStyle} />
+                    <input
+                      value={stop.waitingTime}   
+                      placeholder=" "
+                      className={`${inputClass} !bg-gray-50 peer pl-10 pt-6`}
+                      onChange={(e) => {
+                        const updated = [...additionalStops];
+                        updated[index].waitingTime = e.target.value;
+                        setAdditionalStops(updated);
+                      }}
+                    />
+                    
+                    {/* Floating label */}
+                    <label
+                      className={`pointer-events-none absolute left-11
+                        transition-all duration-200 text-gray-400
+                        ${
+                          stop.waitingTime
+                            ? "top-3 text-xs"
+                            : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                        }`}
+                    >
+                      Wait Time (In minutes)
+                    </label>
+
+                    {/* Helper text */}
+                    {!stop.waitingTime && (
+                      <span
+                        className="pointer-events-none absolute left-11 top-8
+                          text-[13px] text-gray-500 transition-opacity
+                          peer-focus:opacity-0"
+                      >
+                        30
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="relative">
+                    <PencilIcon className={iconStyle} />
+                    <input
+                      value={stop.notes}  
+                      placeholder=" "
+                      className={`${inputClass} !bg-gray-50 peer pl-10 pt-6`}
+                      onChange={(e) => {
+                        const updated = [...additionalStops];
+                        updated[index].notes = e.target.value;
+                        setAdditionalStops(updated);
+                      }}
+                    /> 
+
+                    {/* Floating label */}
+                    <label
+                      className={`pointer-events-none absolute left-11
+                        transition-all duration-200 text-gray-400
+                        ${
+                          stop.notes
+                            ? "top-3 text-xs"
+                            : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                        }`}
+                    >
+                      Notes
+                    </label>
+
+                    {/* Helper text */}
+                    {!stop.notes && (
+                      <span
+                        className="pointer-events-none absolute left-11 top-8
+                          text-[13px] text-gray-500 transition-opacity
+                          peer-focus:opacity-0"
+                      >
+                        Short description...
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
             ))}
 
@@ -979,7 +1077,7 @@ export default function Search() {
 
                         setAdditionalStops([
                           ...additionalStops,
-                          { input: "", place: null }
+                          { input: "", place: null, waitingTime: "", notes: "" },
                         ]);
                       }}
                       disabled={!canAddAnotherStop(additionalStops)}
