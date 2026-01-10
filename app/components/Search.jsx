@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
@@ -44,12 +44,42 @@ export default function Search() {
   const [timeInput, setTimeInput] = useState( data?.timeInput || "");
   const [fromFlightNumber, setFromFlightNumber] = useState(data?.airportFrom?.fromFlightNumber || "");
   const [toFlightNumber, setToFlightNumber] = useState( data?.airportTo?.toFlightNumber || "" );
-  const [flightCat, setFlightCat] = useState( data?.airportFrom?.meetAndGreet || "" );
+  const [flightCat, setFlightCat] = useState( data?.airportFrom?.flightCat || "" );
 
   // Selected places
   const [fromPlace, setFromPlace] = useState( data?.from || null);
   const [toPlace, setToPlace] = useState(data?.to || null);
-  const [additionalStops, setAdditionalStops] = useState( data?.additionalStops || []);
+  
+  const EMPTY_STOP = {
+    name: "",
+    address: null,
+    lat: null,
+    lng: null,
+    waitingTime: "",
+    notes: "",
+  };
+
+  const [additionalStops, setAdditionalStops] = useState(
+    Array.isArray(data?.additionalStops) && data.additionalStops.length
+      ? data.additionalStops.map(s => ({
+          name: s.name || "",
+          address: s.address || null,
+          lat: s.lat || null,
+          lng: s.lng || null,
+          waitingTime: s.waitingTime || "",
+          notes: s.notes || "",
+        }))
+      : []
+  );
+
+  useEffect(() => {
+    console.log("Additional Stops changed:", additionalStops);
+    // additionalStops.map((stop, index) => {
+    //   console.log("Additional Stops changed:", stop.name, index);
+    // });
+  }, [additionalStops]);
+
+
   const [pickupDate, setPickupDate] = useState(() => {
     if (data?.pickupDate) {
       return new Date(data.pickupDate);
@@ -199,14 +229,21 @@ export default function Search() {
         if (stopIndex !== null) {
           const updated = [...additionalStops];
           updated[stopIndex] = {
-            input: fullAddress,
-            place: {
-              name: place.name,
-              address: place.formatted_address,
-              lat: place.geometry.location.lat(),
-              lng: place.geometry.location.lng(),
-            },
+            ...updated[stopIndex],   // 👈 REQUIRED
+            name: place.name,
+            address: place.formatted_address,
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
           };
+          // updated[stopIndex] = {
+          //   input: fullAddress,
+          //   place: {
+          //     name: place.name,
+          //     address: place.formatted_address,
+          //     lat: place.geometry.location.lat(),
+          //     lng: place.geometry.location.lng(),
+          //   },
+          // };
           setAdditionalStops(updated);
           listEl.style.display = "none";
           return;
@@ -367,34 +404,25 @@ export default function Search() {
 
       // Estimated Arrival = pickup + duration
       const estimatedTime = new Date( pickupDateTime.getTime() + routeDetails.durationMinutes * 60 * 1000 );
-
-      dispatch(
-        saveSearch({
+      
+      const saveData = {
           tripType: activeTab,
           from: fromPlace,
           to: toPlace,
           pickupDate: pickupDate.toISOString(),
           pickupTime: pickupTime.toISOString(),
-          pickupTimeLabel: pickupTime.toLocaleTimeString(
-            "en-US",
-            time12HrOptions
-          ),
-
+          pickupTimeLabel: pickupTime.toLocaleTimeString("en-US", time12HrOptions),
           estimatedTime: estimatedTime.toISOString(),
-          estimatedTimeLabel: estimatedTime.toLocaleTimeString(
-            "en-US",
-            time12HrOptions
-          ),
-
+          estimatedTimeLabel: estimatedTime.toLocaleTimeString("en-US", time12HrOptions),
           airportFrom: fromPlace?.isAirport
           ? {
               fromFlightNumber,
+              flightCat,
               terminal: fromPlace.terminal,
               meetAndGreet: flightCat === "Meet & Greet" || flightCat === "Curbside",
               airportFee: flightCat === "Meet & Greet" || flightCat === "Curbside",
             }
           : null,
-
           airportTo: toPlace?.isAirport
           ? {
               toFlightNumber,
@@ -403,23 +431,26 @@ export default function Search() {
               airportFee: false,
             }
           : null,
-
-          additionalStops: additionalStops.filter(s => s.place).map(s => s.place),
-
+          additionalStops: additionalStops.filter(s => s.address !== null),
           // Route info
           distanceMiles: routeDetails.distanceMiles || 0,
           distanceKM: routeDetails.distanceKM || 0,
           durationMinutes: convertTime(routeDetails.durationMinutes, 'M'),
           routeDescription: routeDetails.routeDescription,
           highlights: routeDetails.highlights,
-        })
+        };
+
+      dispatch(
+        saveSearch(saveData)
       );
+      
+      console.log("Search Data:", saveData);
 
       router.push("/booking/vehicles");
     } catch (err) {
       setLoading(false);
       console.error(err);
-      showAlert({ text: `Unable to calculate route. Please try again. ${err.message}` });
+      showAlert({ text: `Unable to calculate route. Please try again. ${err.message || err}` });
     }
     finally {
       setLoading(false);
@@ -585,7 +616,6 @@ export default function Search() {
               />
             </div>
 
-
             {/* Flight Number */}
             {fromPlace?.isAirport && (
             <div className="grid md:grid-cols-2 gap-3">
@@ -675,7 +705,6 @@ export default function Search() {
             </div>
             )}
 
-
             {/* ADDITIONAL STOP */}
             {additionalStops.map((stop, index) => (
               <div key={index} className="p-2 bg-gray-100 border border-gray-200 rounded-lg">
@@ -688,14 +717,12 @@ export default function Search() {
                   {/* Input */}
                   <input
                     ref={(el) => (stopInputRefs.current[index] = el)}
-                    value={stop.input}               
+                    value={stop.address || ""}               
                     placeholder=" "
                     className={`${inputClass} !bg-gray-50 peer pl-10 pr-10 pt-6`}
-
                     onChange={(e) => {
                       const updated = [...additionalStops];
-                      updated[index].input = e.target.value;
-                      updated[index].place = null;
+                      updated[index].address = e.target.value;
                       setAdditionalStops(updated);
 
                       const listEl = stopListRefs.current[index];
@@ -738,7 +765,7 @@ export default function Search() {
                   </label>
 
                   {/* Helper text */}
-                  {!stop.input && (
+                  {!stop.address && (
                     <span
                       className="pointer-events-none absolute left-11 top-8
                         text-[13px] text-gray-500 transition-opacity
@@ -774,10 +801,15 @@ export default function Search() {
                       placeholder=" "
                       className={`${inputClass} !bg-gray-50 peer pl-10 pt-6`}
                       onChange={(e) => {
-                        const updated = [...additionalStops];
-                        updated[index].waitingTime = e.target.value;
-                        setAdditionalStops(updated);
-                      }}
+    setAdditionalStops(prev => {
+      const updated = [...prev];
+      updated[index] = {
+        ...updated[index],
+        waitingTime: e.target.value,
+      };
+      return updated;
+    });
+  }}
                     />
                     
                     {/* Floating label */}
@@ -812,10 +844,15 @@ export default function Search() {
                       placeholder=" "
                       className={`${inputClass} !bg-gray-50 peer pl-10 pt-6`}
                       onChange={(e) => {
-                        const updated = [...additionalStops];
-                        updated[index].notes = e.target.value;
-                        setAdditionalStops(updated);
-                      }}
+    setAdditionalStops(prev => {
+      const updated = [...prev];
+      updated[index] = {
+        ...updated[index],
+        notes: e.target.value,
+      };
+      return updated;
+    });
+  }}
                     /> 
 
                     {/* Floating label */}
@@ -1077,7 +1114,7 @@ export default function Search() {
 
                         setAdditionalStops([
                           ...additionalStops,
-                          { input: "", place: null, waitingTime: "", notes: "" },
+                          EMPTY_STOP,
                         ]);
                       }}
                       disabled={!canAddAnotherStop(additionalStops)}

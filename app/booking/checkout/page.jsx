@@ -14,7 +14,7 @@ import visaIcon from "../../../public/assets/mastercard.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { saveSearch } from "@/store/searchSlice";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaChild } from "react-icons/fa";
 import { chargeSavedCard, createBooking } from "@/app/lib/externalApi";
 import { formatDate } from "@/app/lib/functions";
 import Tabs from "@/app/components/Tabs";
@@ -33,10 +33,6 @@ export default function CheckoutPage() {
   const activeStep = 3; // Payment step
 
   const { data } = useSelector((s) => s.search);
-  if (!data) {
-    router.push("/");
-    return;
-  }
 
   useEffect(() => {
     // If no search data, redirect to home
@@ -45,7 +41,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    console.log("Checkout Page - Retrieved data:", data);
+    // console.log("Checkout Page - Retrieved data:", data);
   }, [router, data]);
 
   const booknow = async () => {
@@ -55,20 +51,17 @@ export default function CheckoutPage() {
       setErrors(null);
 
       const payload = {
+        trip_type: data.tripType,
         pickup_date: data.pickupDate,
         pickup_time: data.pickupTime,
         from: data.from,
+        additionalStops: data.additionalStops || [],
         to: data.to || "",
+        airportFrom: data.airportFrom,
+        airportTo: data.airportTo,
         distance_km: data.distanceKM,
         distance_mile: data.distanceMiles,
         duration_minutes: data.durationMinutes,
-        trip_type: data.tripType,
-        payment_type: data.paymentType,
-
-        flight_number: data.PickupInfo.flightNumber,
-        pickup_sign: data.PickupInfo.pickupSign,
-        chauffeur_notes: data.PickupInfo.chauffeurNotes,
-        reference_code: data.PickupInfo.referenceCode,
 
         passengers: data.selectedPassenger,
         luggage: data.selectedLuggage,
@@ -83,20 +76,23 @@ export default function CheckoutPage() {
           price_HR: data.selectedVehicle.priceHR,
         },
 
-        guest: {
-          booking_for: data.PickupInfo.bookingFor,
-          title: data.PickupInfo.title,
-          first_name: data.PickupInfo.firstName,
-          last_name: data.PickupInfo.lastName,
-          email: data.PickupInfo.email,
-          phone: data.PickupInfo.contactNumber,
-          booker_title: data.PickupInfo.booker_title,
-          booker_first_name: data.PickupInfo.booker_firstName,
-          booker_last_name: data.PickupInfo.booker_lastName,
-          booker_email: data.PickupInfo.booker_email,
-          booker_phone: data.PickupInfo.booker_contactNumber,
-        },
+        guest: data.PickupInfo,
 
+        // guest: {
+        //   booking_for: data.PickupInfo.bookingFor,
+        //   title: data.PickupInfo.title,
+        //   first_name: data.PickupInfo.firstName,
+        //   last_name: data.PickupInfo.lastName,
+        //   email: data.PickupInfo.email,
+        //   phone: data.PickupInfo.contactNumber,
+        //   booker_title: data.PickupInfo.booker_title,
+        //   booker_first_name: data.PickupInfo.booker_firstName,
+        //   booker_last_name: data.PickupInfo.booker_lastName,
+        //   booker_email: data.PickupInfo.booker_email,
+        //   booker_phone: data.PickupInfo.booker_contactNumber,
+        // },
+
+        payment_type: data.paymentType,
         payment: {
           brand: data.cardData?.brand || null,
           last4: data.cardData?.last4 || null,
@@ -106,11 +102,14 @@ export default function CheckoutPage() {
           tax_price: data.payment.taxPrice,
           total_price: data.payment.totalPrice,
         },
+
+        //totalSelected
       };
+      console.log("Saved data:", data);
+      console.log("Payload", payload);
+      return;
+      //const result = await createBooking(payload);    
 
-      const result = await createBooking(payload);    
-
-      console.log("Booking", result);
       if (result.status != "confirmed") {
         // If the API returns { message: "Validation failed", errors: ["Email is required", ...] }
         setError(result.message || "Booking failed");
@@ -133,7 +132,8 @@ export default function CheckoutPage() {
             paymentMethodId: data.cardData.paymentMethodId, 
             customerId: data.stripeCustomerId, 
             amount: data.payment.totalPrice,
-            orderId: result.order_id
+            orderId: result.order_id,
+            bookingId: result.booking_id
           }
           const res = await chargeSavedCard(chargePayload);
 
@@ -286,20 +286,28 @@ export default function CheckoutPage() {
                       <div className="mt-6 border border-gray-200 rounded-xl p-3 md:p-4">
                           <div className="flex justify-between">
                               <div>
-                              <p className="font-semibold text-xs md:text-sm">{data.selectedVehicle.name}</p>
-                              <div className="flex items-center gap-4 mt-3 text-xs text-gray-700">
-                                  <span className="flex items-center gap-2">
-                                    <UsersIcon className="w-5 h-5" /> {data.selectedPassenger}
-                                  </span>
-                                  <span className="flex items-center gap-2">
-                                    <BriefcaseIcon className="w-5 h-5" /> {data.selectedLuggage}
-                                  </span>                                
-                              </div>
-                              <div className="flex items-center gap-4 mt-3 text-xs text-gray-700">
-                                  <p className="flex items-start md:items-center gap-1">
-                                      <ExclamationCircleIcon className="w-5 h-5 flex-shrink-0 " /> Have more bags or passengers? Please change to Business Van / SUV
-                                  </p>
-                              </div>
+                                <p className="font-semibold text-xs md:text-sm">{data.selectedVehicle.name}</p>
+                                {data.selectedVehicle.name && (
+                                <div className="flex items-center gap-4 mt-3 text-xs text-gray-700">
+                                    <p className="flex items-start md:items-center gap-1">
+                                        <ExclamationCircleIcon className="w-5 h-5 flex-shrink-0 " /> Have more bags or passengers? Please change to Business Van / SUV
+                                    </p>
+                                </div>
+                                )}
+                                <div className="flex items-center gap-4 mt-3 text-xs text-gray-700">
+                                    <span className="flex items-center gap-2">
+                                      <UsersIcon className="w-5 h-5" /> {data.selectedPassenger}
+                                    </span>
+                                    <span className="flex items-center gap-2">
+                                      <BriefcaseIcon className="w-5 h-5" /> {data.selectedLuggage}
+                                    </span>           
+                                    <span className="flex items-center gap-2">
+                                      {(data.guest?.seats?.infant || data.guest?.seats?.toddler || data.guest?.seats?.booster) && <FaChild className="w-5 h-5" /> }
+                                      {data.guest?.seats?.infant ? data.guest?.seats?.infant + ' infant' : ''}
+                                      {data.guest?.seats?.toddler ? data.guest?.seats?.toddler + ' toddler' : ''}
+                                      {data.guest?.seats?.booster ? data.guest?.seats?.booster + ' booster' : ''}
+                                    </span>                     
+                                </div>
                               </div>
                           
                               <div className="flex items-start flex-col md:flex-row">

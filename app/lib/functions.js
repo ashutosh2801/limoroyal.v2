@@ -63,7 +63,7 @@ export function canAddAnotherStop(additionalStops) {
   if (additionalStops?.length === 0) return true;
 
   const lastStop = additionalStops[additionalStops?.length - 1];
-  return lastStop.input && lastStop.input.trim().length > 0;
+  return lastStop.name && lastStop.name.trim().length > 0;
 };
 
 export function getAlphabetLabel(index) {

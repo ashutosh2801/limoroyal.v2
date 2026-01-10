@@ -33,7 +33,6 @@ export default function Booking() {
   if (!data || !data.pickupDate) {
     router.push("/booknow"); return;
   }
-  console.log("Vehicles page:", data);
 
   const trip = {
     date: new Date(data.pickupDate).toDateString(),
@@ -130,21 +129,22 @@ export default function Booking() {
         taxPrice, // optional numeric value for calculations
         totalLabel: `$${totalPrice}`,
         totalPrice, // optional numeric value for calculations
-      };    
-
-      dispatch(
-        saveSearch({ 
+      };  
+      
+      const saveData = { 
           ...data, 
           selectedVehicle, 
           selectedPassenger: vehicleData[selectedIdx]?.passengers || 1,
           selectedLuggage: vehicleData[selectedIdx]?.luggage || 0,
           payment
-        })
+        };
+
+      dispatch(
+        saveSearch(saveData)
       );
 
-      //console.log("Saved data:", payment);
+      console.log("Saved data:", saveData);
 
-      // For example, navigate to the next step
       router.push("/booking/passengers-info");
     }
     catch (err) {
