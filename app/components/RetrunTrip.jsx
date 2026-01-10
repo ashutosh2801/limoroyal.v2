@@ -737,7 +737,7 @@ export default function returnTrip({form, setForm, errors}) {
                 />
             </div>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid md:grid-cols-2 gap-3">
                 <div className="relative">
                 <ClockIcon className={iconStyle} />
                 <input

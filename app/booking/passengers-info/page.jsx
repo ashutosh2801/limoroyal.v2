@@ -562,14 +562,9 @@ export default function PickupInfoPage() {
                                 onChange={() => setForm({ ...form, createAccount: !form.createAccount })}
                                 className="sr-only peer"
                             />
-                            <div className="w-10 h-6 bg-gray-300 peer-checked:bg-yellow-600 rounded-full
-                                            after:content-[''] after:absolute after:top-1 after:left-1
-                                            after:bg-white after:w-4 after:h-4 after:rounded-full
-                                            after:transition-all peer-checked:after:translate-x-4" />
+                            <div className="relative w-10 h-6 bg-gray-300 peer-checked:bg-yellow-600 rounded-full after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-all peer-checked:after:translate-x-4" />
                           </label>
-                          <span className="text-sm font-medium animate-pulse pt-1">
-                          Check this box to securely create an account for faster bookings next time.
-                          </span>
+                          <span className="text-xs xl:text-sm font-medium animate-pulse pt-1">Check this box to securely create an account for faster bookings next time.</span>
                         </div>
 
                         
@@ -804,7 +799,7 @@ export default function PickupInfoPage() {
                       <div className="w-full mt-5 space-y-4">
                       
                         {/* CHILD SEATS */}
-                        <div className="flex flex-col md:flex-row md:items-center gap-3">
+                        <div className="flex flex-col xl:flex-row xl:items-center gap-3">
                           <div className="flex gap-2">
                             <div className="flex items-center gap-2 md:w-[260px]">
                               <span className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full">
@@ -854,7 +849,7 @@ export default function PickupInfoPage() {
                           {/* Child seat selects (SHOW ONLY IF ON) */}
                           {form.childSeats && (
                             <>
-                            <div className="grid md:grid-cols-3 gap-2 md:ml-auto md:w-[60%]">
+                            <div className="grid grid-cols-3 gap-2 xl:ml-auto xl:w-[60%]">
                               <div className="relative">
                                 {/* Select infant */}
                                 <select
@@ -994,7 +989,6 @@ export default function PickupInfoPage() {
                           </p>
                           </div>
                         )}
-                        
     
                         {/* RETURN TRIP */}
                         <div className="flex items-center gap-3">

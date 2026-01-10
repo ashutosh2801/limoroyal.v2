@@ -239,7 +239,7 @@ export default function Booking() {
                     </div>
 
                     {data.additionalStops && data.additionalStops.length > 0 && (
-                      <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
+                      <div className="flex items-start gap-3 text-xs xl:text-sm mb-3 relative z-10">
                         <Squares2X2Icon className="w-5 h-5 text-gray-600 flex-shrink-0" />
                         <div>
                           <p className="font-semibold line-clamp-1">{data.additionalStops[0].name}</p>

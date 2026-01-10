@@ -487,7 +487,7 @@ export default function Search() {
   // ---------------- RENDER ----------------
   return (
     <div className="w-full px-4 relative z-52 mt-5">
-      <div className="bg-white w-full md:max-w-md lg:max-w-sm xl:max-w-lg shadow-xl relative lg:absolute right-0 lg:right-5 xl:right-20 lg:-top-150 xl:-top-130 mt-10 lg:mt-0 rounded-md">
+      <div className="bg-white w-full md:max-w-full lg:max-w-full xl:max-w-lg shadow-xl relative xl:absolute right-0 md:right-0 xl:right-20 md:top-0 lg:top-0 xl:-top-130 mt-10 lg:mt-0 rounded-md">
 
         {/* Tabs */}
         <div className="grid grid-cols-2 mt-1">
@@ -506,180 +506,180 @@ export default function Search() {
 
         {/* ---------------- ONE WAY ---------------- */}
         {activeTab === "oneway" && (
-          <div className="grid gap-3 px-4 py-3">
+          <div className="grid md:flex xl:grid md:flex-wrap xl:flex-nowrap gap-3 px-4 py-3">
 
-            {/* FROM */}
-            <div className="relative">
-              {/* Icon */}
-              <FaCarSide
-                className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
-              />
-
-              {/* Input */}
-              <input
-                ref={fromInputRef}
-                value={fromInput}
-                placeholder=" "
-                className={`${inputClass} peer pl-10 pt-6`}
-                onChange={(e) => {
-                  setFromInput(e.target.value);
-                  setFromPlace(null);
-                  fetchPredictions(
-                    e.target.value,
-                    fromListRef,
-                    fromInputRef,
-                    setFromInput
-                  );
-                }}
-
-                onFocus={(e) => {
-                  setFromInput(e.target.value);
-                  setFromPlace(null);
-                  fetchPredictions(
-                    e.target.value,
-                    fromListRef,
-                    fromInputRef,
-                    setFromInput
-                  );
-                }}
-              />
-
-              {/* Floating label */}
-              <label
-                className={`pointer-events-none absolute left-11
-                  transition-all duration-200 text-gray-400
-                  ${
-                    fromInput
-                      ? "top-2 text-xs"
-                      : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
-                  }`}
-              >
-                Pickup Location
-              </label>
-
-              {/* Helper text */}
-              {!fromInput && (
-                <span
-                  className="pointer-events-none absolute left-11 top-8
-                    text-[13px] text-gray-500 transition-opacity
-                    peer-focus:opacity-0"
-                >
-                  Address, Airport, Hotel...
-                </span>
-              )}
-
-              {fromInput && (
-                <XMarkIcon
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
-                  onClick={() => {
-                    setFromInput("");
-                    setFromPlace(null);
-                    fromListRef.current.style.display = "none";
-                  }}
-                />
-              )}
-
-              <div
-                ref={fromListRef}
-                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
-              />
-            </div>
-
-
-            {/* Flight Number */}
-            {fromPlace?.isAirport && (
-            <div className="grid md:grid-cols-2 gap-3">
-              <div className="relative">
+            <div className={`grid grid-cols-1 gap-3 w-full xl:grid-cols-1 ${fromPlace?.isAirport ? "md:grid-cols-4" : "md:grid-cols-1"}`}>
+              {/* Pickup Location */}
+              <div className="relative md:col-span-2">
                 {/* Icon */}
-                <FaPlane
+                <FaCarSide
                   className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
                 />
 
                 {/* Input */}
                 <input
-                  id="fromFlightNumber"
-                  value={fromFlightNumber.toUpperCase()}
-                  type="text"
+                  ref={fromInputRef}
+                  value={fromInput}
                   placeholder=" "
-                  maxLength={6}
                   className={`${inputClass} peer pl-10 pt-6`}
-                  onChange={(e) => setFromFlightNumber(e.target.value.toUpperCase())}
-                />                
+                  onChange={(e) => {
+                    setFromInput(e.target.value);
+                    setFromPlace(null);
+                    fetchPredictions(
+                      e.target.value,
+                      fromListRef,
+                      fromInputRef,
+                      setFromInput
+                    );
+                  }}
+
+                  onFocus={(e) => {
+                    setFromInput(e.target.value);
+                    setFromPlace(null);
+                    fetchPredictions(
+                      e.target.value,
+                      fromListRef,
+                      fromInputRef,
+                      setFromInput
+                    );
+                  }}
+                />
 
                 {/* Floating label */}
                 <label
                   className={`pointer-events-none absolute left-11
                     transition-all duration-200 text-gray-400
                     ${
-                      fromFlightNumber
+                      fromInput
                         ? "top-2 text-xs"
                         : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
                     }`}
                 >
-                  Flight Number
+                  Pickup Location
                 </label>
 
                 {/* Helper text */}
-                {!fromFlightNumber && (
+                {!fromInput && (
                   <span
                     className="pointer-events-none absolute left-11 top-8
                       text-[13px] text-gray-500 transition-opacity
                       peer-focus:opacity-0"
                   >
-                    EK202, UL225..
+                    Address, Airport, Hotel...
                   </span>
                 )}
 
-                {/* Clear button */}
-                {fromFlightNumber && (
+                {fromInput && (
                   <XMarkIcon
                     className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
-                    onClick={() => setFromFlightNumber("")}
+                    onClick={() => {
+                      setFromInput("");
+                      setFromPlace(null);
+                      fromListRef.current.style.display = "none";
+                    }}
                   />
                 )}
-              </div>
-              <div className="relative">
-                {/* Icon */}
-                <FaPlane
-                  className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+
+                <div
+                  ref={fromListRef}
+                  className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
                 />
-
-                {/* Select */}
-                <select
-                  value={flightCat}
-                  className={`${inputClass} peer pl-10 pt-6 appearance-none`}
-                  onChange={(e) => setFlightCat(e.target.value)}
-                >
-                  <option value="">Select</option>
-                  <option value="Meet & Greet">Meet & Greet</option>
-                  <option value="Curbside">Curbside</option>
-                </select>
-
-                {/* Dropdown arrow */}
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                  ▼
-                </span>
-
-                {/* Floating label */}
-                <label
-                  className={`pointer-events-none absolute left-11 transition-all duration-200 text-gray-400
-                    ${
-                      fromFlightNumber
-                        ? "top-2 text-xs"
-                        : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
-                    }`}
-                >
-                  Select
-                </label>
               </div>
-            </div>
-            )}
 
+              {/* Flight Number & Service Type */}
+              {fromPlace?.isAirport && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:col-span-2">
+                <div className="relative">
+                  {/* Icon */}
+                  <FaPlane
+                    className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                  />
+
+                  {/* Input */}
+                  <input
+                    id="fromFlightNumber"
+                    value={fromFlightNumber.toUpperCase()}
+                    type="text"
+                    placeholder=" "
+                    maxLength={6}
+                    className={`${inputClass} peer pl-10 pt-6`}
+                    onChange={(e) => setFromFlightNumber(e.target.value.toUpperCase())}
+                  />                
+
+                  {/* Floating label */}
+                  <label
+                    className={`pointer-events-none absolute left-11
+                      transition-all duration-200 text-gray-400
+                      ${
+                        fromFlightNumber
+                          ? "top-2 text-xs"
+                          : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                      }`}
+                  >
+                    Flight Number
+                  </label>
+
+                  {/* Helper text */}
+                  {!fromFlightNumber && (
+                    <span
+                      className="pointer-events-none absolute left-11 top-8
+                        text-[13px] text-gray-500 transition-opacity
+                        peer-focus:opacity-0"
+                    >
+                      EK202, UL225..
+                    </span>
+                  )}
+
+                  {/* Clear button */}
+                  {fromFlightNumber && (
+                    <XMarkIcon
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                      onClick={() => setFromFlightNumber("")}
+                    />
+                  )}
+                </div>
+                <div className="relative">
+                  {/* Icon */}
+                  <FaPlane
+                    className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                  />
+
+                  {/* Select */}
+                  <select
+                    value={flightCat}
+                    className={`${inputClass} peer pl-10 pt-6 appearance-none`}
+                    onChange={(e) => setFlightCat(e.target.value)}
+                  >
+                    <option value="">Select</option>
+                    <option value="Meet & Greet">Meet & Greet</option>
+                    <option value="Curbside">Curbside</option>
+                  </select>
+
+                  {/* Dropdown arrow */}
+                  <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    ▼
+                  </span>
+
+                  {/* Floating label */}
+                  <label
+                    className={`pointer-events-none absolute left-11 transition-all duration-200 text-gray-400
+                      ${
+                        fromFlightNumber
+                          ? "top-2 text-xs"
+                          : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                      }`}
+                  >
+                    Service Type
+                  </label>
+                </div>
+              </div>
+              )}
+            </div>
 
             {/* ADDITIONAL STOP */}
             {additionalStops.map((stop, index) => (
-              <div key={index} className="p-2 bg-gray-100 border border-gray-200 rounded-lg">
-                <div className="relative mb-3">
+              <div key={index} className='p-2 bg-gray-100 border border-gray-200 rounded-lg grid grid-cols-1 md:grid-cols-[2fr_2fr] xl:grid-cols-1 gap-3 w-full'>
+                <div className="relative md:col-span-1">
                   {/* Icon */}
                   <FaCarSide
                     className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
@@ -765,224 +765,227 @@ export default function Search() {
                     className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
                   />
                 </div>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="relative">
-                    <ClockIcon className={iconStyle} />
-                    <input
-                      value={stop.waitingTime}   
-                      placeholder=" "
-                      className={`${inputClass} !bg-gray-50 peer pl-10 pt-6`}
-                      onChange={(e) => {
-                        const updated = [...additionalStops];
-                        updated[index].waitingTime = e.target.value;
-                        setAdditionalStops(updated);
-                      }}
-                    />
-                    
-                    {/* Floating label */}
-                    <label
-                      className={`pointer-events-none absolute left-11
-                        transition-all duration-200 text-gray-400
-                        ${
-                          stop.waitingTime
-                            ? "top-3 text-xs"
-                            : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
-                        }`}
-                    >
-                      Wait Time (In minutes)
-                    </label>
-
-                    {/* Helper text */}
-                    {!stop.waitingTime && (
-                      <span
-                        className="pointer-events-none absolute left-11 top-8
-                          text-[13px] text-gray-500 transition-opacity
-                          peer-focus:opacity-0"
+                <div className="md:col-span-1">
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="relative">
+                      <ClockIcon className={iconStyle} />
+                      <input
+                        value={stop.waitingTime}   
+                        placeholder=" "
+                        className={`${inputClass} !bg-gray-50 peer pl-10 pt-6`}
+                        onChange={(e) => {
+                          const updated = [...additionalStops];
+                          updated[index].waitingTime = e.target.value;
+                          setAdditionalStops(updated);
+                        }}
+                      />
+                      
+                      {/* Floating label */}
+                      <label
+                        className={`pointer-events-none absolute left-11
+                          transition-all duration-200 text-gray-400 line-clamp-1
+                          ${
+                            stop.waitingTime
+                              ? "top-3 text-xs"
+                              : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                          }`}
                       >
-                        30
-                      </span>
-                    )}
-                  </div>
+                        Wait Time (In minutes)
+                      </label>
 
-                  <div className="relative">
-                    <PencilIcon className={iconStyle} />
-                    <input
-                      value={stop.notes}  
-                      placeholder=" "
-                      className={`${inputClass} !bg-gray-50 peer pl-10 pt-6`}
-                      onChange={(e) => {
-                        const updated = [...additionalStops];
-                        updated[index].notes = e.target.value;
-                        setAdditionalStops(updated);
-                      }}
-                    /> 
+                      {/* Helper text */}
+                      {!stop.waitingTime && (
+                        <span
+                          className="pointer-events-none absolute left-11 top-8
+                            text-[13px] text-gray-500 transition-opacity
+                            peer-focus:opacity-0"
+                        >
+                          30
+                        </span>
+                      )}
+                    </div>
 
-                    {/* Floating label */}
-                    <label
-                      className={`pointer-events-none absolute left-11
-                        transition-all duration-200 text-gray-400
-                        ${
-                          stop.notes
-                            ? "top-3 text-xs"
-                            : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
-                        }`}
-                    >
-                      Notes
-                    </label>
+                    <div className="relative">
+                      <PencilIcon className={iconStyle} />
+                      <input
+                        value={stop.notes}  
+                        placeholder=" "
+                        className={`${inputClass} !bg-gray-50 peer pl-10 pt-6`}
+                        onChange={(e) => {
+                          const updated = [...additionalStops];
+                          updated[index].notes = e.target.value;
+                          setAdditionalStops(updated);
+                        }}
+                      /> 
 
-                    {/* Helper text */}
-                    {!stop.notes && (
-                      <span
-                        className="pointer-events-none absolute left-11 top-8
-                          text-[13px] text-gray-500 transition-opacity
-                          peer-focus:opacity-0"
+                      {/* Floating label */}
+                      <label
+                        className={`pointer-events-none absolute left-11
+                          transition-all duration-200 text-gray-400
+                          ${
+                            stop.notes
+                              ? "top-3 text-xs"
+                              : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                          }`}
                       >
-                        Short description...
-                      </span>
-                    )}
+                        Notes
+                      </label>
+
+                      {/* Helper text */}
+                      {!stop.notes && (
+                        <span
+                          className="pointer-events-none absolute left-11 top-8
+                            text-[13px] text-gray-500 transition-opacity
+                            peer-focus:opacity-0 line-clamp-1"
+                        >
+                          Short description...
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
 
-            {/* TO */}
-            <div className="relative">
-              {/* Icon */}
-              <MapPinIcon
-                className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
-              />
-
-              {/* Input */}
-              <input
-                ref={toInputRef}
-                value={toInput}
-                placeholder=" "
-                className={`${inputClass} peer pl-10 pt-6`}
-                onChange={(e) => {
-                  setToInput(e.target.value);
-                  setToPlace(null);
-                  fetchPredictions(
-                    e.target.value,
-                    toListRef,
-                    toInputRef,
-                    setToInput
-                  );
-                }}
-
-                onFocus={(e) => {
-                  setToInput(e.target.value);
-                  setToPlace(null);
-                  fetchPredictions(
-                    e.target.value,
-                    toListRef,
-                    toInputRef,
-                    setToInput
-                  );
-                }}
-              />
-
-              {/* Floating label */}
-              <label
-                className={`pointer-events-none absolute left-11
-                  transition-all duration-200 text-gray-400
-                  ${
-                    toInput
-                      ? "top-2 text-xs"
-                      : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
-                  }`}
-              >
-                Drop-off Location
-              </label>
-
-              {/* Helper text */}
-              {!toInput && (
-                <span
-                  className="pointer-events-none absolute left-11 top-8
-                    text-[13px] text-gray-500 transition-opacity
-                    peer-focus:opacity-0"
-                >
-                  Address, Airport, Hotel...
-                </span>
-              )}
-
-              {/* Clear button */}
-              {toInput && (
-                <XMarkIcon
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4
-                    cursor-pointer text-gray-400 hover:text-gray-600"
-                  onClick={() => {
-                    setToInput("");
-                    setToPlace(null);
-                    if (toListRef.current) {
-                      toListRef.current.style.display = "none";
-                    }
-                  }}
-                />
-              )}
-
-              {/* Predictions dropdown */}
-              <div
-                ref={toListRef}
-                className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
-              />
-            </div>
-
-            {/* To Flight Number */}
-            {toPlace?.isAirport && (
-            <div className="grid md:grid-cols-1 gap-3">
-              <div className="relative">
+            <div className={`grid grid-cols-1 gap-3 w-full xl:grid-cols-1 ${toPlace?.isAirport ? "md:grid-cols-4" : "md:grid-cols-1"}`}>
+              {/* Drop off Location */}
+              <div className="relative md:col-span-2">
                 {/* Icon */}
-                <FaPlane
+                <MapPinIcon
                   className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
                 />
 
                 {/* Input */}
                 <input
-                  id="toFlightNumber"
-                  value={toFlightNumber}
+                  ref={toInputRef}
+                  value={toInput}
                   placeholder=" "
                   className={`${inputClass} peer pl-10 pt-6`}
-                  onChange={(e) => setToFlightNumber(e.target.value.toUpperCase())}
-                />                
+                  onChange={(e) => {
+                    setToInput(e.target.value);
+                    setToPlace(null);
+                    fetchPredictions(
+                      e.target.value,
+                      toListRef,
+                      toInputRef,
+                      setToInput
+                    );
+                  }}
+
+                  onFocus={(e) => {
+                    setToInput(e.target.value);
+                    setToPlace(null);
+                    fetchPredictions(
+                      e.target.value,
+                      toListRef,
+                      toInputRef,
+                      setToInput
+                    );
+                  }}
+                />
 
                 {/* Floating label */}
                 <label
                   className={`pointer-events-none absolute left-11
                     transition-all duration-200 text-gray-400
                     ${
-                      toFlightNumber
+                      toInput
                         ? "top-2 text-xs"
                         : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
                     }`}
                 >
-                  Flight Number
+                  Drop-off Location
                 </label>
 
                 {/* Helper text */}
-                {!toFlightNumber && (
+                {!toInput && (
                   <span
                     className="pointer-events-none absolute left-11 top-8
                       text-[13px] text-gray-500 transition-opacity
                       peer-focus:opacity-0"
                   >
-                    EK202, UL225..
+                    Address, Airport, Hotel...
                   </span>
                 )}
 
                 {/* Clear button */}
-                {toFlightNumber && (
+                {toInput && (
                   <XMarkIcon
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
-                    onClick={() => setToFlightNumber("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4
+                      cursor-pointer text-gray-400 hover:text-gray-600"
+                    onClick={() => {
+                      setToInput("");
+                      setToPlace(null);
+                      if (toListRef.current) {
+                        toListRef.current.style.display = "none";
+                      }
+                    }}
                   />
                 )}
-              </div>
-              
-            </div>
-            )}
 
-            <div className="grid grid-cols-2 gap-3">
+                {/* Predictions dropdown */}
+                <div
+                  ref={toListRef}
+                  className="absolute z-50 bg-white w-full border rounded-lg mt-1 hidden max-h-100 overflow-y-auto"
+                />
+              </div>
+
+              {/* To Flight Number */}
+              {toPlace?.isAirport && (
+              <div className="grid grid-cols-1 gap-3 md:col-span-2">
+                <div className="relative">
+                  {/* Icon */}
+                  <FaPlane
+                    className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                  />
+
+                  {/* Input */}
+                  <input
+                    id="toFlightNumber"
+                    value={toFlightNumber}
+                    placeholder=" "
+                    className={`${inputClass} peer pl-10 pt-6`}
+                    onChange={(e) => setToFlightNumber(e.target.value.toUpperCase())}
+                  />                
+
+                  {/* Floating label */}
+                  <label
+                    className={`pointer-events-none absolute left-11
+                      transition-all duration-200 text-gray-400
+                      ${
+                        toFlightNumber
+                          ? "top-2 text-xs"
+                          : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                      }`}
+                  >
+                    Flight Number
+                  </label>
+
+                  {/* Helper text */}
+                  {!toFlightNumber && (
+                    <span
+                      className="pointer-events-none absolute left-11 top-8
+                        text-[13px] text-gray-500 transition-opacity
+                        peer-focus:opacity-0"
+                    >
+                      EK202, UL225..
+                    </span>
+                  )}
+
+                  {/* Clear button */}
+                  {toFlightNumber && (
+                    <XMarkIcon
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                      onClick={() => setToFlightNumber("")}
+                    />
+                  )}
+                </div>
+                
+              </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 md:w-full">
               <div className="relative">
                 <CalendarDaysIcon className={iconStyle} />
                 <DatePicker
@@ -1043,7 +1046,7 @@ export default function Search() {
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative w-full">
               <div className="grid grid-cols-1 gap-4">
                 {/* <div className="flex items-center">
                   <button
