@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react'
-import { CalendarDaysIcon, ClockIcon, MapPinIcon } from '@heroicons/react/24/solid';
+import { CalendarDaysIcon, ClockIcon, MapPinIcon, Squares2X2Icon } from '@heroicons/react/24/solid';
 import { formatDate } from "@/app/lib/functions";
 import { FaChild } from 'react-icons/fa';
 
@@ -28,7 +28,7 @@ function Locations({data, seats, display="flex gap-4"}) {
 
         {data.additionalStops && data.additionalStops.length > 0 && (
             <div className="flex items-start gap-3 text-xs md:text-sm mb-3 relative z-10">
-                <MapPinIcon className="w-5 h-5 text-black flex-shrink-0" />
+                <Squares2X2Icon className="w-4 h-4 text-gray-600 flex-shrink-0" />
                 <div>
                     <p className="font-semibold line-clamp-1">{data.additionalStops[0].name}</p>
                     <p className="text-gray-600">{data.additionalStops[0].address}</p>
@@ -41,7 +41,7 @@ function Locations({data, seats, display="flex gap-4"}) {
             <div className="flex items-start gap-2 relative z-10">
                 <MapPinIcon className="w-4 h-4 mt-1 text-red-500 flex-shrink-0" />
                 <div>
-                    <p className="font-semibold text-xs md:text-base">
+                    <p className="font-semibold text-xs md:text-sm">
                     {data.to?.name}
                     </p>
                     <p className="text-gray-600 text-xs md:text-sm">
