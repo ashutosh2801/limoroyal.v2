@@ -61,6 +61,8 @@ function Locations({data, seats, display="flex gap-4"}) {
             <ClockIcon className="w-5 h-5 text-gray-600" />
             <span>{data?.pickupTimeLabel}</span>
         </div>
+    </div>
+    <div className={`${display}`}>
         {data.selectedPassenger > 0 && (
         <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
@@ -80,19 +82,19 @@ function Locations({data, seats, display="flex gap-4"}) {
         </div>
         )}
 
-        {(seats?.infant > 0 || seats?.toddler > 0 || seats?.booster > 0) && (
+        {(data.PickupInfo?.seats?.infant || data.PickupInfo?.seats?.toddler || data.PickupInfo?.seats?.booster) && (
         <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 mt-3">
             <span className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full">
                 <FaChild />
             </span>
-            {seats?.infant > 0 && (
-                <span>{seats?.infant} infant</span>
+            {data.PickupInfo?.seats?.infant > 0 && (
+                <span>{data.PickupInfo?.seats?.infant} infant</span>
             )}
-            {seats?.toddler > 0 && (
-                <span>{seats?.toddler} toddler</span>
+            {data.PickupInfo?.seats?.toddler > 0 && (
+                <span>{data.PickupInfo?.seats?.toddler} toddler</span>
             )}
-            {seats?.booster > 0 && (
-                <span>{seats?.booster} booster</span>
+            {data.PickupInfo?.seats?.booster > 0 && (
+                <span>{data.PickupInfo?.seats?.booster} booster</span>
             )}
         </div>
         )}
