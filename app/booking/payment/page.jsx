@@ -105,11 +105,12 @@ function PaymentForm() {
   const handlePayment = async () => {
 
     if (paymentOption === "quote") {
+      const saveData = {
+        ...data,
+        paymentType: "quote",
+      };
       dispatch(
-        saveSearch({
-          ...data,
-          paymentType: "quote",
-        })
+        saveSearch(saveData)
       );
 
       router.push("/booking/checkout");
@@ -163,16 +164,18 @@ function PaymentForm() {
         saveCard
       };
 
-      dispatch(
-        saveSearch({
+      const saveData = {
           ...data, 
           paymentType: "card", 
           stripeCustomerId: customerId, 
           cardData 
-        })
+        };
+
+      dispatch(
+        saveSearch(saveData)
       );
 
-      console.log("Saved data:", data);
+      console.log("Saved data:", saveData);
 
       // 👉 Save paymentMethodId to your DB
       setSuccess(true);

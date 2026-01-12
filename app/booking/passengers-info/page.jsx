@@ -60,52 +60,6 @@ export default function PickupInfoPage() {
 
   });
 
-  const handleSeatChange = (type, value) => {
-    const newValue = Number(value);
-
-    const newTotal = totalSelected - seats[type] + newValue;
-    // Block if exceeds required seats
-    if (newTotal > requiredSeats) { 
-      showAlert({ text: `You can select a maximum of ${requiredSeats} seats.`});
-      return; 
-    }
-
-    let childPrice = parseInt(newTotal) * parseFloat(childCost);
-    let subTotalPrice = parseFloat(payment?.subTotalPrice);
-    let taxPrice = (subTotalPrice + childPrice) * (13/100);
-    let totalPrice = subTotalPrice + childPrice + taxPrice;
-
-    subTotalPrice = Number(subTotalPrice).toFixed(2);
-    childPrice = Number(childPrice).toFixed(2);
-    taxPrice = Number(taxPrice).toFixed(2);
-    totalPrice = Number(totalPrice).toFixed(2);
-
-    setPayment({
-      subTotalPrice,
-      childPrice,
-      taxPrice,
-      totalPrice,
-      subTotalLabel: `$${subTotalPrice}`,
-      childLabel: `$${childPrice}`,
-      taxLabel: `Tax (13%) $${taxPrice}`,
-      totalLabel: `$${totalPrice}`,
-
-      childSeats: form?.childSeats,
-      totalSelected: newTotal,
-    });
-
-    setForm((prev) => ({
-      ...prev,
-      totalSelected: newTotal,
-    }));
-
-    setSeats((prev) => ({
-      ...prev,
-      [type]: newValue,
-    }));
-  };
-  const isDisabled = (type) => totalSelected >= requiredSeats && seats[type] === 0;
-
   const trip = {
     date: new Date(data.pickupDate).toDateString(),
     time: new Date(data.pickupTime).toLocaleTimeString(),
@@ -143,11 +97,55 @@ export default function PickupInfoPage() {
     tripPurpose: data?.PickupInfo?.tripPurpose || "",
   });
 
-  const [errors, setErrors] = useState({});
+  const handleSeatChange = (type, value) => {
+    const newValue = Number(value);
 
-  useEffect(()=>{
-      console.log(data);
-    }, [data]);
+    const newTotal = totalSelected - seats[type] + newValue;
+    // Block if exceeds required seats
+    if (newTotal > requiredSeats) { 
+      showAlert({ text: `You can select a maximum of ${requiredSeats} seats.`});
+      return; 
+    }
+
+    let childPrice = parseInt(newTotal) * parseFloat(childCost);
+    let subTotalPrice = parseFloat(payment?.subTotalPrice);
+    let taxPrice = (subTotalPrice + childPrice) * (13/100);
+    let totalPrice = subTotalPrice + childPrice + taxPrice;
+
+    subTotalPrice = Number(subTotalPrice).toFixed(2);
+    childPrice = Number(childPrice).toFixed(2);
+    taxPrice = Number(taxPrice).toFixed(2);
+    totalPrice = Number(totalPrice).toFixed(2);
+
+    setPayment({
+      subTotalPrice,
+      childPrice,
+      taxPrice,
+      totalPrice,
+      subTotalLabel: `$${subTotalPrice}`,
+      childLabel: `$${childPrice}`,
+      taxLabel: `Tax (13%) $${taxPrice}`,
+      totalLabel: `$${totalPrice}`,
+
+      childSeats: form?.childSeats,
+      totalSelected: newTotal,
+    });
+
+    setSeats((prev) => ({
+      ...prev,
+      [type]: newValue,
+    }));
+
+    setForm((prev) => ({
+      ...prev,
+      totalSelected: newTotal,
+    }));
+
+  };
+  const isDisabled = (type) => totalSelected >= requiredSeats && seats[type] === 0;
+
+
+  const [errors, setErrors] = useState({});
 
   const validate = () => {
     const newErrors = {};
@@ -201,11 +199,15 @@ export default function PickupInfoPage() {
 
     if (!validate()) {refMsg.current?.scrollIntoView({ behavior: "smooth" }); return;}
 
+    const saveData = { 
+      ...data, PickupInfo: { ...form, seats }, payment
+    };
+
     dispatch(
-      saveSearch({ 
-        ...data, PickupInfo: { ...form }, payment, seats
-      })
+      saveSearch(saveData)
     );
+
+    console.log("Saved data:", saveData);
 
     router.push("/booking/payment");
   };
@@ -991,7 +993,7 @@ export default function PickupInfoPage() {
                         )}
     
                         {/* RETURN TRIP */}
-                        <div className="flex items-center gap-3">
+                        {/* <div className="flex items-center gap-3">
                             <div className="flex items-center gap-2 md:w-[260px]">
                             <span className="w-6 h-6 flex items-center justify-center bg-yellow-600 rounded-full">
                                 <ArrowPathIcon className="w-4 h-4 text-white" />
@@ -1013,7 +1015,7 @@ export default function PickupInfoPage() {
                                             after:bg-white after:w-4 after:h-4 after:rounded-full
                                             after:transition-all peer-checked:after:translate-x-4" />
                             </label>
-                        </div>
+                        </div> */}
     
                         {/* RETURN TRIP FIELDS (SHOW ONLY IF ON) */}
                         {form.returnTrip && (
