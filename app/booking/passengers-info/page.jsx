@@ -8,6 +8,7 @@ import {
   ClockIcon,
   ArrowPathIcon,
   MapPinIcon,
+  Squares2X2Icon
 } from "@heroicons/react/24/solid";
 import {
   CheckCircleIcon as CheckCircleOutlineIcon,
@@ -219,7 +220,7 @@ export default function PickupInfoPage() {
     <div className="min-h-screen">
       <div className="py-10 border-b webBorderColor">
         <div className="container mx-auto px-2">
-          <div className="flex flex-col md:flex-row space-x-5 pt-[80px] md:pt-0 mt-0 md:mt-40">
+          <div className="flex flex-col md:flex-row space-x-5 pt-[90px] md:pt-[20px] xl:pt-0 mt-0 md:mt-20 xl:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
               <div className="sticky top-5 z-50">
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-5">
@@ -254,7 +255,7 @@ export default function PickupInfoPage() {
             {/* Centered white content card */}
             <div className="w-full md:w-2/3 order-1 md:order-2">
               <div className="bg-white rounded-md shadow-xl overflow-hidden text-black mb-5 md:mb-0">
-                <div className="p-4 md:p-8">
+                <div className="p-4 xl:p-8">
 
                   {/* Blacklane Stepper */}
                   <Tabs activeStep={activeStep} />              
@@ -318,7 +319,7 @@ export default function PickupInfoPage() {
                           Book for myself
                         </label>
 
-                        <label className="flex items-center gap-2 text-xs md:text-sm">
+                        <label className="flex items-center gap-2 text-xs xl:text-sm">
                           <input
                             type="radio"
                             name="bookingFor"
@@ -331,8 +332,8 @@ export default function PickupInfoPage() {
                       </div> */}
                     </div>
 
-                    <div className="mb-6 p-3 md:p-4 md:p-6 md:!pr-6 lg:!pr-20 border border-gray-200 rounded-xl space-y-4">
-                      <p className="font-semibold mb-2 text-sm md:text-base">Passenger Details</p>
+                    <div className="mb-6 p-3 lg:p-4 lg:p-6 lg:!pr-6 lg:!pr-20 border border-gray-200 rounded-xl space-y-4">
+                      <p className="font-semibold mb-2 text-sm xl:text-base">Passenger Details</p>
 
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="relative w-full md:w-50">
@@ -360,7 +361,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.title
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             Title
@@ -404,7 +405,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.firstName
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             First Name
@@ -446,7 +447,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.lastName
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             Last Name
@@ -490,7 +491,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.email
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                           >
                             Email Address
@@ -534,7 +535,7 @@ export default function PickupInfoPage() {
                               ${
                                 form.contactNumber
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus-within:top-2 peer-focus-within:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus-within:top-2 peer-focus-within:text-xs"
                               }`}
                           >
                             Contact Number
@@ -567,14 +568,9 @@ export default function PickupInfoPage() {
                                 onChange={() => setForm({ ...form, createAccount: !form.createAccount })}
                                 className="sr-only peer"
                             />
-                            <div className="w-10 h-6 bg-gray-300 peer-checked:bg-yellow-600 rounded-full
-                                            after:content-[''] after:absolute after:top-1 after:left-1
-                                            after:bg-white after:w-4 after:h-4 after:rounded-full
-                                            after:transition-all peer-checked:after:translate-x-4" />
+                            <div className="relative w-10 h-6 bg-gray-300 peer-checked:bg-yellow-600 rounded-full after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-all peer-checked:after:translate-x-4" />
                           </label>
-                          <span className="text-sm font-medium animate-pulse pt-1">
-                          Check this box to securely create an account for faster bookings next time.
-                          </span>
+                          <span className="text-xs xl:text-sm font-medium animate-pulse pt-1">Check this box to securely create an account for faster bookings next time.</span>
                         </div>
 
                         
@@ -582,8 +578,8 @@ export default function PickupInfoPage() {
                     </div>
 
                     {(form.bookingFor === "someoneElse") && (
-                      <div className="mb-6 p-3 md:p-4 md:p-6 md:!pr-6 lg:!pr-20 border border-gray-200 rounded-xl space-y-4">
-                        <p className="font-semibold mb-2 text-sm md:text-base">Booker Details</p>
+                      <div className="mb-6 p-3 lg:p-4 lg:p-6 lg:!pr-6 lg:!pr-20 border border-gray-200 rounded-xl space-y-4">
+                        <p className="font-semibold mb-2 text-sm xl:text-base">Booker Details</p>
 
                         <div className="grid md:grid-cols-2 gap-4">
                           <div className="relative w-full md:w-50">
@@ -611,7 +607,7 @@ export default function PickupInfoPage() {
                                 ${
                                   form.booker_title
                                     ? "top-2 text-xs"
-                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                    : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                                 }`}
                             >
                               Title
@@ -655,7 +651,7 @@ export default function PickupInfoPage() {
                                 ${
                                   form.booker_firstName
                                     ? "top-2 text-xs"
-                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                    : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                                 }`}
                             >
                               First Name
@@ -697,7 +693,7 @@ export default function PickupInfoPage() {
                                 ${
                                   form.booker_lastName
                                     ? "top-2 text-xs"
-                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                    : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                                 }`}
                             >
                               Last Name
@@ -741,7 +737,7 @@ export default function PickupInfoPage() {
                                 ${
                                   form.booker_email
                                     ? "top-2 text-xs"
-                                    : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                    : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                                 }`}
                             >
                               Email Address
@@ -785,7 +781,7 @@ export default function PickupInfoPage() {
                                 ${
                                   form.booker_contactNumber
                                     ? "top-2 text-xs"
-                                    : "top-3 text-[12px] md:text-sm peer-focus-within:top-2 peer-focus-within:text-xs"
+                                    : "top-3 text-[12px] xl:text-sm peer-focus-within:top-2 peer-focus-within:text-xs"
                                 }`}
                             >
                               Contact Number
@@ -809,7 +805,7 @@ export default function PickupInfoPage() {
                       <div className="w-full mt-5 space-y-4">
                       
                         {/* CHILD SEATS */}
-                        <div className="flex flex-col md:flex-row md:items-center gap-3">
+                        <div className="flex flex-col xl:flex-row xl:items-center gap-3">
                           <div className="flex gap-2">
                             <div className="flex items-center gap-2 md:w-[260px]">
                               <span className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full">
@@ -859,7 +855,7 @@ export default function PickupInfoPage() {
                           {/* Child seat selects (SHOW ONLY IF ON) */}
                           {form.childSeats && (
                             <>
-                            <div className="grid md:grid-cols-3 gap-2 md:ml-auto md:w-[60%]">
+                            <div className="grid grid-cols-3 gap-2 xl:ml-auto xl:w-[60%]">
                               <div className="relative">
                                 {/* Select infant */}
                                 <select
@@ -999,7 +995,6 @@ export default function PickupInfoPage() {
                           </p>
                           </div>
                         )}
-                        
     
                         {/* RETURN TRIP */}
                         <div className="flex items-center gap-3">
@@ -1079,14 +1074,14 @@ export default function PickupInfoPage() {
                   <div className="mt-6 flex justify-between">
                     <button
                       onClick={(e) => {e.preventDefault(); router.back(); }}
-                      className="flex py-3 px-3 md:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs md:text-base w-auto transition"
+                      className="flex py-3 px-3 xl:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs xl:text-base w-auto transition"
                     >
-                      <FaChevronLeft className="text-white text-sm mr-1 md:mt-1" />
+                      <FaChevronLeft className="text-white text-xs xl:text-sm mr-1 mt-[2px] xl:mt-1" />
                       Back
                     </button>
                     <button
                       onClick={handleContinue}
-                      className="flex py-3 px-2 md:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs md:text-base w-auto"
+                      className="flex py-3 px-2 xl:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs xl:text-base w-auto"
                     >
                       Continue to Payment/Quote
                       <FaChevronRight className="text-white text-sm ml-1 md:mt-1" />

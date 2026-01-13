@@ -6,7 +6,8 @@ import {
   MapPinIcon,
   UsersIcon,
   BriefcaseIcon,
-  ExclamationCircleIcon
+  ExclamationCircleIcon,
+  Squares2X2Icon
 } from "@heroicons/react/24/solid";
 
 import vClass from "../../../public/assets/sedan/mercedes-benz-s-class.png";
@@ -166,20 +167,25 @@ export default function CheckoutPage() {
     <div className="min-h-screen">
       <div className="py-10 border-b webBorderColor">
         <div className="container mx-auto px-2">
-          <div className="flex flex-col md:flex-row space-x-5 pt-[80px] md:pt-0 mt-0 md:mt-40">
+          <div className="flex flex-col md:flex-row space-x-5 pt-[90px] md:pt-[20px] xl:pt-0 mt-0 md:mt-20 xl:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
               <div className="sticky top-5 z-50">
                 {/* Payment Card */}
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-5">
-                  <h2 className="mb-4 text-lg md:text-lg font-bold border-b border-gray-200 pb-1">Payment details</h2>
+                  <h2 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Payment details</h2>
                   <div className="flex justify-between items-center">
                       <p className="text-sm text-gray-700">Payment</p>
                       <button 
                       onClick={() => router.push("/booking/payment")}
                       className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                   </div>
+<<<<<<< HEAD
                   <b className="text-xs md:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
                   <div className="flex items-center gap-2 text-xs md:text-sm font-medium mt-2">
+=======
+                  <b className="text-xs xl:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
+                  <div className="flex items-center gap-2 text-xs xl:text-sm font-medium mt-2">
+>>>>>>> e925d259844ce9e865eeca9c031a3ec8da90da57
                     {data.paymentType == 'quote' ? <span className="text-green-500">Get a Quote</span> : <>
                       <Image src={visaIcon} alt="Visa" className="h-5 w-auto" />
                       •••• {data.cardData?.last4} ({data.cardData?.brand?.toUpperCase()})
@@ -190,7 +196,7 @@ export default function CheckoutPage() {
                 {/* Billing info */}
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-5">
                     <div>
-                      <h2 className="mb-4 text-lg md:text-lg font-bold border-b border-gray-200 pb-1">Billing Information</h2>
+                      <h2 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Billing Information</h2>
                         <div className="flex justify-between items-center">
                             <p className="text-sm text-gray-700">Billing Information</p>
                             <button 
@@ -198,7 +204,11 @@ export default function CheckoutPage() {
                             onClick={() => router.push("/booking/payment")}
                             className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                         </div>
+<<<<<<< HEAD
                         <b className="text-xs md:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
+=======
+                        <b className="text-xs xl:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
+>>>>>>> e925d259844ce9e865eeca9c031a3ec8da90da57
                     </div>
                 </div>
 
@@ -225,7 +235,7 @@ export default function CheckoutPage() {
             </div>
             <div className="w-full md:w-2/3 order-1 md:order-2">
               <div className="bg-white rounded-md shadow-xl overflow-hidden text-black mb-5 md:mb-0">
-                <div className="p-4 md:p-8">
+                <div className="p-4 xl:p-8">
 
                   {/* ===========================
                       STEP INDICATOR
@@ -236,9 +246,9 @@ export default function CheckoutPage() {
                       TWO COLUMN LAYOUT
                   ============================ */}
                   <div>
-                      <h2 className="text-lg md:text-xl font-bold mb-4">Your ride</h2>
+                      <h2 className="text-lg xl:text-xl font-bold mb-4">Your ride</h2>
 
-                      <div className="border border-gray-200 rounded-xl p-3 md:p-4">
+                      <div className="border border-gray-200 rounded-xl p-3 xl:p-4">
 
                           {/* Title row */}
                           {/* <div className="flex justify-between items-center">
@@ -295,7 +305,7 @@ export default function CheckoutPage() {
                       </div>
 
                       {/* Vehicle Selection Block */}
-                      <div className="mt-6 border border-gray-200 rounded-xl p-3 md:p-4">
+                      <div className="mt-6 border border-gray-200 rounded-xl p-3 xl:p-4">
                           <div className="flex justify-between">
                               <div>
                                 <p className="font-semibold text-xs md:text-sm">{data.selectedVehicle.name}</p>
@@ -346,12 +356,12 @@ export default function CheckoutPage() {
                           <div className="border border-gray-200 rounded-xl bg-white overflow-hidden">
 
                               {/* Guest Name */}
-                              <div className="p-3 md:p-5 flex justify-between items-start border-b border-gray-200">
+                              <div className="p-3 xl:p-5 flex justify-between items-start border-b border-gray-200">
                                 <div>                                    
-                                    <p className="text-sm text-gray-500">Passenger name</p>
-                                    <p className="text-xs md:text-sm font-semibold mt-1">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</p>
-                                    <p className="text-xs md:text-sm text-gray-500 mt-4">Contact details</p>
-                                    <p className="text-xs md:text-sm font-medium mt-1">
+                                    <p className="text-xs xl:text-sm text-gray-500">Passenger name</p>
+                                    <p className="text-xs xl:text-sm font-semibold mt-1">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</p>
+                                    <p className="text-xs xl:text-sm text-gray-500 mt-4">Contact details</p>
+                                    <p className="text-xs xl:text-sm font-medium mt-1">
                                     {`${data.PickupInfo.email} • +${data.PickupInfo.contactNumber}`}
                                     </p>
                                 </div>
@@ -362,12 +372,12 @@ export default function CheckoutPage() {
                               </div>
 
                               {data.PickupInfo.bookingFor === "someoneElse" && (
-                              <div className="p-3 md:p-5 flex justify-between items-start border-b border-gray-200">
+                              <div className="p-3 xl:p-5 flex justify-between items-start border-b border-gray-200">
                                 <div>                                    
-                                    <p className="text-sm text-gray-500">Booker Name</p>
-                                    <p className="text-xs md:text-sm font-semibold mt-1">{`${data.PickupInfo.booker_title} ${data.PickupInfo.booker_firstName} ${data.PickupInfo.booker_lastName}`}</p>
-                                    <p className="text-xs md:text-sm text-gray-500 mt-4">Contact details</p>
-                                    <p className="text-xs md:text-sm font-medium mt-1">
+                                    <p className="text-xs xl:text-sm text-gray-500">Booker Name</p>
+                                    <p className="text-xs xl:text-sm font-semibold mt-1">{`${data.PickupInfo.booker_title} ${data.PickupInfo.booker_firstName} ${data.PickupInfo.booker_lastName}`}</p>
+                                    <p className="text-xs xl:text-sm text-gray-500 mt-4">Contact details</p>
+                                    <p className="text-xs xl:text-sm font-medium mt-1">
                                     {`${data.PickupInfo.booker_email} • +${data.PickupInfo.booker_contactNumber}`}
                                     </p>
                                 </div>
@@ -394,9 +404,9 @@ export default function CheckoutPage() {
                   <div className="mt-6 flex justify-between">
                     <button
                       onClick={(e) => {e.preventDefault(); router.back(); }}
-                      className="flex py-3 px-3 md:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs md:text-base w-auto transition"
+                      className="flex py-3 px-3 xl:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs xl:text-base w-auto transition"
                     >
-                      <FaChevronLeft className="text-white text-sm mr-1 md:mt-1" />
+                      <FaChevronLeft className="text-white text-xs xl:text-sm mr-1 mt-[2px] xl:mt-1" />
                       Back
                     </button>
                     {/* <button

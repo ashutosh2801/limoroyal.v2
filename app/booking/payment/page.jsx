@@ -8,7 +8,8 @@ import {
   ClockIcon,
   MapPinIcon,
   ExclamationCircleIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  Squares2X2Icon
 } from "@heroicons/react/24/solid";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import payment from '../../../public/assets/payment.png'
@@ -196,12 +197,12 @@ function PaymentForm() {
     <div className="min-h-screen">
       <div className="py-10 border-b webBorderColor">
         <div className="container mx-auto px-2">
-          <div className="flex flex-col md:flex-row space-x-5 pt-[80px] md:pt-0 mt-0 md:mt-40">
+          <div className="flex flex-col md:flex-row space-x-5 pt-[90px] md:pt-[20px] xl:pt-0 mt-0 md:mt-20 xl:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
             <div className="sticky top-5 z-50">
               <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
                 <div>
-                  <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Booking Summary</h4>
+                  <h4 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Booking Summary</h4>
                 </div>
                 
                 <Locations data={data} seats={data.seats} display="" />
@@ -231,7 +232,7 @@ function PaymentForm() {
             </div>
             <div className="w-full md:w-2/3 order-1 md:order-2">
               <div className="bg-white rounded-md shadow-xl overflow-hidden text-black mb-5 md:mb-0">
-                <div className="p-4 md:p-8">
+                <div className="p-4 xl:p-8">
 
                     {/* Blacklane Stepper */}
                     <Tabs activeStep={activeStep} />              
@@ -242,7 +243,7 @@ function PaymentForm() {
                     {/* --- Payment Form --- */}
                     {/* <h2 className="mt-7 text-lg md:text-xl font-bold">Add credit or debit card</h2> */}
 
-                    <h2 className="mt-7 text-lg md:text-xl font-bold">
+                    <h2 className="mt-7 text-lg xl:text-xl font-bold">
                       Choose an option
                     </h2>
 
@@ -257,7 +258,7 @@ function PaymentForm() {
                           className="w-4 h-4"
                         />
                         <div>
-                          <p className="font-semibold text-sm md:text-base">
+                          <p className="font-semibold text-sm xl:text-base">
                             Add credit or debit card
                           </p>
                           <p className="text-xs text-gray-500">
@@ -276,7 +277,7 @@ function PaymentForm() {
                           className="w-4 h-4"
                         />
                         <div>
-                          <p className="font-semibold text-sm md:text-base">
+                          <p className="font-semibold text-sm xl:text-base">
                             Get a Quote
                           </p>
                           <p className="text-xs text-gray-500">
@@ -306,7 +307,7 @@ function PaymentForm() {
                               className={`absolute left-3 text-gray-400 pointer-events-none transition-all duration-200 ${
                                 nameOnCard
                                   ? "top-2 text-xs"
-                                  : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
+                                  : "top-3 text-[12px] xl:text-sm peer-focus:top-2 peer-focus:text-xs"
                               }`}
                             >
                               Name on card *
@@ -342,7 +343,7 @@ function PaymentForm() {
                               className={`absolute left-3 text-gray-400 pointer-events-none transition-all duration-200 ${
                                 cardNumber || cardFocused
                                   ? "top-1 text-xs"
-                                  : "top-2 text-[12px] md:text-sm"
+                                  : "top-2 text-[12px] xl:text-sm"
                               }`}
                             >
                               Card Number *
@@ -382,7 +383,7 @@ function PaymentForm() {
                                 className={`absolute left-3 text-gray-400 pointer-events-none transition-all duration-200 ${
                                   cardExpiry || expiryFocused
                                     ? "top-1 text-xs"
-                                    : "top-2 text-[12px] md:text-sm"
+                                    : "top-2 text-[12px] xl:text-sm"
                                 }`}
                               >
                                 Expiration Date *
@@ -411,7 +412,7 @@ function PaymentForm() {
                                 className={`absolute left-3 text-gray-400 pointer-events-none transition-all duration-200 ${
                                   cardCvc || cvcFocused
                                     ? "top-1 text-xs"
-                                    : "top-2 text-[12px] md:text-sm"
+                                    : "top-2 text-[12px] xl:text-sm"
                                 }`}
                               >
                                 CVV *
@@ -453,12 +454,12 @@ function PaymentForm() {
 
                     <div className="mt-5">
                         <div className="border border-gray-200 rounded-xl">
-                            <div className="p-3 md:p-4">
-                                <p className="text-gray-700 text-xs md:text-sm py-2 flex items-center items-start"> <CheckCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> Our Servers are encrypted with TLS/SSL to ensure security and privacy.</p>
+                            <div className="p-3 xl:p-4">
+                                <p className="text-gray-700 text-xs xl:text-sm py-2 flex items-center items-start"> <CheckCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> Our Servers are encrypted with TLS/SSL to ensure security and privacy.</p>
                             </div>
                             <hr className="border-t border-gray-200" />
                             <div className="p-3 md:p-4">
-                                <p className="text-gray-700 text-xs md:text-sm py-2 flex items-center items-start"> <ExclamationCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> The amount will be held from your selected payment method after the booking, We only charge you after the ride is finished.</p>
+                                <p className="text-gray-700 text-xs xl:text-sm py-2 flex items-center items-start"> <ExclamationCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> The amount will be held from your selected payment method after the booking, We only charge you after the ride is finished.</p>
                             </div>
                         </div>
                     </div> 
@@ -467,15 +468,15 @@ function PaymentForm() {
                     <div className="mt-6 flex justify-between">
                       <button
                         onClick={(e) => {e.preventDefault(); router.back(); }}
-                        className="flex py-3 px-3 md:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs md:text-base w-auto transition"
+                        className="flex py-3 px-3 xl:px-10 rounded-md font-medium text-white bg-gray-700 hover:opacity-80 cursor-pointer text-xs xl:text-base w-auto transition"
                       >
-                        <FaChevronLeft className="text-white text-sm mr-1 md:mt-1" />
+                        <FaChevronLeft className="text-white text-xs xl:text-sm mr-1 mt-[2px] xl:mt-1" />
                         Back
                       </button>
                       <button
                         onClick={handlePayment}
                         disabled={processing}
-                        className={`flex py-3 px-3 md:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs md:text-base w-auto ${
+                        className={`flex py-3 px-3 xl:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs xl:text-base w-auto ${
                           processing ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"
                         }`}
                       >
@@ -484,7 +485,7 @@ function PaymentForm() {
                             : paymentOption === "card"
                             ? "Proceed to Checkout"
                             : "Get a Quote"}
-                        <FaChevronRight className="text-white text-sm ml-1 md:mt-1" />
+                        <FaChevronRight className="text-white text-xs xl:text-sm ml-1 mt-[2px] xl:mt-1" />
                       </button>
                     </div>
 
