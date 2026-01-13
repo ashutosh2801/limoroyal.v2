@@ -179,13 +179,8 @@ export default function CheckoutPage() {
                       onClick={() => router.push("/booking/payment")}
                       className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                   </div>
-<<<<<<< HEAD
                   <b className="text-xs md:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
                   <div className="flex items-center gap-2 text-xs md:text-sm font-medium mt-2">
-=======
-                  <b className="text-xs xl:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
-                  <div className="flex items-center gap-2 text-xs xl:text-sm font-medium mt-2">
->>>>>>> e925d259844ce9e865eeca9c031a3ec8da90da57
                     {data.paymentType == 'quote' ? <span className="text-green-500">Get a Quote</span> : <>
                       <Image src={visaIcon} alt="Visa" className="h-5 w-auto" />
                       •••• {data.cardData?.last4} ({data.cardData?.brand?.toUpperCase()})
@@ -204,11 +199,7 @@ export default function CheckoutPage() {
                             onClick={() => router.push("/booking/payment")}
                             className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                         </div>
-<<<<<<< HEAD
                         <b className="text-xs md:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
-=======
-                        <b className="text-xs xl:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
->>>>>>> e925d259844ce9e865eeca9c031a3ec8da90da57
                     </div>
                 </div>
 

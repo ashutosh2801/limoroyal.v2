@@ -168,7 +168,7 @@ export default function BookingSuccess() {
                       </div>
 
                       {
-                        bookData?.location?.stops?.map((stop, i) => (
+                        Object.values(bookData?.location?.stops || {}).map((stop, i) => (
                           <div key={i}>
                             <p className="text-gray-500 text-xs">Stop</p>
                             <p className="font-semibold leading-snug">
@@ -177,6 +177,7 @@ export default function BookingSuccess() {
                           </div>
                         ))
                       }
+
                       <div>
                         <p className="text-gray-500 text-xs">Drop off</p>
                         <p className="font-semibold leading-snug">
