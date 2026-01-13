@@ -30,8 +30,9 @@ export default function Booking() {
   const [selectedIdx, setSelectedIdx] = useState(null);
 
   const { data } = useSelector((state) => state.search);
-  if (!data || !data.pickupDate) {
-    router.push("/booknow"); return;
+  if (!data || Object.keys(data).length === 0) {
+    router.push("/");
+    return;
   }
 
   const trip = {

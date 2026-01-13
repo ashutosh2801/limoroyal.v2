@@ -25,24 +25,24 @@ import Locations from "../../components/Locations";
 export default function CheckoutPage() {
 
   const dispatch = useDispatch();
-
+  const router = useRouter();
+  const activeStep = 3;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState([]);
-  const router = useRouter();
-  const activeStep = 3; // Payment step
 
   const { data } = useSelector((s) => s.search);
+  if (!data || Object.keys(data).length === 0) {
+    router.push("/");
+    return;
+  }
 
-  useEffect(() => {
-    // If no search data, redirect to home
-    if (!data || Object.keys(data).length === 0) {
-      router.push("/");
-      return;
-    }
-
-    // console.log("Checkout Page - Retrieved data:", data);
-  }, [router, data]);
+  // useEffect(() => {
+  //   if (!data || Object.keys(data).length === 0) {
+  //     router.push("/");
+  //     return;
+  //   }
+  // }, [router, data]);
 
   const booknow = async () => {
     try {
@@ -110,8 +110,8 @@ export default function CheckoutPage() {
 
       const result = await createBooking(payload);    
 
-      console.log('result', result);
-      return;
+      // console.log('result', result);
+      // return;
       
       if (result.status != "confirmed") {
         // If the API returns { message: "Validation failed", errors: ["Email is required", ...] }
@@ -178,7 +178,7 @@ export default function CheckoutPage() {
                       onClick={() => router.push("/booking/payment")}
                       className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                   </div>
-                  <b className="text-xs md:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
+                  <b className="text-xs md:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
                   <div className="flex items-center gap-2 text-xs md:text-sm font-medium mt-2">
                     {data.paymentType == 'quote' ? <span className="text-green-500">Get a Quote</span> : <>
                       <Image src={visaIcon} alt="Visa" className="h-5 w-auto" />
@@ -198,7 +198,7 @@ export default function CheckoutPage() {
                             onClick={() => router.push("/booking/payment")}
                             className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                         </div>
-                        <b className="text-xs md:text-sm font-semibold">{`${data.PickupInfo.title} ${data.PickupInfo.firstName} ${data.PickupInfo.lastName}`}</b>
+                        <b className="text-xs md:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
                     </div>
                 </div>
 
@@ -211,7 +211,7 @@ export default function CheckoutPage() {
                       onClick={booknow}
                       disabled={loading}
                       className="w-full py-3 text-white webBG rounded-md hover:opacity-90 text-sm mt-4 cursor-pointer">
-                        {loading ? "Booking..." : data.paymentType == 'quote' ? "Get a Quote Now"  : "Book now"}
+                        {loading ? "Booking..." : data?.paymentType == 'quote' ? "Get a Quote Now"  : "Book now"}
                     </button>
                     {error && (
                       <p className="text-red-500 text-base mt-2">{error}</p>
@@ -380,7 +380,7 @@ export default function CheckoutPage() {
                               <div className="px-3 md:px-5 py-2 flex justify-between items-center">
                                 <div>
                                     <p className="text-sm text-gray-500">Trip Notes</p>
-                                    <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.tripPurpose || "-"}</p>
+                                    <p className="text-xs md:text-sm font-semibold mt-1">{data.PickupInfo.trip_notes || "-"}</p>
                                 </div>
                               </div>                             
 

@@ -224,7 +224,8 @@ export default function Search() {
         if (listEl) listEl.style.display = "none";
 
         const airportData = extractAirportData(place);
-        const fullAddress = `${place.formatted_address ? place.formatted_address : place.name}`;
+        // const fullAddress = `${place.formatted_address ? place.formatted_address : place.name}`;
+        const fullAddress = `${place.name}`;
 
         if (stopIndex !== null) {
           const updated = [...additionalStops];

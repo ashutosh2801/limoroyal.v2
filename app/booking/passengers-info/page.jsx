@@ -33,9 +33,13 @@ export default function PickupInfoPage() {
   const dispatch = useDispatch();
   const activeStep = 1; // Pickup Info
   const { data } = useSelector((state) => state.search);
+  if (!data || Object.keys(data).length === 0) {
+    router.push("/");
+    return;
+  }
 
-  const requiredSeats = data?.requiredSeats || 2; // dynamic (2 or 3)
-  const childCost = data?.childCost || 25;
+  const requiredSeats = data?.selectedVehicle?.numChildSeatAllow || 0; // dynamic (2 or 3)
+  const childCost = data?.selectedVehicle?.perChildSeatPrice || 0;
   const [seats, setSeats] = useState({
     infant: data?.seats?.infant || 0,
     toddler: data?.seats?.toddler || 0,
@@ -93,7 +97,7 @@ export default function PickupInfoPage() {
     // Return Trip
     returnTrip: data?.PickupInfo?.returnTrip || "",
     // Special Requests
-    tripPurpose: data?.PickupInfo?.tripPurpose || "",
+    trip_notes: data?.PickupInfo?.trip_notes || "",
   });
 
   const handleSeatChange = (type, value) => {
@@ -998,7 +1002,7 @@ export default function PickupInfoPage() {
                         
     
                         {/* RETURN TRIP */}
-                        {/* <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3">
                             <div className="flex items-center gap-2 md:w-[260px]">
                             <span className="w-6 h-6 flex items-center justify-center bg-yellow-600 rounded-full">
                                 <ArrowPathIcon className="w-4 h-4 text-white" />
@@ -1020,7 +1024,7 @@ export default function PickupInfoPage() {
                                             after:bg-white after:w-4 after:h-4 after:rounded-full
                                             after:transition-all peer-checked:after:translate-x-4" />
                             </label>
-                        </div> */}
+                        </div>
     
                         {/* RETURN TRIP FIELDS (SHOW ONLY IF ON) */}
                         {form.returnTrip && (
@@ -1037,8 +1041,8 @@ export default function PickupInfoPage() {
                         {/* Input */}
                         <input
                           type="text"
-                          value={form.tripPurpose}
-                          onChange={(e) => setForm({ ...form, tripPurpose: e.target.value })}
+                          value={form.trip_notes}
+                          onChange={(e) => setForm({ ...form, trip_notes: e.target.value })}
                           placeholder=" "
                           className="peer w-full px-3 pt-8 pb-5 text-xs md:text-sm
                             border rounded-xl bg-gray-100 border-gray-200
@@ -1050,7 +1054,7 @@ export default function PickupInfoPage() {
                           className={`absolute left-3 text-gray-400 pointer-events-none
                             transition-all duration-200
                             ${
-                              form.tripPurpose
+                              form.trip_notes
                                 ? "top-2 text-xs"
                                 : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
                             }`}
@@ -1059,7 +1063,7 @@ export default function PickupInfoPage() {
                         </label>
 
                         {/* Helper text inside input */}
-                        {!form.tripPurpose && (
+                        {!form.trip_notes && (
                           <span className="pointer-events-none absolute left-3 top-10 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden md:block">
                             Enter any special requirements or requests for your trip e.g. business visit, child car seats, etc.
                           </span>

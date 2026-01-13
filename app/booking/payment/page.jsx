@@ -41,6 +41,10 @@ function PaymentForm() {
   const activeStep = 2; // Payment step
 
   const { data } = useSelector((s) => s.search);
+  if (!data || Object.keys(data).length === 0) {
+    router.push("/");
+    return;
+  }
 
   const [paymentOption, setPaymentOption] = useState("card");
   const [nameOnCard, setNameOnCard] = useState("");
