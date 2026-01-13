@@ -34,9 +34,13 @@ export default function PickupInfoPage() {
   const dispatch = useDispatch();
   const activeStep = 1; // Pickup Info
   const { data } = useSelector((state) => state.search);
+  if (!data || Object.keys(data).length === 0) {
+    router.push("/");
+    return;
+  }
 
-  const requiredSeats = data?.requiredSeats || 2; // dynamic (2 or 3)
-  const childCost = data?.childCost || 25;
+  const requiredSeats = data?.selectedVehicle?.numChildSeatAllow || 0; // dynamic (2 or 3)
+  const childCost = data?.selectedVehicle?.perChildSeatPrice || 0;
   const [seats, setSeats] = useState({
     infant: data?.seats?.infant || 0,
     toddler: data?.seats?.toddler || 0,
@@ -58,6 +62,43 @@ export default function PickupInfoPage() {
     childSeats: data?.payment?.childSeats || 0,
     totalSelected: data?.payment?.totalSelected || 0,
 
+  });
+
+  const trip = {
+    date: new Date(data.pickupDate).toDateString(),
+    time: new Date(data.pickupTime).toLocaleTimeString(),
+    from: data.from,
+    to: data.to || "",
+    distanceKM: data.distanceKM || "",
+    pickupTimeLabel: data.pickupTimeLabel,
+    estimatedTimeLabel: data.estimatedTimeLabel,
+    durationMinutes: data.tripType == 'oneway' ? data.durationMinutes : data.duration,
+    tripType: data.tripType,
+    duration: data.duration || ""
+  };
+
+  const [form, setForm] = useState({
+    bookingFor: data?.PickupInfo?.bookingFor || "myself",
+    title: data?.PickupInfo?.title || "",
+    firstName: data?.PickupInfo?.firstName || "",
+    lastName: data?.PickupInfo?.lastName || "",
+    email: data?.PickupInfo?.email || "",
+    contactNumber: data?.PickupInfo?.contactNumber || "",
+    createAccount: data?.PickupInfo?.createAccount,
+    // Booker Information
+    booker_title: data?.PickupInfo?.booker_title || "",
+    booker_firstName: data?.PickupInfo?.booker_firstName || "",
+    booker_lastName: data?.PickupInfo?.booker_lastName || "",
+    booker_email: data?.PickupInfo?.booker_email || "",
+    booker_contactNumber: data?.PickupInfo?.booker_contactNumber || "",
+    // Additional Information
+    childSeats: data?.PickupInfo?.childSeats || "",
+    totalSelected,
+    seats: data?.seats || seats,
+    // Return Trip
+    returnTrip: data?.PickupInfo?.returnTrip || "",
+    // Special Requests
+    trip_notes: data?.PickupInfo?.trip_notes || "",
   });
 
   const handleSeatChange = (type, value) => {
@@ -94,60 +135,21 @@ export default function PickupInfoPage() {
       totalSelected: newTotal,
     });
 
+    setSeats((prev) => ({
+      ...prev,
+      [type]: newValue,
+    }));
+
     setForm((prev) => ({
       ...prev,
       totalSelected: newTotal,
     }));
 
-    setSeats((prev) => ({
-      ...prev,
-      [type]: newValue,
-    }));
   };
   const isDisabled = (type) => totalSelected >= requiredSeats && seats[type] === 0;
 
-  const trip = {
-    date: new Date(data.pickupDate).toDateString(),
-    time: new Date(data.pickupTime).toLocaleTimeString(),
-    from: data.from,
-    to: data.to || "",
-    distanceKM: data.distanceKM || "",
-    pickupTimeLabel: data.pickupTimeLabel,
-    estimatedTimeLabel: data.estimatedTimeLabel,
-    durationMinutes: data.tripType == 'oneway' ? data.durationMinutes : data.duration,
-    tripType: data.tripType,
-    duration: data.duration || ""
-  };
-
-  const [form, setForm] = useState({
-    bookingFor: data?.PickupInfo?.bookingFor || "myself",
-    title: data?.PickupInfo?.title || "",
-    firstName: data?.PickupInfo?.firstName || "",
-    lastName: data?.PickupInfo?.lastName || "",
-    email: data?.PickupInfo?.email || "",
-    contactNumber: data?.PickupInfo?.contactNumber || "",
-    createAccount: data?.PickupInfo?.createAccount,
-    // Booker Information
-    booker_title: data?.PickupInfo?.booker_title || "",
-    booker_firstName: data?.PickupInfo?.booker_firstName || "",
-    booker_lastName: data?.PickupInfo?.booker_lastName || "",
-    booker_email: data?.PickupInfo?.booker_email || "",
-    booker_contactNumber: data?.PickupInfo?.booker_contactNumber || "",
-    // Additional Information
-    childSeats: data?.PickupInfo?.childSeats || "",
-    totalSelected,
-    seats: data?.seats || seats,
-    // Return Trip
-    returnTrip: data?.PickupInfo?.returnTrip || "",
-    // Special Requests
-    tripPurpose: data?.PickupInfo?.tripPurpose || "",
-  });
 
   const [errors, setErrors] = useState({});
-
-  useEffect(()=>{
-      console.log(data);
-    }, [data]);
 
   const validate = () => {
     const newErrors = {};
@@ -201,11 +203,15 @@ export default function PickupInfoPage() {
 
     if (!validate()) {refMsg.current?.scrollIntoView({ behavior: "smooth" }); return;}
 
+    const saveData = { 
+      ...data, PickupInfo: { ...form, seats }, payment
+    };
+
     dispatch(
-      saveSearch({ 
-        ...data, PickupInfo: { ...form }, payment, seats
-      })
+      saveSearch(saveData)
     );
+
+    console.log("Saved data:", saveData);
 
     router.push("/booking/payment");
   };
@@ -1030,8 +1036,8 @@ export default function PickupInfoPage() {
                         {/* Input */}
                         <input
                           type="text"
-                          value={form.tripPurpose}
-                          onChange={(e) => setForm({ ...form, tripPurpose: e.target.value })}
+                          value={form.trip_notes}
+                          onChange={(e) => setForm({ ...form, trip_notes: e.target.value })}
                           placeholder=" "
                           className="peer w-full px-3 pt-8 pb-5 text-xs md:text-sm
                             border rounded-xl bg-gray-100 border-gray-200
@@ -1043,7 +1049,7 @@ export default function PickupInfoPage() {
                           className={`absolute left-3 text-gray-400 pointer-events-none
                             transition-all duration-200
                             ${
-                              form.tripPurpose
+                              form.trip_notes
                                 ? "top-2 text-xs"
                                 : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
                             }`}
@@ -1052,7 +1058,7 @@ export default function PickupInfoPage() {
                         </label>
 
                         {/* Helper text inside input */}
-                        {!form.tripPurpose && (
+                        {!form.trip_notes && (
                           <span className="pointer-events-none absolute left-3 top-10 text-[12px] text-gray-500 transition-opacity peer-focus:opacity-0 hidden md:block">
                             Enter any special requirements or requests for your trip e.g. business visit, child car seats, etc.
                           </span>
