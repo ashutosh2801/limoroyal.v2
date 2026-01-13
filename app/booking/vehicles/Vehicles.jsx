@@ -400,7 +400,7 @@ export default function Booking() {
                                 </div>
 
                                 {/* price */}
-                                <div className="text-right md:w-70 xl:w-40 mt-8 md:mt-0">
+                                <div className="text-right md:w-70 xl:w-[30rem] mt-8 md:mt-0">
                                   <div className="text-[10px] md:text-base xl:text-base font-medium text-red-300 line-through">{v.offerPrice}</div>
                                   <div className="text-xs md:text-lg xl:text-2xl font-bold md:mt-1 md:mb-1">{v.price}</div>
                                   <div>
