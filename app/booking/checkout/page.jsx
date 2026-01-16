@@ -17,7 +17,6 @@ import ReturnTrip from "./ReturnTrip";
 export default function CheckoutPage() {
   const dispatch = useDispatch();
   const router = useRouter();
-  const activeStep = 3;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState([]);
@@ -27,6 +26,9 @@ export default function CheckoutPage() {
     router.push("/");
     return;
   }
+
+  const hasReturnTrip = Boolean(data?.PickupInfo?.returnTrip);
+  const activeStep = hasReturnTrip ? 5 : 3;
 
   const booknow = async () => {
     try {
@@ -127,6 +129,19 @@ export default function CheckoutPage() {
     }
   };
 
+  const [collapse, setCollapse] = useState({
+    booking: true,
+    returnBooking: true,
+    price: true,
+  });
+
+  const toggleCollapse = (key) => {
+    setCollapse((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   return (
     <div className="min-h-screen">
       <div className="py-10 border-b webBorderColor">
@@ -167,9 +182,28 @@ export default function CheckoutPage() {
                         <b className="text-xs md:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
                     </div>
                 </div>
+                
 
-                {/* Price breakdown */}
-                <PriceBreakdown paymentData={data.returnData?.payment || data.payment} oldData={data.returnData?.payment ?data.payment : null} /> 
+                <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
+                  <div
+                    className="flex justify-between items-center cursor-pointer border-b border-gray-200 pb-1"
+                    onClick={() => toggleCollapse("price")}
+                  >
+                    <h4 className="text-sm xl:text-lg font-bold">
+                      Price breakdown
+                    </h4>
+                    <span className="text-xl font-bold">
+                      {collapse.price ? "−" : "+"}
+                    </span>
+                  </div>
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ${
+                      collapse.price ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <PriceBreakdown paymentData={data.returnData?.payment || data.payment} oldData={data.returnData?.payment ?data.payment : null} />
+                  </div>
+                </div> 
 
                 {/* Book now button */}
                 <div>
@@ -196,7 +230,7 @@ export default function CheckoutPage() {
                   {/* ===========================
                       STEP INDICATOR
                   ============================ */}
-                  <Tabs activeStep={activeStep} />     
+                  <Tabs activeStep={activeStep} hasReturnTrip={hasReturnTrip} />
 
                   {/* ===========================
                       TWO COLUMN LAYOUT
