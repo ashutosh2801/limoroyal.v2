@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { getAlphabetLabel } from "../lib/functions";
 
-export default function RouteMap() {
+export default function RouteMap({isReturn=false}) {
   const mapRef = useRef(null);
   const movingMarkerRef = useRef(null);
   const routePathRef = useRef([]);
@@ -22,30 +22,30 @@ export default function RouteMap() {
         mapRef.current
       ) {
         clearInterval(interval);
-        initMap();
+        initMap( isReturn ? data.returnData : data);
       }
     }, 100);
 
     return () => clearInterval(interval);
   }, [data]);
 
-  function initMap() {
+  function initMap(d) {
 
     if (
-    !data ||
-    !data.from?.lat ||
-    !data.from?.lng ||
-    !data.to?.lat ||
-    !data.to?.lng
+    !d ||
+    !d.from?.lat ||
+    !d.from?.lng ||
+    !d.to?.lat ||
+    !d.to?.lng
     ) {
         return;
     }
 
-    const pointA = { lat: data?.from?.lat, lng: data?.from?.lng };
-    const stops = Array.isArray(data.additionalStops)
-                  ? data.additionalStops.filter(s => s?.lat && s?.lng)
+    const pointA = { lat: d?.from?.lat, lng: d?.from?.lng };
+    const stops = Array.isArray(d.additionalStops)
+                  ? d.additionalStops.filter(s => s?.lat && s?.lng)
                   : [];
-    const pointB = { lat: data?.to?.lat, lng: data?.to?.lng };
+    const pointB = { lat: d?.to?.lat, lng: d?.to?.lng };
 
     const map = new window.google.maps.Map(mapRef.current, {
       zoom: 14,

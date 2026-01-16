@@ -17,6 +17,7 @@ import { FaCarSide, FaPlane } from "react-icons/fa";
 import { startSearch, saveSearch } from "@/store/searchSlice";
 import { extractAirportData, convertTime, canAddAnotherStop } from "@/app/lib/functions";
 import { showAlert } from "@/app/lib/alert";
+import { combineDateAndTime } from "@/app/lib/calculateTripPrice";
 
 export default function Search() {
 
@@ -208,14 +209,7 @@ export default function Search() {
     placesService.current.getDetails(
       {
         placeId,
-        fields: [
-                  "name",
-                  "formatted_address",
-                  "geometry",
-                  "place_id",
-                  "types",
-                  "address_components"
-                ],
+        fields: ["name", "formatted_address", "geometry", "place_id", "types", "address_components"],
       },
       (place, status) => {
         if (status !== window.google.maps.places.PlacesServiceStatus.OK) return;
@@ -225,26 +219,17 @@ export default function Search() {
 
         const airportData = extractAirportData(place);
         // const fullAddress = `${place.formatted_address ? place.formatted_address : place.name}`;
-        const fullAddress = `${place.name}`;
+        const fullAddress = `${place.formatted_address}`;
 
         if (stopIndex !== null) {
           const updated = [...additionalStops];
           updated[stopIndex] = {
-            ...updated[stopIndex],   // 👈 REQUIRED
+            ...updated[stopIndex],   // REQUIRED
             name: place.name,
             address: place.formatted_address,
             lat: place.geometry.location.lat(),
             lng: place.geometry.location.lng(),
           };
-          // updated[stopIndex] = {
-          //   input: fullAddress,
-          //   place: {
-          //     name: place.name,
-          //     address: place.formatted_address,
-          //     lat: place.geometry.location.lat(),
-          //     lng: place.geometry.location.lng(),
-          //   },
-          // };
           setAdditionalStops(updated);
           listEl.style.display = "none";
           return;
@@ -274,7 +259,7 @@ export default function Search() {
   };
 
   // ---------------- DISTANCE (MILES) ----------------
-  const getRouteDetails = (from, to, pickupDateTime = null) => {
+  const getRouteDetails = (from, to, stops, pickupDateTime = null) => {
     return new Promise((resolve, reject) => {
       if (!directionsService.current) {
         reject("Directions service not ready");
@@ -285,60 +270,44 @@ export default function Search() {
         {
           origin: { lat: from.lat, lng: from.lng },
           destination: { lat: to.lat, lng: to.lng },
+          waypoints: stops.map((s) => ({
+            location: { lat: s.lat, lng: s.lng },
+            stopover: true,
+          })),
           travelMode: window.google.maps.TravelMode.DRIVING,
-          unitSystem: google.maps.UnitSystem.IMPERIAL,
-
-          // THIS IS THE KEY PART
           drivingOptions: {
-            departureTime: pickupDateTime || new Date(), // now OR selected pickup time
+            departureTime: pickupDateTime || new Date(),
             trafficModel: window.google.maps.TrafficModel.BEST_GUESS,
           },
-
-          // Optional but recommended
           provideRouteAlternatives: true,
         },
         (result, status) => {
-          if (status !== "OK" || !result?.routes?.length) {
-            reject("Route not found");
-            return;
-          }
+          if (status !== "OK") return reject("Route not found");
 
-          const route = result.routes[0];
-          // const leg = route.legs[0];
-          const bestRoute = result.routes.reduce((a, b) =>
-            a.legs[0].distance.value < b.legs[0].distance.value ? a : b
-          );
+          const bestRoute = result.routes.reduce((a, b) => {
+            const da = a.legs.reduce((s, l) => s + l.distance.value, 0);
+            const db = b.legs.reduce((s, l) => s + l.distance.value, 0);
+            return da < db ? a : b;
+          });
 
-          const leg = bestRoute.legs[0];
+          let dist = 0;
+          let dur = 0;
+
+          bestRoute.legs.forEach((l) => {
+            dist += l.distance.value;
+            dur += l.duration_in_traffic?.value || l.duration.value;
+          });
 
           resolve({
-            distanceMiles: Number((leg.distance.value / 1609.34).toFixed(2)),
-            distanceKM: Number((leg.distance.value / 1000).toFixed(2)),
-
-            // 👇 USE duration_in_traffic
-            durationMinutes: Math.ceil(
-              (leg.duration_in_traffic?.value || leg.duration.value) / 60
-            ),
-
-            routeDescription: route.summary || "Fastest available route",
-            highlights: route.warnings || [],
+            distanceMiles: Number((dist / 1609.34).toFixed(2)),
+            distanceKM: Number((dist / 1000).toFixed(2)),
+            durationMinutes: Math.ceil(dur / 60),
+            routeDescription: bestRoute.summary,
+            highlights: bestRoute.warnings || [],
           });
         }
       );
     });
-  };
-
-  // ---------------- Combine Date And Time ----------------
-  const combineDateAndTime = (date, time) => {
-    const d = new Date(date);
-    const t = new Date(time);
-
-    d.setHours(t.getHours());
-    d.setMinutes(t.getMinutes());
-    d.setSeconds(0);
-    d.setMilliseconds(0);
-
-    return d;
   };
 
   const time12HrOptions = {
@@ -401,7 +370,7 @@ export default function Search() {
       const pickupDateTime = combineDateAndTime( pickupDate, pickupTime );
 
       // Get Route Details
-      const routeDetails = await getRouteDetails(fromPlace, toPlace, pickupDateTime);
+      const routeDetails = await getRouteDetails(fromPlace, toPlace, additionalStops, pickupDateTime);
 
       // Estimated Arrival = pickup + duration
       const estimatedTime = new Date( pickupDateTime.getTime() + routeDetails.durationMinutes * 60 * 1000 );
@@ -449,7 +418,7 @@ export default function Search() {
 
       router.push("/booking/vehicles");
     } catch (err) {
-      setLoading(false);
+      //setLoading(false);
       console.error(err);
       showAlert({ text: `Unable to calculate route. Please try again. ${err.message || err}` });
     }
@@ -527,7 +496,7 @@ export default function Search() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-2 py-3 text-sm font-semibold ${
+              className={`px-2 py-3 text-sm font-semibold cursor-pointer ${
                 activeTab === tab ? "bg-white" : "bg-gray-100"
               }`}
             >

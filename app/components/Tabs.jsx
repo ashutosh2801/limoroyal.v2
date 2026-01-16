@@ -1,13 +1,14 @@
 import React from "react";
 
-const steps = [
-  "Service Class",
-  "Passenger Details",
-  "Payment",
-  "Checkout",
-];
+function Tabs({ activeStep, hasReturnTrip=false }) {
+  const steps = [
+    "Service Class",
+    "Passenger Details",
+    // hasReturnTrip ? "Return Trip" : "",
+    "Payment",
+    "Checkout",
+  ];
 
-function Tabs({ activeStep }) {
   return (
     <div className="relative w-full max-w-3xl mx-auto pb-5">
       
@@ -34,7 +35,7 @@ function Tabs({ activeStep }) {
             >
               {/* Step Label */}
               <span
-                className={`mb-5 text-[9px] lg:text-base xl:text-sm font-semibold line-clamp-1 ${
+                className={`mb-5 text-[9px] lg:text-base xl:text-sm font-semibold line-clamp-1  ${
                   isCompleted || isActive
                     ? "text-black"
                     : "text-gray-400"
