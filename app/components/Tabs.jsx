@@ -1,19 +1,27 @@
 import React from "react";
 
 function Tabs({ activeStep, hasReturnTrip=false }) {
-  const steps = [
-    "Service Class",
-    "Passenger Details",
-    // hasReturnTrip ? "Return Trip" : "",
-    "Payment",
-    "Checkout",
-  ];
+  const steps = hasReturnTrip
+  ? [
+      "Service Class",
+      "Passenger Details",
+      "Return Vehicles",
+      "Return Passenger Details",
+      "Payment",
+      "Checkout",
+    ]
+  : [
+      "Service Class",
+      "Passenger Details",
+      "Payment",
+      "Checkout",
+    ];
 
   return (
-    <div className="relative w-full max-w-3xl mx-auto pb-5">
+    <div className="relative w-full mx-auto pb-5">
       
       {/* Background line */}
-      <div className="absolute top-8 md:top-7 lg:top-9 xl:top-8 left-0 right-0 h-[2px] bg-black" />
+      <div className="absolute top-8 md:top-7 lg:top-7 xl:top-8 left-0 right-0 h-[2px] bg-black" />
 
       {/* Progress line */}
       {/* <div
@@ -35,7 +43,7 @@ function Tabs({ activeStep, hasReturnTrip=false }) {
             >
               {/* Step Label */}
               <span
-                className={`mb-5 text-[9px] lg:text-base xl:text-sm font-semibold line-clamp-1  ${
+                className={`mb-5 text-[9px] lg:text-[9px] xl:text-xs font-semibold line-clamp-1  ${
                   isCompleted || isActive
                     ? "text-black"
                     : "text-gray-400"
@@ -47,7 +55,7 @@ function Tabs({ activeStep, hasReturnTrip=false }) {
               {/* Step Circle */}
               <div
                 className={`
-                  w-5 h-5 md:w-6 md:h-6 text-xs md:text-base flex items-center justify-center rounded-full z-10 mt-[-10px] md:mt-[-18px]
+                  w-5 h-5 md:w-6 md:h-6 text-xs xl:text-base flex items-center justify-center rounded-full z-10 mt-[-10px] md:mt-[-18px]
                   ${
                     isCompleted
                       ? "webBG text-white"

@@ -30,7 +30,7 @@ const AccountSidebar = ({ active, children }) => {
 
       {/* Content */}
       <div className="container mx-auto px-4 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-20 md:mt-0 mb-15 md:mb-0">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-20 lg:mt-0 mb-15 lg:mb-0">
 
           {/* Sidebar */}
           <aside className="bg-[#0a0a0a] border border-gray-900 rounded-xl py-6 h-fit">
@@ -51,7 +51,7 @@ const AccountSidebar = ({ active, children }) => {
           </aside>
 
           {/* Page Content */}
-          <section className="lg:col-span-3 bg-[#0a0a0a] border border-gray-900 rounded-xl p-4 md:p-8">
+          <section className="lg:col-span-3 bg-[#0a0a0a] border border-gray-900 rounded-xl p-4 lg:p-8">
             {children}
           </section>
 
