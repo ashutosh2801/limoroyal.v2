@@ -249,6 +249,19 @@ export default function PickupInfoPage() {
 
   };
 
+  const [collapse, setCollapse] = useState({
+      booking: true,
+      returnBooking: true,
+      price: true,
+    });
+  
+    const toggleCollapse = (key) => {
+      setCollapse((prev) => ({
+        ...prev,
+        [key]: !prev[key],
+      }));
+    };
+
   return (
     <div className="min-h-screen">
       <div className="py-10 border-b webBorderColor">
@@ -256,17 +269,47 @@ export default function PickupInfoPage() {
           <div className="flex flex-col md:flex-row space-x-5 pt-[90px] md:pt-[20px] xl:pt-0 mt-0 md:mt-20 xl:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
               <div className="sticky top-5 z-50">
-                <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-5">
-                  <div>
-                    <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Pickup Trip Details</h4>
+                <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
+                  <div
+                    className="flex justify-between items-center cursor-pointer border-b border-gray-200 pb-1"
+                    onClick={() => toggleCollapse("booking")}
+                  >
+                    <h4 className="text-sm xl:text-lg font-bold">
+                      Booking Summary
+                    </h4>
+                    <span className="text-xl font-bold">
+                      {collapse.booking ? "−" : "+"}
+                    </span>
+                  </div>   
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ${
+                      collapse.booking ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <Locations data={data} seats={data.seats} display="" />
                   </div>
+                </div>
 
-                  <Locations data={data} display="" />
-
-                </div>                
-
-                {/* Price breakdown */}
-                <PriceBreakdown paymentData={payment} />                
+                <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
+                  <div
+                    className="flex justify-between items-center cursor-pointer border-b border-gray-200 pb-1"
+                    onClick={() => toggleCollapse("price")}
+                  >
+                    <h4 className="text-sm xl:text-lg font-bold">
+                      Price breakdown
+                    </h4>
+                    <span className="text-xl font-bold">
+                      {collapse.price ? "−" : "+"}
+                    </span>
+                  </div>
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ${
+                      collapse.price ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <PriceBreakdown paymentData={data.payment} />
+                  </div>
+                </div>               
 
               </div>
             </div>
@@ -276,7 +319,10 @@ export default function PickupInfoPage() {
                 <div className="p-4 xl:p-8">
 
                   {/* Blacklane Stepper */}
-                  <Tabs activeStep={activeStep} />              
+                  <Tabs
+                    activeStep={activeStep}
+                    hasReturnTrip={form.returnTrip}
+                  />              
 
                   {/* Vehicles grid */}                  
                   {/* <VehiclesGrid />                       */}

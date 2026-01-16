@@ -27,7 +27,7 @@ import PriceBreakdown from "@/app/components/PriceBreakdown";
 export default function Booking() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const activeStep = 5; // Service Class
+  const activeStep = 2; // Service Class
   const [submiting, setSubmitting] = useState(false);
   
   const [selectedIdx, setSelectedIdx] = useState(null);
@@ -196,6 +196,18 @@ export default function Booking() {
     });
   };
 
+  const [collapse, setCollapse] = useState({
+    booking: true,
+    returnBooking: true,
+    price: true,
+  });
+
+  const toggleCollapse = (key) => {
+    setCollapse((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
   return (
     <div className="min-h-screen">
@@ -205,21 +217,67 @@ export default function Booking() {
             <div className="w-full md:w-1/3 order-2 md:order-1">
               <div className="sticky top-5 z-50">
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
-                  <div>
-                    <h4 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Booking Summary</h4>
-                  </div>                  
-                  <Locations data={data} seats={data.seats} display="" />
+                  <div
+                    className="flex justify-between items-center cursor-pointer border-b border-gray-200 pb-1"
+                    onClick={() => toggleCollapse("booking")}
+                  >
+                    <h4 className="text-sm xl:text-lg font-bold">
+                      Booking Summary
+                    </h4>
+                    <span className="text-xl font-bold">
+                      {collapse.booking ? "−" : "+"}
+                    </span>
+                  </div>   
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ${
+                      collapse.booking ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <Locations data={data} seats={data.seats} display="" />
+                  </div>
                 </div>
 
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
-                  <div>
-                    <h4 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Return Trip Booking Summary</h4>
-                  </div>                  
-                  <Locations data={data.returnData} display="" />
+                  <div
+                    className="flex justify-between items-center cursor-pointer border-b border-gray-200 pb-1"
+                    onClick={() => toggleCollapse("returnBooking")}
+                  >
+                    <h4 className="text-sm xl:text-lg font-bold">
+                      Return Trip Booking Summary
+                    </h4>
+                    <span className="text-xl font-bold">
+                      {collapse.returnBooking ? "−" : "+"}
+                    </span>
+                  </div>
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ${
+                      collapse.returnBooking ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <Locations data={data.returnData} display="" />
+                  </div>
                 </div>
 
-                {/* Price breakdown */}
-                <PriceBreakdown paymentData={data.payment} />
+                <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
+                  <div
+                    className="flex justify-between items-center cursor-pointer border-b border-gray-200 pb-1"
+                    onClick={() => toggleCollapse("price")}
+                  >
+                    <h4 className="text-sm xl:text-lg font-bold">
+                      Price breakdown
+                    </h4>
+                    <span className="text-xl font-bold">
+                      {collapse.price ? "−" : "+"}
+                    </span>
+                  </div>
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ${
+                      collapse.price ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <PriceBreakdown paymentData={data.payment} />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -229,7 +287,7 @@ export default function Booking() {
               <div className="bg-white rounded-md shadow-xl text-black mb-5 md:mb-0">
                 <div className="p-3 xl:p-8">
                   {/* Blacklane Stepper */}
-                  <Tabs activeStep={activeStep} />              
+                  <Tabs activeStep={2} hasReturnTrip />             
 
                   {/* Trip summary (date,time,from,to) */}
                   {/* <TripSummary trip={trip} /> */}

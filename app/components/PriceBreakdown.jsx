@@ -5,9 +5,8 @@ import React from 'react'
 export default function PriceBreakdown({paymentData, oldData=null}) {    
     
     return (
-    <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-5">
-        <h2 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Price breakdown</h2>
-        <div className="text-xs md:text-sm">
+    <div>
+        <div className="relative mt-4 text-xs md:text-sm">
             <div className="flex justify-between py-1">
                 <span className="text-gray-700">Price {oldData!=null ? '(+ retrun trip)':''} excl. tax</span>
                 <span>{paymentData?.subTotalLabel}</span>
