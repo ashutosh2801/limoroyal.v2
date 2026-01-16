@@ -29,7 +29,7 @@ const Login = () => {
       </div>
 
       {/* Card */}
-      <div className="flex items-center justify-center px-4 relative mt-20 md:mt-0 mb-15 md:mb-0">
+      <div className="flex items-center justify-center px-4 relative mt-20 lg:mt-0 mb-15 lg:mb-0">
         <div className="relative z-10 w-full max-w-lg bg-[#0a0a0a] backdrop-blur-xl border border-gray-900 rounded-2xl p-4 md:p-8 shadow-2xl">
 
           {/* ================= FORGOT PASSWORD ================= */}
@@ -149,7 +149,7 @@ const Login = () => {
                     <button
                       type="button"
                       onClick={() => setIsForgotPassword(true)}
-                      className="webColor hover:underline"
+                      className="webColor hover:underline cursor-pointer"
                     >
                       Forgot password?
                     </button>
@@ -158,7 +158,7 @@ const Login = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-3 mt-2 webBG text-white font-semibold rounded-lg transition cursor-pointer"
+                  className="w-full py-3 mt-2 webBG text-white font-semibold rounded-lg transition hover:opacity-90 cursor-pointer"
                 >
                   {isLogin ? "Login" : "Create Account"}
                 </button>

@@ -23,27 +23,53 @@ const Orders = () => {
         </p>
       </div>
 
-      {/* Order Card */}
-      <div className="bg-black border border-gray-800 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <p className="text-white font-medium">Order #LR-1024</p>
+      <div className="space-y-4">
+        {/* Order Card */}
+        <div className="bg-black border border-gray-800 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p className="text-white font-medium">Order #LR-1024</p>
 
-          <div className="flex items-center gap-3 text-sm text-gray-400 mt-2">
-            <CalendarDaysIcon className="w-4 h-4" />
-            <span>12 Jan 2026</span>
+            <div className="flex items-center gap-3 text-sm text-gray-400 mt-2">
+              <CalendarDaysIcon className="w-4 h-4" />
+              <span>12 Jan 2026</span>
+            </div>
+
+            <p className="text-sm mt-2 webColor">Completed</p>
           </div>
 
-          <p className="text-sm mt-2 webColor">Completed</p>
+          <div className="flex items-center gap-4">
+            <span className="text-white font-semibold text-lg">$450</span>
+            <button
+              onClick={() => setOpen(true)}
+              className="webBG px-6 py-2 rounded-lg text-sm font-medium text-white hover:opacity-90 transition cursor-pointer"
+            >
+              View
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <span className="text-white font-semibold text-lg">$450</span>
-          <button
-            onClick={() => setOpen(true)}
-            className="webBG px-6 py-2 rounded-lg text-sm font-medium text-white hover:opacity-90 transition cursor-pointer"
-          >
-            View
-          </button>
+        {/* Order Card */}
+        <div className="bg-black border border-gray-800 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p className="text-white font-medium">Order #LR-1024</p>
+
+            <div className="flex items-center gap-3 text-sm text-gray-400 mt-2">
+              <CalendarDaysIcon className="w-4 h-4" />
+              <span>12 Jan 2026</span>
+            </div>
+
+            <p className="text-sm mt-2 webColor">Completed</p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span className="text-white font-semibold text-lg">$450</span>
+            <button
+              onClick={() => setOpen(true)}
+              className="webBG px-6 py-2 rounded-lg text-sm font-medium text-white hover:opacity-90 transition cursor-pointer"
+            >
+              View
+            </button>
+          </div>
         </div>
       </div>
 
