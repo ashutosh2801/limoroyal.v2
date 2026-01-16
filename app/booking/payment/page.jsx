@@ -205,27 +205,23 @@ function PaymentForm() {
                   <h4 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Booking Summary</h4>
                 </div>
                 
-                <Locations data={data} seats={data.seats} display="" />
+                <Locations data={data} display="" />
 
               </div>
-
-              <div className="bg-white rounded-md shadow-xl overflow-hidden text-black p-1 mb-4">
-                  {/* <div className="h-80 w-full rounded-xl overflow-hidden">
-                    <RouteMap />                     
-                  </div> */}
-                  <div className="mt-4 mb-2 text-xs md:text-sm text-gray-600 flex gap-5 px-3"> 
-                    {data.distanceKM && (<p className="flex gap-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M10.8 16C12.7882 16 14.4 14.3882 14.4 12.4L14.4 3.2L15.2 3.2C15.5235 3.2 15.8153 3.00512 15.9391 2.70616C16.0629 2.4072 15.9945 2.06312 15.7657 1.83432L14.1657 0.23432C13.8532 -0.0780794 13.3467 -0.0780795 13.0343 0.23432L11.4343 1.83432C11.2055 2.06312 11.137 2.4072 11.2609 2.70616C11.3847 3.00512 11.6764 3.2 12 3.2L12.8 3.2L12.8 12.4C12.8 13.5046 11.9045 14.4 10.8 14.4C9.69541 14.4 8.8 13.5046 8.8 12.4L8.8 3.6C8.8 1.61176 7.18824 -7.70349e-07 5.2 -9.44166e-07C3.21176 -1.11798e-06 1.6 1.61176 1.6 3.6L1.6 11.3366C0.667839 11.666 -1.60618e-06 12.555 -1.69753e-06 13.6C-1.81341e-06 14.9255 1.07448 16 2.4 16C3.72552 16 4.8 14.9255 4.8 13.6C4.8 12.555 4.13216 11.666 3.2 11.3366L3.2 3.6C3.2 2.49544 4.09544 1.6 5.2 1.6C6.30456 1.6 7.2 2.49544 7.2 3.6L7.2 12.4C7.2 14.3882 8.81176 16 10.8 16Z"></path></svg> {trip.distanceKM} km
-                    </p>)}
-                    <p className="flex gap-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M10.3904 10.0572C10.1976 10.0572 10.0145 10.003 9.86024 9.89458L7.46988 8.21386C7.24819 8.06024 7.11325 7.80723 7.11325 7.54518V4.18373C7.11325 3.72289 7.50843 3.35241 8 3.35241C8.49157 3.35241 8.88675 3.72289 8.88675 4.18373V7.12952L10.9205 8.55723C11.1133 8.69277 11.2289 8.88253 11.2675 9.10843C11.2964 9.3253 11.2386 9.5512 11.094 9.72289C10.9301 9.93072 10.6699 10.0572 10.3807 10.0572H10.3904Z"></path><path d="M8 15C3.58554 15 0 11.6386 0 7.5C0 3.36145 3.58554 0 8 0C12.4145 0 16 3.36145 16 7.5C16 11.6386 12.4145 15 8 15ZM8 1.66265C4.56867 1.66265 1.77349 4.28313 1.77349 7.5C1.77349 10.7169 4.56867 13.3373 8 13.3373C11.4313 13.3373 14.2265 10.7169 14.2265 7.5C14.2265 4.28313 11.4313 1.66265 8 1.66265Z"></path></svg>
-                      {data.durationMinutes}
-                    </p>
-                  </div>
+              {data.returnData && (
+              <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
+                <div>
+                  <h4 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">RetrunTrip Booking Summary</h4>
                 </div>
+                
+                <Locations data={data.returnData} display="" />
+
+              </div>
+              )}
+              
 
               {/* Price breakdown */}
-              <PriceBreakdown paymentData={data.payment} /> 
+              <PriceBreakdown paymentData={data.returnData?.payment || data.payment} oldData={data.returnData?.payment ?data.payment : null} /> 
 
               
             </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useImperativeHandle, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
@@ -16,15 +16,13 @@ import { FaCarSide, FaPlane } from "react-icons/fa";
 import { startSearch, saveSearch } from "@/store/searchSlice";
 import { extractAirportData, convertTime, canAddAnotherStop } from "@/app/lib/functions";
 import { showAlert } from "@/app/lib/alert";
+import { combineDateAndTime } from "@/app/lib/calculateTripPrice";
 
-export default function returnTrip({form, setForm, errors}) {
-
-  const dispatch = useDispatch();
-  const router = useRouter();
+const ReturnTrip = forwardRef((props, ref) => {
   const { data } = useSelector((state) => state.search);
   
   const [activeTab, setActiveTab] = useState("oneway");
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({});
 
   // ---------------- GOOGLE PLACES ----------------
   const fromInputRef = useRef(null);
@@ -38,20 +36,45 @@ export default function returnTrip({form, setForm, errors}) {
   const stopListRefs = useRef([]);
 
   // Input values
-  const [fromInput, setFromInput] = useState( data?.to?.address || "");
-  const [toInput, setToInput] = useState(data?.from?.address || "");
-  const [timeInput, setTimeInput] = useState( data?.timeInput || "");
-  const [fromFlightNumber, setFromFlightNumber] = useState("");
-  const [toFlightNumber, setToFlightNumber] = useState( "" );
-  const [flightCat, setFlightCat] = useState( "" );
+  const [fromInput, setFromInput] = useState( data?.returnData?.from?.address || data?.to?.address || "");
+  const [toInput, setToInput] = useState( data?.returnData?.to?.address || data?.from?.address || "" );
+  const [fromFlightNumber, setFromFlightNumber] = useState( data?.returnData?.airportFrom?.fromFlightNumber || "");
+  const [flightCat, setFlightCat] = useState( data?.returnData?.airportFrom?.flightCat || "" );
+  const [toFlightNumber, setToFlightNumber] = useState( data?.returnData?.airportTo?.toFlightNumber || "" );
 
   // Selected places
-  const [fromPlace, setFromPlace] = useState( data?.to || null);
-  const [toPlace, setToPlace] = useState(data?.from || null);
-  const [additionalStops, setAdditionalStops] = useState( data?.additionalStops || []);
-  const [pickupDate, setPickupDate] = useState(null);
-  const [pickupTime, setPickupTime] = useState(null);
+  const [fromPlace, setFromPlace] = useState( data?.returnData?.from || data?.to || null);
+  const [toPlace, setToPlace] = useState(data?.returnData?.to || data?.from || null);
+  const [pickupDate, setPickupDate] = useState(() => {
+    if (data?.returnData?.pickupDate) {
+      return new Date(data?.returnData?.pickupDate);
+    }
+    return null;
+  });
+  const [pickupTime, setPickupTime] = useState(() => {
+    if (data?.returnData?.pickupTime) {
+      return new Date(data?.returnData?.pickupTime);
+    }
+    return null;
+  });
   const [googleReady, setGoogleReady] = useState(false);
+  const [additionalStops, setAdditionalStops] = useState(
+    Array.isArray(data?.returnData?.additionalStops) && data.returnData?.additionalStops.length
+      ? data.returnData?.additionalStops.map(s => ({
+          name: s.name || "",
+          address: s.address || null,
+          lat: s.lat || null,
+          lng: s.lng || null,
+          waitingTime: s.waitingTime || "",
+          notes: s.notes || "",
+        }))
+      : []
+  );
+  const time12HrOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -101,7 +124,6 @@ export default function returnTrip({form, setForm, errors}) {
           status !== window.google.maps.places.PlacesServiceStatus.OK ||
           !predictions
         ) {
-          //listRef.current.style.display = "none";
           if (listEl) {
             listEl.style.display = "none";
           }
@@ -131,12 +153,7 @@ export default function returnTrip({form, setForm, errors}) {
                 </div>
               </div>
             </div>
-          `;
-
-          // div.innerHTML = `
-          //   <div class="font-semibold">${p.structured_formatting.main_text}</div>
-          //   <div class="text-xs text-gray-500">${p.description}</div>
-          // `;
+          `;          
 
           div.onclick = () =>
             selectPlace(
@@ -183,18 +200,17 @@ export default function returnTrip({form, setForm, errors}) {
         if (listEl) listEl.style.display = "none";
 
         const airportData = extractAirportData(place);
-        const fullAddress = `${place.formatted_address ? place.formatted_address : place.name}`;
+        // const fullAddress = `${place.formatted_address ? place.formatted_address : place.name}`;
+        const fullAddress = `${place.formatted_address}`;
 
         if (stopIndex !== null) {
           const updated = [...additionalStops];
           updated[stopIndex] = {
-            input: fullAddress,
-            place: {
-              name: place.name,
-              address: place.formatted_address,
-              lat: place.geometry.location.lat(),
-              lng: place.geometry.location.lng(),
-            },
+            ...updated[stopIndex],   // REQUIRED
+            name: place.name,
+            address: place.formatted_address,
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
           };
           setAdditionalStops(updated);
           listEl.style.display = "none";
@@ -225,246 +241,136 @@ export default function returnTrip({form, setForm, errors}) {
   };
 
   // ---------------- DISTANCE (MILES) ----------------
-  const getRouteDetails = (from, to, pickupDateTime = null) => {
-    return new Promise((resolve, reject) => {
-      if (!directionsService.current) {
-        reject("Directions service not ready");
-        return;
-      }
-
+  const getRouteDetails = (from, to, stops, pickupDateTime) =>
+    new Promise((resolve, reject) => {
       directionsService.current.route(
         {
           origin: { lat: from.lat, lng: from.lng },
           destination: { lat: to.lat, lng: to.lng },
+          waypoints: stops.map((s) => ({
+            location: { lat: s.lat, lng: s.lng },
+            stopover: true,
+          })),
           travelMode: window.google.maps.TravelMode.DRIVING,
-          unitSystem: google.maps.UnitSystem.IMPERIAL,
-
-          // THIS IS THE KEY PART
           drivingOptions: {
-            departureTime: pickupDateTime || new Date(), // now OR selected pickup time
+            departureTime: pickupDateTime || new Date(),
             trafficModel: window.google.maps.TrafficModel.BEST_GUESS,
           },
-
-          // Optional but recommended
           provideRouteAlternatives: true,
         },
         (result, status) => {
-          if (status !== "OK" || !result?.routes?.length) {
-            reject("Route not found");
-            return;
-          }
+          if (status !== "OK") return reject("Route not found");
 
-          const route = result.routes[0];
-          // const leg = route.legs[0];
-          const bestRoute = result.routes.reduce((a, b) =>
-            a.legs[0].distance.value < b.legs[0].distance.value ? a : b
-          );
+          const bestRoute = result.routes.reduce((a, b) => {
+            const da = a.legs.reduce((s, l) => s + l.distance.value, 0);
+            const db = b.legs.reduce((s, l) => s + l.distance.value, 0);
+            return da < db ? a : b;
+          });
 
-          const leg = bestRoute.legs[0];
+          let dist = 0;
+          let dur = 0;
+
+          bestRoute.legs.forEach((l) => {
+            dist += l.distance.value;
+            dur += l.duration_in_traffic?.value || l.duration.value;
+          });
 
           resolve({
-            distanceMiles: Number((leg.distance.value / 1609.34).toFixed(2)),
-            distanceKM: Number((leg.distance.value / 1000).toFixed(2)),
-
-            // 👇 USE duration_in_traffic
-            durationMinutes: Math.ceil(
-              (leg.duration_in_traffic?.value || leg.duration.value) / 60
-            ),
-
-            routeDescription: route.summary || "Fastest available route",
-            highlights: route.warnings || [],
+            distanceMiles: Number((dist / 1609.34).toFixed(2)),
+            distanceKM: Number((dist / 1000).toFixed(2)),
+            durationMinutes: Math.ceil(dur / 60),
+            routeDescription: bestRoute.summary,
+            highlights: bestRoute.warnings || [],
           });
         }
       );
-    });
-  };
+  });
 
-  // ---------------- Combine Date And Time ----------------
-  const combineDateAndTime = (date, time) => {
-    const d = new Date(date);
-    const t = new Date(time);
-
-    d.setHours(t.getHours());
-    d.setMinutes(t.getMinutes());
-    d.setSeconds(0);
-    d.setMilliseconds(0);
-
-    return d;
-  };
-
-  const time12HrOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  };
-
-  // ---------------- SEARCH One Way HANDLER ----------------
-  const handleSearchOneWay = async() => {
+  const validate = async () => {
     if (!googleReady) {
-      showAlert({
-        text: "Map services are still loading. Please wait.",
-        icon: "warning",
-      });
+      showAlert({text: "Map services are still loading. Please wait."});
       return;
     }
-
     if ((!fromPlace)) {
-      showAlert({text: "Please select pickup address from dropdown list!"});
+      showAlert({text: "Please select return pickup address from dropdown list!"});
+      return;
+    }
+    if (fromPlace?.isAirport && !fromFlightNumber) {
+      showAlert({text: "Flight number is required for airport pickup!"});
       return;
     }
     if ((!toPlace)) {
-      showAlert({text: "Please select drop-off address from dropdown list!"});
+      showAlert({text: "Please select return drop-off address from dropdown list!"});
+      return;
+    }
+    if (toPlace?.isAirport && !toFlightNumber) {
+      showAlert({text: "Flight number is required for airport drop-off."});
       return;
     }
     if ((!pickupDate)) {
-      showAlert({text: "Please select pickup date!"});
+      showAlert({text: "Please select return pickup date!"});
       return;
     }
     if ((!pickupTime)) {
-      showAlert({text: "Please select pickup time!"});
+      showAlert({text: "Please select return pickup time!"});
       return;
     }
 
-    if (fromPlace?.isAirport && !fromFlightNumber) {
-      showAlert({
-        text: "Flight number is required for airport pickup!",
-        icon: "warning",
-      });
-      // document.getElementById("fromFlightNumber").focus();
-      return;
-    }
+    // Pickup DateTime
+    const pickupDateTime = combineDateAndTime( pickupDate, pickupTime );
 
-    if (toPlace?.isAirport && !toFlightNumber) {
-      showAlert({
-        text: "Flight number is required for airport drop-off.",
-        icon: "warning",
-      });
-      // document.getElementById("toFlightNumber").focus();
-      return;
-    }
+    // Get Route Details
+    const routeDetails = await getRouteDetails(fromPlace, toPlace, additionalStops, pickupDateTime);
 
-    try {
+    // Estimated Arrival = pickup + duration
+    const estimatedTime = new Date( pickupDateTime.getTime() + routeDetails.durationMinutes * 60 * 1000 );
 
-      dispatch(startSearch());
-      setLoading(true);
+    const tripData = {
+      tripType: activeTab,
+      from: fromPlace,
+      to: toPlace,
+      pickupDate: pickupDate.toISOString(),
+      pickupTime: pickupTime.toISOString(),
+      pickupTimeLabel: pickupTime.toLocaleTimeString(
+        "en-US",
+        time12HrOptions
+      ),
+      estimatedTime: estimatedTime.toISOString(),
+      estimatedTimeLabel: estimatedTime.toLocaleTimeString(
+        "en-US",
+        time12HrOptions
+      ),
+      airportFrom: fromPlace?.isAirport ? {
+          fromFlightNumber,
+          terminal: fromPlace.terminal,
+          meetAndGreet: flightCat === "Meet & Greet" || flightCat === "Curbside",
+          airportFee: flightCat === "Meet & Greet" || flightCat === "Curbside",
+        }
+      : null,
+      airportTo: toPlace?.isAirport ? {
+          toFlightNumber,
+          terminal: toPlace.terminal,
+          meetAndGreet: false,
+          airportFee: false,
+        }
+      : null,
+      additionalStops: additionalStops.filter(s => s.address !== null),
+      // Route info
+      distanceMiles: routeDetails.distanceMiles || 0,
+      distanceKM: routeDetails.distanceKM || 0,
+      durationMinutes: convertTime(routeDetails.durationMinutes, 'M'),
+      routeDescription: routeDetails.routeDescription,
+      highlights: routeDetails.highlights,
+    };
 
-      // Pickup DateTime
-      const pickupDateTime = combineDateAndTime( pickupDate, pickupTime );
+    setFormData(tripData);
+    return tripData;
+  }
 
-      // Get Route Details
-      const routeDetails = await getRouteDetails(fromPlace, toPlace, pickupDateTime);
-
-      // Estimated Arrival = pickup + duration
-      const estimatedTime = new Date( pickupDateTime.getTime() + routeDetails.durationMinutes * 60 * 1000 );
-
-      dispatch(
-        saveSearch({
-          tripType: activeTab,
-          from: fromPlace,
-          to: toPlace,
-          pickupDate: pickupDate.toISOString(),
-          pickupTime: pickupTime.toISOString(),
-          pickupTimeLabel: pickupTime.toLocaleTimeString(
-            "en-US",
-            time12HrOptions
-          ),
-
-          estimatedTime: estimatedTime.toISOString(),
-          estimatedTimeLabel: estimatedTime.toLocaleTimeString(
-            "en-US",
-            time12HrOptions
-          ),
-
-          airportFrom: fromPlace?.isAirport
-          ? {
-              fromFlightNumber,
-              terminal: fromPlace.terminal,
-              meetAndGreet: flightCat === "Meet & Greet" || flightCat === "Curbside",
-              airportFee: flightCat === "Meet & Greet" || flightCat === "Curbside",
-            }
-          : null,
-
-          airportTo: toPlace?.isAirport
-          ? {
-              toFlightNumber,
-              terminal: toPlace.terminal,
-              meetAndGreet: false,
-              airportFee: false,
-            }
-          : null,
-
-          additionalStops: additionalStops.filter(s => s.place).map(s => s.place),
-
-          // Route info
-          distanceMiles: routeDetails.distanceMiles || 0,
-          distanceKM: routeDetails.distanceKM || 0,
-          durationMinutes: convertTime(routeDetails.durationMinutes, 'M'),
-          routeDescription: routeDetails.routeDescription,
-          highlights: routeDetails.highlights,
-        })
-      );
-
-      router.push("/booking/vehicles");
-    } catch (err) {
-      setLoading(false);
-      console.error(err);
-      showAlert({ text: `Unable to calculate route. Please try again. ${err.message}` });
-    }
-    finally {
-      setLoading(false);
-    }
-
-  };
-
-  // ---------------- SEARCH By The Hour HANDLER ----------------
-  const handleSearchByTheHr = async() => {
-    if (!googleReady) {
-      alert("Map services are still loading. Please wait.");
-      return;
-    }
-
-    if ((!fromPlace || !timeInput || !pickupDate || !pickupTime)) {
-      alert("Please fill all fields");
-      return;
-    }
-
-    dispatch(startSearch());
-
-    try {
-
-      setLoading(true);
-
-      // Pickup DateTime
-      const pickupDateTime = combineDateAndTime( pickupDate, pickupTime );
-
-      // Estimated Arrival = pickup + duration
-      const estimatedTime = new Date( pickupDateTime.getTime() + (parseFloat(timeInput) * 60) );
-
-      dispatch(
-        saveSearch({
-          tripType: activeTab,
-          from: fromPlace,
-          duration: timeInput,
-          durationMinutes: convertTime(timeInput, 'H'),
-          pickupDate: pickupDate.toISOString(),
-          pickupTime: pickupTime.toISOString(),
-          pickupTimeLabel: pickupTime.toLocaleTimeString("en-US", time12HrOptions),
-          estimatedTime: estimatedTime.toISOString(),
-          estimatedTimeLabel: estimatedTime.toLocaleTimeString("en-US", time12HrOptions),
-        })
-      );
-
-      router.push("/booking/vehicles");
-    } catch (err) {
-      setLoading(false);
-      console.error(err);
-      showAlert({ text: `Unable to calculate route. Please try again. ${err.message}` });
-    }
-    finally {
-      setLoading(false);
-    }
-
-  };   
+  useImperativeHandle(ref, () => ({
+    validateForm: validate,
+    getFormData: () => formData,
+  }));
 
   // ---------------- UI STYLES ----------------
   const inputClass =
@@ -617,9 +523,9 @@ export default function returnTrip({form, setForm, errors}) {
 
             {/* Select */}
             <select
-                value={flightCat}
-                className={`${inputClass} peer pl-10 pt-8 pb-2 appearance-none`}
-                onChange={(e) => setFlightCat(e.target.value)}
+              value={flightCat}
+              className={`${inputClass} peer pl-10 pt-8 pb-2 appearance-none`}
+              onChange={(e) => setFlightCat(e.target.value)}
             >
                 <option value="">Select</option>
                 <option value="Meet & Greet">Meet & Greet</option>
@@ -658,12 +564,12 @@ export default function returnTrip({form, setForm, errors}) {
 
                 {/* Input */}
                 <input
-                ref={(el) => (stopInputRefs.current[index] = el)}
-                value={stop.input}               
-                placeholder=" "
-                className={`${inputClass} !bg-gray-50 peer pl-10 pr-10 pt-6`}
+                  ref={(el) => (stopInputRefs.current[index] = el)}
+                  value={stop.address}               
+                  placeholder=" "
+                  className={`${inputClass} !bg-gray-50 peer pl-10 pr-10 pt-6`}
 
-                onChange={(e) => {
+                  onChange={(e) => {
                     const updated = [...additionalStops];
                     updated[index].input = e.target.value;
                     updated[index].place = null;
@@ -673,43 +579,43 @@ export default function returnTrip({form, setForm, errors}) {
                     const inputEl = stopInputRefs.current[index];
 
                     if (listEl && inputEl) {
-                    fetchPredictions(
-                        e.target.value,
-                        listEl,
-                        inputEl,
-                        null,
-                        index
-                    );
+                      fetchPredictions(
+                          e.target.value,
+                          listEl,
+                          inputEl,
+                          null,
+                          index
+                      );
                     }
-                }}
-                onFocus={(e) => {
-                    if (e.target.value.length >= 2) {
-                    const listEl = stopListRefs.current[index];
-                    const inputEl = stopInputRefs.current[index];
-                    if (listEl && inputEl) {
+                  }}
+                  onFocus={(e) => {
+                      if (e.target.value.length >= 2) {
+                      const listEl = stopListRefs.current[index];
+                      const inputEl = stopInputRefs.current[index];
+                      if (listEl && inputEl) {
                         fetchPredictions(
-                        e.target.value,
-                        listEl,
-                        inputEl,
-                        null,
-                        index
+                          e.target.value,
+                          listEl,
+                          inputEl,
+                          null,
+                          index
                         );
-                    }
-                    }
-                }}
+                      }
+                      }
+                  }}
                 />
 
                 {/* Floating label */}
                 <label
                 className={`pointer-events-none absolute left-11
                     transition-all duration-200 text-gray-400
-                    ${stop.input ? "top-2 text-xs" : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"}`}
+                    ${stop.address ? "top-2 text-xs" : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"}`}
                 >
                 Stop {index + 1}
                 </label>
 
                 {/* Helper text */}
-                {!stop.input && (
+                {!stop.address && (
                 <span
                     className="pointer-events-none absolute left-11 top-8
                     text-[13px] text-gray-500 transition-opacity
@@ -831,25 +737,25 @@ export default function returnTrip({form, setForm, errors}) {
             placeholder=" "
             className={`${inputClass} peer pl-10 pt-6`}
             onChange={(e) => {
-                setToInput(e.target.value);
-                setToPlace(null);
-                fetchPredictions(
+              setToInput(e.target.value);
+              setToPlace(null);
+              fetchPredictions(
                 e.target.value,
                 toListRef,
                 toInputRef,
                 setToInput
-                );
+              );
             }}
 
             onFocus={(e) => {
-                setToInput(e.target.value);
-                setToPlace(null);
-                fetchPredictions(
+              setToInput(e.target.value);
+              setToPlace(null);
+              fetchPredictions(
                 e.target.value,
                 toListRef,
                 toInputRef,
                 setToInput
-                );
+              );
             }}
             />
 
@@ -880,15 +786,15 @@ export default function returnTrip({form, setForm, errors}) {
             {/* Clear button */}
             {toInput && (
             <XMarkIcon
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4
-                cursor-pointer text-gray-400 hover:text-gray-600"
-                onClick={() => {
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4
+              cursor-pointer text-gray-400 hover:text-gray-600"
+              onClick={() => {
                 setToInput("");
                 setToPlace(null);
                 if (toListRef.current) {
                     toListRef.current.style.display = "none";
                 }
-                }}
+              }}
             />
             )}
 
@@ -915,6 +821,7 @@ export default function returnTrip({form, setForm, errors}) {
                 placeholder=" "
                 className={`${inputClass} peer pl-10 pt-6`}
                 onChange={(e) => setToFlightNumber(e.target.value.toUpperCase())}
+                maxLength={6}
             />                
 
             {/* Floating label */}
@@ -992,6 +899,7 @@ export default function returnTrip({form, setForm, errors}) {
                 onChange={setPickupTime}
                 showTimeSelect
                 showTimeSelectOnly
+                search={true}
                 timeIntervals={5}
                 dateFormat="hh:mm aa"
                 placeholderText="12:00 pm"
@@ -1060,4 +968,6 @@ export default function returnTrip({form, setForm, errors}) {
       
     </div>
   );
-}
+});
+
+export default ReturnTrip;

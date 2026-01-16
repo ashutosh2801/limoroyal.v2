@@ -27,10 +27,12 @@ import VehiclesGrid from "@/app/components/VehiclesGrid";
 import ReturnTrip from "@/app/components/RetrunTrip";
 import PriceBreakdown from "@/app/components/PriceBreakdown";
 import Locations from "@/app/components/Locations";
+import { calculateTripPrice } from "../../lib/calculateTripPrice";
 
 export default function PickupInfoPage() {
   const router = useRouter();
   const refMsg = useRef(null);
+  const childRef = useRef();
   const dispatch = useDispatch();
   const activeStep = 1; // Pickup Info
   const { data } = useSelector((state) => state.search);
@@ -38,7 +40,7 @@ export default function PickupInfoPage() {
     router.push("/");
     return;
   }
-
+  const [loading, setLoading] = useState(false);
   const requiredSeats = data?.selectedVehicle?.numChildSeatAllow || 0; // dynamic (2 or 3)
   const childCost = data?.selectedVehicle?.perChildSeatPrice || 0;
   const [seats, setSeats] = useState({
@@ -61,7 +63,6 @@ export default function PickupInfoPage() {
     
     childSeats: data?.payment?.childSeats || 0,
     totalSelected: data?.payment?.totalSelected || 0,
-
   });
 
   const trip = {
@@ -148,7 +149,6 @@ export default function PickupInfoPage() {
   };
   const isDisabled = (type) => totalSelected >= requiredSeats && seats[type] === 0;
 
-
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -199,21 +199,54 @@ export default function PickupInfoPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
 
-    if (!validate()) {refMsg.current?.scrollIntoView({ behavior: "smooth" }); return;}
+    setLoading(true);
 
-    const saveData = { 
-      ...data, PickupInfo: { ...form, seats }, payment
-    };
+    try {
+      if (!validate()) {
+        refMsg.current?.scrollIntoView({ behavior: "smooth" }); return;
+      }
 
-    dispatch(
-      saveSearch(saveData)
-    );
 
-    console.log("Saved data:", saveData);
+      let saveData = {};
+      if(form.returnTrip) {
+        const formData = await childRef.current.validateForm();
+        if (!formData) {
+          console.log("Data from child:", formData);
+          showAlert({text: "Something is wrong with return trip form! Please fill all locations and try again."});      
+          return;
+        }    
+        //const formData = childRef.current.getFormData();
+        console.log("Data from child:", formData);      
 
-    router.push("/booking/payment");
+        saveData = { 
+          ...data, PickupInfo: { ...form, seats }, payment, returnData: {...formData}
+        };
+        //console.log("Saved data:", saveData);
+        //return;
+        router.push("/booking/return-vehicles");
+      }
+      else {
+        saveData = { 
+          ...data, PickupInfo: { ...form, seats }, payment
+        };
+        router.push("/booking/payment");
+      }
+
+      dispatch(
+        saveSearch(saveData)
+      );
+    } catch (err) {
+      console.error(err);
+      showAlert({
+        text: err,
+        icon: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+
   };
 
   return (
@@ -228,24 +261,9 @@ export default function PickupInfoPage() {
                     <h4 className="mb-4 text-sm md:text-lg font-bold border-b border-gray-200 pb-1">Pickup Trip Details</h4>
                   </div>
 
-                  <Locations data={data} seats={seats} display="" />
+                  <Locations data={data} display="" />
 
-                </div>
-
-                <div className="bg-white rounded-md shadow-xl overflow-hidden text-black p-1 mb-5">
-                  {/* <div className="h-80 w-full rounded-xl overflow-hidden">
-                    <RouteMap />                     
-                  </div> */}
-                  <div className="mt-4 mb-2 text-xs md:text-sm text-gray-600 flex gap-5 px-3"> 
-                    {data.distanceKM && (<p className="flex gap-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M10.8 16C12.7882 16 14.4 14.3882 14.4 12.4L14.4 3.2L15.2 3.2C15.5235 3.2 15.8153 3.00512 15.9391 2.70616C16.0629 2.4072 15.9945 2.06312 15.7657 1.83432L14.1657 0.23432C13.8532 -0.0780794 13.3467 -0.0780795 13.0343 0.23432L11.4343 1.83432C11.2055 2.06312 11.137 2.4072 11.2609 2.70616C11.3847 3.00512 11.6764 3.2 12 3.2L12.8 3.2L12.8 12.4C12.8 13.5046 11.9045 14.4 10.8 14.4C9.69541 14.4 8.8 13.5046 8.8 12.4L8.8 3.6C8.8 1.61176 7.18824 -7.70349e-07 5.2 -9.44166e-07C3.21176 -1.11798e-06 1.6 1.61176 1.6 3.6L1.6 11.3366C0.667839 11.666 -1.60618e-06 12.555 -1.69753e-06 13.6C-1.81341e-06 14.9255 1.07448 16 2.4 16C3.72552 16 4.8 14.9255 4.8 13.6C4.8 12.555 4.13216 11.666 3.2 11.3366L3.2 3.6C3.2 2.49544 4.09544 1.6 5.2 1.6C6.30456 1.6 7.2 2.49544 7.2 3.6L7.2 12.4C7.2 14.3882 8.81176 16 10.8 16Z"></path></svg> {trip.distanceKM} km
-                    </p>)}
-                    <p className="flex gap-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M10.3904 10.0572C10.1976 10.0572 10.0145 10.003 9.86024 9.89458L7.46988 8.21386C7.24819 8.06024 7.11325 7.80723 7.11325 7.54518V4.18373C7.11325 3.72289 7.50843 3.35241 8 3.35241C8.49157 3.35241 8.88675 3.72289 8.88675 4.18373V7.12952L10.9205 8.55723C11.1133 8.69277 11.2289 8.88253 11.2675 9.10843C11.2964 9.3253 11.2386 9.5512 11.094 9.72289C10.9301 9.93072 10.6699 10.0572 10.3807 10.0572H10.3904Z"></path><path d="M8 15C3.58554 15 0 11.6386 0 7.5C0 3.36145 3.58554 0 8 0C12.4145 0 16 3.36145 16 7.5C16 11.6386 12.4145 15 8 15ZM8 1.66265C4.56867 1.66265 1.77349 4.28313 1.77349 7.5C1.77349 10.7169 4.56867 13.3373 8 13.3373C11.4313 13.3373 14.2265 10.7169 14.2265 7.5C14.2265 4.28313 11.4313 1.66265 8 1.66265Z"></path></svg>
-                      {data.durationMinutes}
-                    </p>
-                  </div>
-                </div>
+                </div>                
 
                 {/* Price breakdown */}
                 <PriceBreakdown paymentData={payment} />                
@@ -803,199 +821,204 @@ export default function PickupInfoPage() {
                       <p className="font-semibold text-sm md:text-base">Additional Information</p>
 
                       <div className="w-full mt-5 space-y-4">
-                      
-                        {/* CHILD SEATS */}
-                        <div className="flex flex-col xl:flex-row xl:items-center gap-3">
-                          <div className="flex gap-2">
-                            <div className="flex items-center gap-2 md:w-[260px]">
-                              <span className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full">
-                                  👶
-                              </span>
-                              <span className="text-sm font-medium">
-                                  Do you want Child Seats?
-                              </span>
-                            </div>
-    
-                            {/* Toggle */}
-                            <label className="relative inline-flex items-center cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={form.childSeats}
-                                onChange={() => {
-                                  setSeats({
-                                    infant: 0,
-                                    toddler: 0,
-                                    booster: 0,
-                                  });
-                                  setPayment({
-                                    subTotalPrice: data.payment?.subTotalPrice || 0,
-                                    taxPrice: data.payment?.taxPrice || 0,
-                                    totalPrice: data.payment?.totalPrice || 0,
-                                    childPrice: data.payment?.childPrice || 0,
+                        {
+                          requiredSeats > 0 && (
+                            <>                          
+                            {/* CHILD SEATS */}
+                            <div className="flex flex-col xl:flex-row xl:items-center gap-3">
+                              <div className="flex gap-2">
+                                <div className="flex items-center gap-2 md:w-[260px]">
+                                  <span className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full">
+                                      👶
+                                  </span>
+                                  <span className="text-sm font-medium">
+                                      Do you want Child Seats?
+                                  </span>
+                                </div>
+        
+                                {/* Toggle */}
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={form.childSeats}
+                                    onChange={() => {
+                                      setSeats({
+                                        infant: 0,
+                                        toddler: 0,
+                                        booster: 0,
+                                      });
+                                      setPayment({
+                                        subTotalPrice: data.payment?.subTotalPrice || 0,
+                                        taxPrice: data.payment?.taxPrice || 0,
+                                        totalPrice: data.payment?.totalPrice || 0,
+                                        childPrice: data.payment?.childPrice || 0,
 
-                                    subTotalLabel: `${data.payment?.subTotalLabel}`,
-                                    taxLabel: `${data.payment?.taxLabel}`,
-                                    totalLabel: `${data.payment?.totalLabel}`,
-                                    childLabel: `${data.payment?.childLabel}`,
+                                        subTotalLabel: `${data.payment?.subTotalLabel}`,
+                                        taxLabel: `${data.payment?.taxLabel}`,
+                                        totalLabel: `${data.payment?.totalLabel}`,
+                                        childLabel: `${data.payment?.childLabel}`,
 
-                                    childSeats: data.payment?.childSeats,
-                                    totalSelected: 0,
-                                  });
-                                  setForm({ ...form, childSeats: !form.childSeats })
-                                }}
-                                className="sr-only peer"
-                            />
-                            <div className="w-10 h-6 bg-gray-300 peer-checked:bg-yellow-600 rounded-full
-                                            after:content-[''] after:absolute after:top-1 after:left-1
-                                            after:bg-white after:w-4 after:h-4 after:rounded-full
-                                            after:transition-all peer-checked:after:translate-x-4" />
-                            </label>
-                          </div>
+                                        childSeats: data.payment?.childSeats,
+                                        totalSelected: 0,
+                                      });
+                                      setForm({ ...form, childSeats: !form.childSeats })
+                                    }}
+                                    className="sr-only peer"
+                                />
+                                <div className="w-10 h-6 bg-gray-300 peer-checked:bg-yellow-600 rounded-full
+                                                after:content-[''] after:absolute after:top-1 after:left-1
+                                                after:bg-white after:w-4 after:h-4 after:rounded-full
+                                                after:transition-all peer-checked:after:translate-x-4" />
+                                </label>
+                              </div>
 
-                          {/* Child seat selects (SHOW ONLY IF ON) */}
-                          {form.childSeats && (
-                            <>
-                            <div className="grid grid-cols-3 gap-2 xl:ml-auto xl:w-[60%]">
-                              <div className="relative">
-                                {/* Select infant */}
-                                <select
-                                  value={seats.infant}
-                                  onChange={(e) => handleSeatChange("infant", e.target.value)}
-                                  disabled={isDisabled("infant")}
-                                  className="peer w-full px-2 pt-7 pb-2 text-sm border rounded-xl
-                                            bg-gray-100 border-gray-200 focus:outline-none
-                                              appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                              {/* Child seat selects (SHOW ONLY IF ON) */}
+                              {form.childSeats && (
+                                <>
+                                <div className="grid grid-cols-3 gap-2 xl:ml-auto xl:w-[60%]">
+                                  <div className="relative">
+                                    {/* Select infant */}
+                                    <select
+                                      value={seats.infant}
+                                      onChange={(e) => handleSeatChange("infant", e.target.value)}
+                                      disabled={isDisabled("infant")}
+                                      className="peer w-full px-2 pt-7 pb-2 text-sm border rounded-xl
+                                                bg-gray-100 border-gray-200 focus:outline-none
+                                                  appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                      
+                                    >
+                                      <option value="" disabled hidden />
+                                      <option value="0">0</option>
+                                      <option value="1">1</option>
+                                      <option value="2">2</option>
+                                    </select>
+        
+                                    {/* Dropdown Icon */}
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                      <FaChevronDown className="text-gray-500 text-sm" />
+                                    </div>
+        
+                                    {/* Floating label */}
+                                    <label
+                                      className="pointer-events-none absolute left-2
+                                                transition-all duration-200 text-gray-400
+                                                top-3 text-xs
+                                                peer-focus:top-2 peer-focus:text-xs
+                                                peer-valid:top-2 peer-valid:text-xs"
+                                    >
+                                      Infant
+                                    </label>
+        
+                                    {/* Helper text */}
+                                    {/* <span
+                                      className="pointer-events-none absolute left-2 top-7
+                                                text-[12px] text-gray-500 transition-opacity
+                                                peer-focus:opacity-0 peer-valid:opacity-0"
+                                    >
+                                      Select infant seats
+                                    </span> */}
+                                  </div>
+
+                                  <div className="relative">
+                                    {/* Select toddler */}
+                                    <select
+                                      value={seats.toddler}
+                                      onChange={(e) => handleSeatChange("toddler", e.target.value)}
+                                      disabled={isDisabled("toddler")}
+                                      className="peer w-full px-2 pt-7 pb-2 text-sm border rounded-xl
+                                                bg-gray-100 border-gray-200 focus:outline-none
+                                                appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                      <option value="" disabled hidden />
+                                      <option value="0">0</option>
+                                      <option value="1">1</option>
+                                      <option value="2">2</option>
+                                    </select>
+        
+                                    {/* Dropdown Icon */}
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                      <FaChevronDown className="text-gray-500 text-sm" />
+                                    </div>
+        
+                                    {/* Floating label */}
+                                    <label
+                                      className="pointer-events-none absolute left-2
+                                                transition-all duration-200 text-gray-400
+                                                top-3 text-xs
+                                                peer-focus:top-2 peer-focus:text-xs
+                                                peer-valid:top-2 peer-valid:text-xs"
+                                    >
+                                      Toddler
+                                    </label>
+        
+                                    {/* Helper text */}
+                                    {/* <span
+                                      className="pointer-events-none absolute left-2 top-7
+                                                text-[12px] text-gray-500 transition-opacity
+                                                peer-focus:opacity-0 peer-valid:opacity-0"
+                                    >
+                                      Select toddler seats
+                                    </span> */}
+                                  </div>
+
+                                  <div className="relative">
+                                    {/* Select booster */}
+                                    <select
+                                      value={seats.booster}
+                                      onChange={(e) => handleSeatChange("booster", e.target.value)}
+                                      disabled={isDisabled("booster")}
+                                      className="peer w-full px-2 pt-7 pb-2 text-sm border rounded-xl
+                                                bg-gray-100 border-gray-200 focus:outline-none
+                                                appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                      <option value="" disabled hidden />
+                                      <option value="0">0</option>
+                                      <option value="1">1</option>
+                                      <option value="2">2</option>
+                                    </select>
+        
+                                    {/* Dropdown Icon */}
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                      <FaChevronDown className="text-gray-500 text-sm" />
+                                    </div>
+        
+                                    {/* Floating label */}
+                                    <label
+                                      className="pointer-events-none absolute left-2
+                                                transition-all duration-200 text-gray-400
+                                                top-3 text-xs
+                                                peer-focus:top-2 peer-focus:text-xs
+                                                peer-valid:top-2 peer-valid:text-xs"
+                                    >
+                                      Booster
+                                    </label>
+        
+                                    {/* Helper text */}
+                                    {/* <span
+                                      className="pointer-events-none absolute left-2 top-7
+                                                text-[12px] text-gray-500 transition-opacity
+                                                peer-focus:opacity-0 peer-valid:opacity-0"
+                                    >
+                                      Select booster seats
+                                    </span> */}
+                                  </div>
                                   
-                                >
-                                  <option value="" disabled hidden />
-                                  <option value="0">0</option>
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                </select>
-    
-                                {/* Dropdown Icon */}
-                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                                  <FaChevronDown className="text-gray-500 text-sm" />
-                                </div>
-    
-                                {/* Floating label */}
-                                <label
-                                  className="pointer-events-none absolute left-2
-                                            transition-all duration-200 text-gray-400
-                                            top-3 text-xs
-                                            peer-focus:top-2 peer-focus:text-xs
-                                            peer-valid:top-2 peer-valid:text-xs"
-                                >
-                                  Infant
-                                </label>
-    
-                                {/* Helper text */}
-                                {/* <span
-                                  className="pointer-events-none absolute left-2 top-7
-                                            text-[12px] text-gray-500 transition-opacity
-                                            peer-focus:opacity-0 peer-valid:opacity-0"
-                                >
-                                  Select infant seats
-                                </span> */}
+                                </div>                            
+                                </>                            
+                                )}
+                            </div>
+                            {/* Error */}
+                            {errors.childSeats && (
+                              <div className="grid md:grid-cols-1 gap-2 md:ml-auto md:w-[100%]">
+                              <p className="text-red-500 text-xs mt-1 text-center md:text-right">
+                                {errors.childSeats}
+                              </p>
                               </div>
-
-                              <div className="relative">
-                                {/* Select toddler */}
-                                <select
-                                  value={seats.toddler}
-                                  onChange={(e) => handleSeatChange("toddler", e.target.value)}
-                                  disabled={isDisabled("toddler")}
-                                  className="peer w-full px-2 pt-7 pb-2 text-sm border rounded-xl
-                                            bg-gray-100 border-gray-200 focus:outline-none
-                                            appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                  <option value="" disabled hidden />
-                                  <option value="0">0</option>
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                </select>
-    
-                                {/* Dropdown Icon */}
-                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                                  <FaChevronDown className="text-gray-500 text-sm" />
-                                </div>
-    
-                                {/* Floating label */}
-                                <label
-                                  className="pointer-events-none absolute left-2
-                                            transition-all duration-200 text-gray-400
-                                            top-3 text-xs
-                                            peer-focus:top-2 peer-focus:text-xs
-                                            peer-valid:top-2 peer-valid:text-xs"
-                                >
-                                  Toddler
-                                </label>
-    
-                                {/* Helper text */}
-                                {/* <span
-                                  className="pointer-events-none absolute left-2 top-7
-                                            text-[12px] text-gray-500 transition-opacity
-                                            peer-focus:opacity-0 peer-valid:opacity-0"
-                                >
-                                  Select toddler seats
-                                </span> */}
-                              </div>
-
-                              <div className="relative">
-                                {/* Select booster */}
-                                <select
-                                  value={seats.booster}
-                                  onChange={(e) => handleSeatChange("booster", e.target.value)}
-                                  disabled={isDisabled("booster")}
-                                  className="peer w-full px-2 pt-7 pb-2 text-sm border rounded-xl
-                                            bg-gray-100 border-gray-200 focus:outline-none
-                                            appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                  <option value="" disabled hidden />
-                                  <option value="0">0</option>
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                </select>
-    
-                                {/* Dropdown Icon */}
-                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                                  <FaChevronDown className="text-gray-500 text-sm" />
-                                </div>
-    
-                                {/* Floating label */}
-                                <label
-                                  className="pointer-events-none absolute left-2
-                                            transition-all duration-200 text-gray-400
-                                            top-3 text-xs
-                                            peer-focus:top-2 peer-focus:text-xs
-                                            peer-valid:top-2 peer-valid:text-xs"
-                                >
-                                  Booster
-                                </label>
-    
-                                {/* Helper text */}
-                                {/* <span
-                                  className="pointer-events-none absolute left-2 top-7
-                                            text-[12px] text-gray-500 transition-opacity
-                                            peer-focus:opacity-0 peer-valid:opacity-0"
-                                >
-                                  Select booster seats
-                                </span> */}
-                              </div>
-                              
-                            </div>                            
-                            </>                            
                             )}
-                        </div>
-                        {/* Error */}
-                        {errors.childSeats && (
-                          <div className="grid md:grid-cols-1 gap-2 md:ml-auto md:w-[100%]">
-                          <p className="text-red-500 text-xs mt-1 text-center md:text-right">
-                            {errors.childSeats}
-                          </p>
-                          </div>
-                        )}
-    
+                            </>
+                          )
+                        } 
+
                         {/* RETURN TRIP */}
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-2 md:w-[260px]">
@@ -1023,7 +1046,7 @@ export default function PickupInfoPage() {
     
                         {/* RETURN TRIP FIELDS (SHOW ONLY IF ON) */}
                         {form.returnTrip && (
-                          <ReturnTrip form={form} setForm={setForm} errors={errors} />
+                          <ReturnTrip ref={childRef} />
                         )}
                       </div>
                       
@@ -1054,7 +1077,7 @@ export default function PickupInfoPage() {
                                 : "top-3 text-[12px] md:text-sm peer-focus:top-2 peer-focus:text-xs"
                             }`}
                         >
-                          Trip Purpose
+                          Trip Notes
                         </label>
 
                         {/* Helper text inside input */}
@@ -1081,9 +1104,10 @@ export default function PickupInfoPage() {
                     </button>
                     <button
                       onClick={handleContinue}
+                      disabled={loading}
                       className="flex py-3 px-2 xl:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs xl:text-base w-auto"
                     >
-                      Continue to Payment/Quote
+                      {loading ? "Please wait..." : "Continue"}
                       <FaChevronRight className="text-white text-sm ml-1 md:mt-1" />
                     </button>
                   </div>
