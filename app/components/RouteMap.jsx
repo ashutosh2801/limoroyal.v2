@@ -2,8 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import { getAlphabetLabel } from "../lib/functions";
 
-export default function RouteMap() {
+export default function RouteMap({isReturn=false}) {
   const mapRef = useRef(null);
   const movingMarkerRef = useRef(null);
   const routePathRef = useRef([]);
@@ -11,30 +12,40 @@ export default function RouteMap() {
   const { data } = useSelector((state) => state.search);
 
   useEffect(() => {
+    if (!data) return;
+
     const interval = setInterval(() => {
-        if (window.google && mapRef.current) {
-            clearInterval(interval);
-            initMap();
-        }
+      if (
+        window.google &&
+        window.google.maps &&
+        typeof window.google.maps.Map === "function" &&
+        mapRef.current
+      ) {
+        clearInterval(interval);
+        initMap( isReturn ? data.returnData : data);
+      }
     }, 100);
 
     return () => clearInterval(interval);
-    }, [data]);
+  }, [data]);
 
-  function initMap() {
+  function initMap(d) {
 
     if (
-    !data ||
-    !data.from?.lat ||
-    !data.from?.lng ||
-    !data.to?.lat ||
-    !data.to?.lng
+    !d ||
+    !d.from?.lat ||
+    !d.from?.lng ||
+    !d.to?.lat ||
+    !d.to?.lng
     ) {
         return;
     }
 
-    const pointA = { lat: data?.from?.lat, lng: data?.from?.lng };
-    const pointB = { lat: data?.to?.lat, lng: data?.to?.lng };
+    const pointA = { lat: d?.from?.lat, lng: d?.from?.lng };
+    const stops = Array.isArray(d.additionalStops)
+                  ? d.additionalStops.filter(s => s?.lat && s?.lng)
+                  : [];
+    const pointB = { lat: d?.to?.lat, lng: d?.to?.lng };
 
     const map = new window.google.maps.Map(mapRef.current, {
       zoom: 14,
@@ -42,9 +53,15 @@ export default function RouteMap() {
 
       // Remove UI & interaction
       disableDefaultUI: true,
-      draggable: false,
-      scrollwheel: false,
-      gestureHandling: "none",
+      zoomControl: true,
+      mapTypeControl: false,
+      scaleControl: false,
+      streetViewControl: false,
+      rotateControl: true,
+      fullscreenControl: false,
+      draggable: true,
+      scrollwheel: true,
+      gestureHandling: "greedy",
 
       // Plain map (no POIs / labels)
       styles: [
@@ -53,30 +70,57 @@ export default function RouteMap() {
           stylers: [{ visibility: "off" }],
         },
         {
-          featureType: "administrative",
-          elementType: "labels",
-          stylers: [{ visibility: "off" }],
+          featureType: "transit",
+          stylers: [{ visibility: "on" }],
         },
         {
           featureType: "road",
           elementType: "labels",
-          stylers: [{ visibility: "off" }],
+          stylers: [{ visibility: "on" }],
+        },
+        {
+          featureType: "administrative",
+          elementType: "labels",
+          stylers: [{ visibility: "on" }],
         },
       ],
     });
+
+    let markerIndex = 0;
 
     // Marker A
     new window.google.maps.Marker({
       position: pointA,
       map,
-      label: "A",
+      label: {
+        text: getAlphabetLabel(markerIndex++),
+        color: "#fff",
+        fontWeight: "bold",
+      }
+    });
+
+    // Stop Markers
+    stops.forEach((stop, i) => {
+      new window.google.maps.Marker({
+        position: stop,
+        map,
+        label: {
+          text: getAlphabetLabel(markerIndex++),
+          color: "#fff",
+          fontWeight: "bold",
+        }
+      });
     });
 
     // Marker B
     new window.google.maps.Marker({
       position: pointB,
       map,
-      label: "B",
+      label: {
+        text: getAlphabetLabel(markerIndex++),
+        color: "#fff",
+        fontWeight: "bold",
+      }
     });
 
     const directionsService = new window.google.maps.DirectionsService();
@@ -84,7 +128,12 @@ export default function RouteMap() {
     directionsService.route(
       {
         origin: pointA,
+        waypoints: stops.map((s) => ({
+          location: s,
+          stopover: true,
+        })),
         destination: pointB,
+        optimizeWaypoints: false,
         travelMode: window.google.maps.TravelMode.DRIVING,
       },
       (result, status) => {
@@ -101,7 +150,7 @@ export default function RouteMap() {
           new window.google.maps.Polyline({
             path: routePathRef.current,
             map,
-            strokeColor: "#facc15",
+            strokeColor: "#008000",
             strokeOpacity: 1,
             strokeWeight: 6,
           });
@@ -116,6 +165,7 @@ export default function RouteMap() {
             },
           });
 
+          indexRef.current = 0;
           animate();
         }
       }

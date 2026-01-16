@@ -1,11 +1,9 @@
 import React from 'react'
-import Booking from "./Booking"
+import Profile from './Profile'
 
 const page = () => {
   return (
-    <div>
-        <Booking />
-    </div>
+    <Profile />
   )
 }
 
