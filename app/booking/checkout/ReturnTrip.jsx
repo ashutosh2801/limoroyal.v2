@@ -75,7 +75,7 @@ function ReturnTrip() {
 
         {/* Guest Information Section */}
         <div className="mt-7">
-            <h2 className="text-lg md:text-xl font-bold mb-4">Passenger's information</h2>
+            <h2 className="text-lg md:text-xl font-bold mb-4">Return Trip Passenger's information</h2>
 
             <div className="border border-gray-200 rounded-xl bg-white overflow-hidden">
 

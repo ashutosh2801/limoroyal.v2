@@ -46,9 +46,10 @@ export default function CheckoutPage() {
         distance_km: data.distanceKM,
         distance_mile: data.distanceMiles,
         duration_minutes: data.durationMinutes,
-
         passengers: data.selectedPassenger,
         luggage: data.selectedLuggage,
+        guest: data.PickupInfo,
+        payment_type: data.paymentType,
 
         vehicle: {
           id: data.selectedVehicle.id,
@@ -60,10 +61,6 @@ export default function CheckoutPage() {
           price_HR: data.selectedVehicle.priceHR,
         },
 
-        guest: data.PickupInfo,
-        returnData: data.returnData,
-        payment_type: data.paymentType,
-
         payment: {
           brand: data.cardData?.brand || null,
           last4: data.cardData?.last4 || null,
@@ -72,11 +69,12 @@ export default function CheckoutPage() {
           sub_total_price: data.payment.subTotalPrice,
           tax_price: data.payment.taxPrice,
           total_price: data.payment.totalPrice,
-        }
+        },
+        returnData: data.returnData
       };
-      // console.log(payload);
-      // return;
       const result = await createBooking(payload);    
+      // console.log('result', result);
+      // return;
       
       if (result.status != "confirmed") {
         // If the API returns { message: "Validation failed", errors: ["Email is required", ...] }
