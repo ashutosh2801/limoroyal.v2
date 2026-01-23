@@ -332,10 +332,10 @@ export default function PickupInfoPage() {
                   />              
 
                   {/* Vehicles grid */}                  
-                  {/* <VehiclesGrid />                       */}
+                  {/* <VehiclesGrid />*/}
 
                   {/* Heading */}
-                  <h2 ref={refMsg} className="mt-6 text-lg md:text-xl font-bold">Passenger Information</h2>
+                  <h2 ref={refMsg} className="md:mt-0 xl:mt-6 text-lg xl:text-xl font-bold">Passenger Information</h2>
                   <small className="text-gray-500 text-[10px] md:text-xs">
                     Provide details your chauffeur should know
                   </small>
@@ -372,7 +372,7 @@ export default function PickupInfoPage() {
 
                         <div className="flex items-center gap-2 md:w-[260px]">
                           
-                          <span className="font-semibold text-sm md:text-base">
+                          <span className="font-semibold text-sm xl:text-base">
                               Book for someone else
                           </span>
                         </div>
@@ -871,7 +871,7 @@ export default function PickupInfoPage() {
 
                     {/* Additional Info */}
                     <div className="mb-2">
-                      <p className="font-semibold text-sm md:text-base">Additional Information</p>
+                      <p className="font-semibold text-sm xl:text-base">Additional Information</p>
 
                       <div className="w-full mt-5 space-y-4">
                         {
@@ -1110,7 +1110,7 @@ export default function PickupInfoPage() {
                     </div>
 
 
-                    <h2 className="mt-10 font-semibold text-sm md:text-base">Trip Notes <span className="text-gray-500 font-medium text-xs md:text-sm">(Any special requirements or requests for your trip e.g. business visit, child car seats, etc.)</span></h2>
+                    <h2 className="mt-10 font-semibold text-xs xl:text-sm">Trip Notes <span className="text-gray-500 font-medium text-xs xl:text-sm">(Any special requirements or requests for your trip e.g. business visit, child car seats, etc.)</span></h2>
                     <div className="mt-3">
                       <div className="relative w-full">
                         {/* Input */}

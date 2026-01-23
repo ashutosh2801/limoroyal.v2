@@ -309,7 +309,7 @@ function PaymentForm() {
                     {/* --- Payment Form --- */}
                     {/* <h2 className="mt-7 text-lg md:text-xl font-bold">Add credit or debit card</h2> */}
 
-                    <h2 className="mt-7 text-lg xl:text-xl font-bold">
+                    <h2 className="md:mt-0 xl:mt-7 text-lg xl:text-xl font-bold">
                       Choose an option
                     </h2>
 
