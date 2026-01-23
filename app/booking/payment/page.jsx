@@ -9,7 +9,8 @@ import {
   MapPinIcon,
   ExclamationCircleIcon,
   CheckCircleIcon,
-  Squares2X2Icon
+  Squares2X2Icon,
+  ChevronDownIcon
 } from "@heroicons/react/24/solid";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import payment from '../../../public/assets/payment.png'
@@ -224,8 +225,12 @@ function PaymentForm() {
                     <h4 className="text-sm xl:text-lg font-bold">
                       Booking Summary
                     </h4>
-                    <span className="text-xl font-bold">
-                      {collapse.booking ? "−" : "+"}
+                    <span className="flex items-center">
+                      <ChevronDownIcon
+                        className={`w-5 h-5 transition-transform duration-300 ${
+                          collapse.booking ? "rotate-180" : ""
+                        }`}
+                      />
                     </span>
                   </div>   
                   <div
@@ -246,8 +251,12 @@ function PaymentForm() {
                       <h4 className="text-sm xl:text-lg font-bold">
                         Return Trip Booking Summary
                       </h4>
-                      <span className="text-xl font-bold">
-                        {collapse.returnBooking ? "−" : "+"}
+                      <span className="flex items-center">
+                        <ChevronDownIcon
+                          className={`w-5 h-5 transition-transform duration-300 ${
+                            collapse.returnBooking ? "rotate-180" : ""
+                          }`}
+                        />
                       </span>
                     </div>
                     <div
@@ -268,8 +277,12 @@ function PaymentForm() {
                     <h4 className="text-sm xl:text-lg font-bold">
                       Price breakdown
                     </h4>
-                    <span className="text-xl font-bold">
-                      {collapse.price ? "−" : "+"}
+                    <span className="flex items-center">
+                      <ChevronDownIcon
+                        className={`w-5 h-5 transition-transform duration-300 ${
+                          collapse.price ? "rotate-180" : ""
+                        }`}
+                      />
                     </span>
                   </div>
                   <div

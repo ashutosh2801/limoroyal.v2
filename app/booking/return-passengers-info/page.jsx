@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaChevronDown, FaChevronLeft, FaChevronRight, FaPlane } from "react-icons/fa";
+import {
+  ChevronDownIcon
+} from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
 import { saveSearch } from "@/store/searchSlice";
 import { showAlert } from "@/app/lib/alert";
@@ -213,7 +216,7 @@ export default function PickupInfoPage() {
         <div className="container mx-auto px-2">
           <div className="flex flex-col md:flex-row space-x-5 pt-[90px] md:pt-[20px] xl:pt-0 mt-0 md:mt-20 xl:mt-40">
             <div className="w-full md:w-1/3 order-2 md:order-1">
-              <div className="sticky top-5 z-50">              
+              <div className="sticky top-5 z-50">
 
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
                   <div
@@ -223,8 +226,12 @@ export default function PickupInfoPage() {
                     <h4 className="text-sm xl:text-lg font-bold">
                       Booking Summary
                     </h4>
-                    <span className="text-xl font-bold">
-                      {collapse.booking ? "−" : "+"}
+                    <span className="flex items-center">
+                      <ChevronDownIcon
+                        className={`w-5 h-5 transition-transform duration-300 ${
+                          collapse.booking ? "rotate-180" : ""
+                        }`}
+                      />
                     </span>
                   </div>   
                   <div
@@ -244,8 +251,12 @@ export default function PickupInfoPage() {
                     <h4 className="text-sm xl:text-lg font-bold">
                       Return Trip Booking Summary
                     </h4>
-                    <span className="text-xl font-bold">
-                      {collapse.returnBooking ? "−" : "+"}
+                    <span className="flex items-center">
+                      <ChevronDownIcon
+                        className={`w-5 h-5 transition-transform duration-300 ${
+                          collapse.returnBooking ? "rotate-180" : ""
+                        }`}
+                      />
                     </span>
                   </div>
                   <div
@@ -265,8 +276,12 @@ export default function PickupInfoPage() {
                     <h4 className="text-sm xl:text-lg font-bold">
                       Price breakdown
                     </h4>
-                    <span className="text-xl font-bold">
-                      {collapse.price ? "−" : "+"}
+                    <span className="flex items-center">
+                      <ChevronDownIcon
+                        className={`w-5 h-5 transition-transform duration-300 ${
+                          collapse.price ? "rotate-180" : ""
+                        }`}
+                      />
                     </span>
                   </div>
                   <div

@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { saveSearch } from "@/store/searchSlice";
 import { FaChevronLeft, FaChevronRight, FaChild } from "react-icons/fa";
+import {
+  ChevronDownIcon
+} from "@heroicons/react/24/solid";
 import { chargeSavedCard, createBooking } from "@/app/lib/externalApi";
 import Tabs from "@/app/components/Tabs";
 import PriceBreakdown from "@/app/components/PriceBreakdown";
@@ -190,8 +193,12 @@ export default function CheckoutPage() {
                     <h4 className="text-sm xl:text-lg font-bold">
                       Price breakdown
                     </h4>
-                    <span className="text-xl font-bold">
-                      {collapse.price ? "−" : "+"}
+                    <span className="flex items-center">
+                      <ChevronDownIcon
+                        className={`w-5 h-5 transition-transform duration-300 ${
+                          collapse.price ? "rotate-180" : ""
+                        }`}
+                      />
                     </span>
                   </div>
                   <div
