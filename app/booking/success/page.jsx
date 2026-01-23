@@ -109,7 +109,7 @@ export default function BookingSuccess() {
 
                       <div className="webBG flex-1 w-full h-full flex items-center justify-center md:justify-end py-2 md:py-0 px-6">
                         <span className="font-bold text-xs md:text-sm tracking-wide">
-                          PICKUP TRIP
+                          {bookData?.booking?.trip_type && bookData.booking.trip_type.toUpperCase()} PICKUP TRIP
                         </span>
                       </div>
                     </div>
