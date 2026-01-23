@@ -174,15 +174,13 @@ export default function CheckoutPage() {
                       <h2 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Billing Information</h2>
                         <div className="flex justify-between items-center">
                             <p className="text-sm text-gray-700">Billing Information</p>
-                            <button 
-                            
+                            <button
                             onClick={() => router.push("/booking/payment")}
                             className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                         </div>
                         <b className="text-xs md:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
                     </div>
                 </div>
-                
 
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
                   <div
