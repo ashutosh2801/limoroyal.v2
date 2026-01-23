@@ -97,7 +97,7 @@ export default function PickupInfoPage() {
     totalSelected,
     seats: data?.seats || seats,
     // Return Trip
-    returnTrip: data?.PickupInfo?.returnTrip || "",
+    returnTrip: data?.PickupInfo?.returnTrip || false,
     // Special Requests
     trip_notes: data?.PickupInfo?.trip_notes || "",
   });
@@ -145,7 +145,6 @@ export default function PickupInfoPage() {
       ...prev,
       totalSelected: newTotal,
     }));
-
   };
   const isDisabled = (type) => totalSelected >= requiredSeats && seats[type] === 0;
 
@@ -208,7 +207,6 @@ export default function PickupInfoPage() {
         refMsg.current?.scrollIntoView({ behavior: "smooth" }); return;
       }
 
-
       let saveData = {};
       if(form.returnTrip) {
         const formData = await childRef.current.validateForm();
@@ -250,17 +248,17 @@ export default function PickupInfoPage() {
   };
 
   const [collapse, setCollapse] = useState({
-      booking: true,
-      returnBooking: true,
-      price: true,
-    });
+    booking: true,
+    returnBooking: true,
+    price: true,
+  });
   
-    const toggleCollapse = (key) => {
-      setCollapse((prev) => ({
-        ...prev,
-        [key]: !prev[key],
-      }));
-    };
+  const toggleCollapse = (key) => {
+    setCollapse((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
   return (
     <div className="min-h-screen">
@@ -1065,6 +1063,8 @@ export default function PickupInfoPage() {
                           )
                         } 
 
+                        {data.tripType == 'oneway' && (
+                        <>
                         {/* RETURN TRIP */}
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-2 md:w-[260px]">
@@ -1093,6 +1093,8 @@ export default function PickupInfoPage() {
                         {/* RETURN TRIP FIELDS (SHOW ONLY IF ON) */}
                         {form.returnTrip && (
                           <ReturnTrip ref={childRef} />
+                        )}
+                        </>
                         )}
                       </div>
                       

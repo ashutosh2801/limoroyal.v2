@@ -15,9 +15,9 @@ import {
 } from "@heroicons/react/24/solid";
 import { CheckCircleIcon as CheckCircleOutlineIcon } from "@heroicons/react/24/outline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faWallet, faFireFlameCurved } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { saveSearch } from "@/store/searchSlice";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft } from "react-icons/fa";
 import { getPickupData } from "@/app/lib/externalApi";
 import Tabs from "@/app/components/Tabs";
 import RouteMap from "@/app/components/RouteMap";
@@ -26,8 +26,7 @@ export default function Booking() {
   const router = useRouter();
   const dispatch = useDispatch();
   const activeStep = 0; // Service Class
-  const [submiting, setSubmitting] = useState(false);
-  
+  const [submiting, setSubmitting] = useState(false);  
   const [selectedIdx, setSelectedIdx] = useState(null);
 
   const { data } = useSelector((state) => state.search);
@@ -53,10 +52,10 @@ export default function Booking() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedIdx, setExpandedIdx] = useState(null);
-  const [passengers, setPassengers] = useState(1);
-  const [luggage, setLuggage] = useState(0);
   const [vehicleData, setVehicleData] = useState({});
   const [mobileModalOpen, setMobileModalOpen] = useState(false);
+  const [passengers, setPassengers] = useState(1);
+  const [luggage, setLuggage] = useState(0);
 
   useEffect(() => {
     const loadPickups = async () => {
@@ -84,8 +83,9 @@ export default function Booking() {
 
     loadPickups();
 
-  }, []);  
+    console.log( data );
 
+  }, []);
 
   const pricedVehicles = vehicles.map((v) => {
     const basePrice =
@@ -94,7 +94,7 @@ export default function Booking() {
           Number(v.baseFare || 0)
         : Number(v.priceHR || 0) * Number(trip.duration || 0);
     
-    const offerPrice = basePrice * 1.10; // ✅ add 10%    
+    const offerPrice = basePrice * 1.10; // add 10%    
 
     return {
       ...v,
@@ -299,9 +299,6 @@ export default function Booking() {
                 <div className="p-3 xl:p-8">
                   {/* Blacklane Stepper */}
                   <Tabs activeStep={activeStep} />              
-
-                  {/* Trip summary (date,time,from,to) */}
-                  {/* <TripSummary trip={trip} /> */}
 
                   {/* Heading */}
                   <h2 className="mt-2 text-lg xl:text-xl font-bold">Select a vehicle class</h2>

@@ -69,11 +69,11 @@ export default function PickupInfoPage() {
     email: data?.returnData?.PickupInfo?.email || data?.PickupInfo?.email || "",
     contactNumber: data?.returnData?.PickupInfo?.contactNumber || data?.PickupInfo?.contactNumber || "",
     // Additional Information
-    childSeats: data?.returnData?.PickupInfo?.childSeats || data?.PickupInfo?.childSeats || "",
+    childSeats: data?.returnData?.PickupInfo?.childSeats || "",
     totalSelected,
     seats: data?.seats || seats,
     // Special Requests
-    trip_notes: data?.returnData?.PickupInfo?.trip_notes || data?.PickupInfo?.trip_notes || "",
+    trip_notes: data?.returnData?.PickupInfo?.trip_notes || "",
   });
 
   const handleSeatChange = (type, value) => {
@@ -518,7 +518,6 @@ export default function PickupInfoPage() {
                     {/* Additional Info */}
                     <div className="mb-2">
                       <p className="font-semibold text-sm md:text-base">Additional Information</p>
-
                       <div className="w-full mt-5 space-y-4">
                         {
                           requiredSeats > 0 && (
@@ -717,10 +716,7 @@ export default function PickupInfoPage() {
                             </>
                           )
                         }
-
-                        
                       </div>
-                      
                     </div>
 
 

@@ -3,8 +3,6 @@
 import { use, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import {
   MapPinIcon,
   CalendarDaysIcon,
@@ -18,6 +16,8 @@ import { startSearch, saveSearch } from "@/store/searchSlice";
 import { extractAirportData, convertTime, canAddAnotherStop } from "@/app/lib/functions";
 import { showAlert } from "@/app/lib/alert";
 import { combineDateAndTime } from "@/app/lib/calculateTripPrice";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Search() {
 
@@ -319,10 +319,7 @@ export default function Search() {
   // ---------------- SEARCH One Way HANDLER ----------------
   const handleSearchOneWay = async() => {
     if (!googleReady) {
-      showAlert({
-        text: "Map services are still loading. Please wait.",
-        icon: "warning",
-      });
+      showAlert({text: "Map services are still loading. Please wait."});
       return;
     }
 
@@ -330,8 +327,16 @@ export default function Search() {
       showAlert({text: "Please select pickup address from dropdown list!"});
       return;
     }
+    if (fromPlace?.isAirport && !fromFlightNumber) {
+      showAlert({text: "Flight number is required for airport pickup!"});
+      return;
+    }
     if ((!toPlace)) {
       showAlert({text: "Please select drop-off address from dropdown list!"});
+      return;
+    }
+    if (toPlace?.isAirport && !toFlightNumber) {
+      showAlert({text: "Flight number is required for airport drop-off."});
       return;
     }
     if ((!pickupDate)) {
@@ -340,24 +345,6 @@ export default function Search() {
     }
     if ((!pickupTime)) {
       showAlert({text: "Please select pickup time!"});
-      return;
-    }
-
-    if (fromPlace?.isAirport && !fromFlightNumber) {
-      showAlert({
-        text: "Flight number is required for airport pickup!",
-        icon: "warning",
-      });
-      // document.getElementById("fromFlightNumber").focus();
-      return;
-    }
-
-    if (toPlace?.isAirport && !toFlightNumber) {
-      showAlert({
-        text: "Flight number is required for airport drop-off.",
-        icon: "warning",
-      });
-      // document.getElementById("toFlightNumber").focus();
       return;
     }
 
@@ -449,20 +436,60 @@ export default function Search() {
       // Pickup DateTime
       const pickupDateTime = combineDateAndTime( pickupDate, pickupTime );
 
+      // Get Route Details
+      const routeDetails = await getRouteDetails(fromPlace, toPlace, additionalStops, pickupDateTime);
+
       // Estimated Arrival = pickup + duration
-      const estimatedTime = new Date( pickupDateTime.getTime() + (parseFloat(timeInput) * 60) );
+      const estimatedTime = new Date( pickupDateTime.getTime() + routeDetails.durationMinutes * 60 * 1000 );
+
+      // Estimated Arrival = pickup + duration
+      // const estimatedTime = new Date( pickupDateTime.getTime() + (parseFloat(timeInput) * 60) );
 
       dispatch(
         saveSearch({
           tripType: activeTab,
           from: fromPlace,
-          duration: timeInput,
-          durationMinutes: convertTime(timeInput, 'H'),
+          to: toPlace,
           pickupDate: pickupDate.toISOString(),
           pickupTime: pickupTime.toISOString(),
           pickupTimeLabel: pickupTime.toLocaleTimeString("en-US", time12HrOptions),
           estimatedTime: estimatedTime.toISOString(),
           estimatedTimeLabel: estimatedTime.toLocaleTimeString("en-US", time12HrOptions),
+          airportFrom: fromPlace?.isAirport
+          ? {
+              fromFlightNumber,
+              flightCat,
+              terminal: fromPlace.terminal,
+              meetAndGreet: flightCat === "Meet & Greet" || flightCat === "Curbside",
+              airportFee: flightCat === "Meet & Greet" || flightCat === "Curbside",
+            }
+          : null,
+          airportTo: toPlace?.isAirport
+          ? {
+              toFlightNumber,
+              terminal: toPlace.terminal,
+              meetAndGreet: false,
+              airportFee: false,
+            }
+          : null,
+          additionalStops: additionalStops.filter(s => s.address !== null),
+          // Route info
+          distanceMiles: routeDetails.distanceMiles || 0,
+          distanceKM: routeDetails.distanceKM || 0,
+          duration: timeInput,
+          durationMinutes: convertTime(timeInput, 'H'),
+          routeDescription: routeDetails.routeDescription,
+          highlights: routeDetails.highlights,
+
+          // tripType: activeTab,
+          // from: fromPlace,
+          // duration: timeInput,
+          // durationMinutes: convertTime(timeInput, 'H'),
+          // pickupDate: pickupDate.toISOString(),
+          // pickupTime: pickupTime.toISOString(),
+          // pickupTimeLabel: pickupTime.toLocaleTimeString("en-US", time12HrOptions),
+          // estimatedTime: estimatedTime.toISOString(),
+          // estimatedTimeLabel: estimatedTime.toLocaleTimeString("en-US", time12HrOptions),
         })
       );
 
@@ -1192,6 +1219,95 @@ export default function Search() {
               />
             </div>
 
+            {/* Flight Number */}
+            {fromPlace?.isAirport && (
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="relative">
+                {/* Icon */}
+                <FaPlane
+                  className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                />
+
+                {/* Input */}
+                <input
+                  id="fromFlightNumber"
+                  value={fromFlightNumber.toUpperCase()}
+                  type="text"
+                  placeholder=" "
+                  maxLength={6}
+                  className={`${inputClass} peer pl-10 pt-6`}
+                  onChange={(e) => setFromFlightNumber(e.target.value.toUpperCase())}
+                />                
+
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${
+                      fromFlightNumber
+                        ? "top-2 text-xs"
+                        : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                    }`}
+                >
+                  Flight Number
+                </label>
+
+                {/* Helper text */}
+                {!fromFlightNumber && (
+                  <span
+                    className="pointer-events-none absolute left-11 top-8
+                      text-[13px] text-gray-500 transition-opacity
+                      peer-focus:opacity-0"
+                  >
+                    EK202, UL225..
+                  </span>
+                )}
+
+                {/* Clear button */}
+                {fromFlightNumber && (
+                  <XMarkIcon
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                    onClick={() => setFromFlightNumber("")}
+                  />
+                )}
+              </div>
+              <div className="relative">
+                {/* Icon */}
+                <FaPlane
+                  className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                />
+
+                {/* Select */}
+                <select
+                  value={flightCat}
+                  className={`${inputClass} peer pl-10 pt-8 pb-2 appearance-none`}
+                  onChange={(e) => setFlightCat(e.target.value)}
+                >
+                  <option value="">Select</option>
+                  <option value="Meet & Greet">Meet & Greet</option>
+                  <option value="Curbside">Curbside</option>
+                </select>
+
+                {/* Dropdown arrow */}
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  ▼
+                </span>
+
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11 transition-all duration-200 text-gray-400
+                    ${
+                      fromFlightNumber
+                        ? "top-2 text-xs"
+                        : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                    }`}
+                >
+                  Select
+                </label>
+              </div>
+            </div>
+            )}
+
             {/* ADDITIONAL STOP */}
             {additionalStops.map((stop, index) => (
               <div key={index} className="relative">
@@ -1364,6 +1480,60 @@ export default function Search() {
               />
             </div>
 
+            {/* To Flight Number */}
+            {toPlace?.isAirport && (
+            <div className="grid md:grid-cols-1 gap-3">
+              <div className="relative">
+                {/* Icon */}
+                <FaPlane
+                  className={`${iconStyle} absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none`}
+                />
+
+                {/* Input */}
+                <input
+                  id="toFlightNumber"
+                  value={toFlightNumber}
+                  placeholder=" "
+                  className={`${inputClass} peer pl-10 pt-6`}
+                  onChange={(e) => setToFlightNumber(e.target.value.toUpperCase())}
+                />                
+
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${
+                      toFlightNumber
+                        ? "top-2 text-xs"
+                        : "top-3 text-sm peer-focus:top-2 peer-focus:text-xs"
+                    }`}
+                >
+                  Flight Number
+                </label>
+
+                {/* Helper text */}
+                {!toFlightNumber && (
+                  <span
+                    className="pointer-events-none absolute left-11 top-8
+                      text-[13px] text-gray-500 transition-opacity
+                      peer-focus:opacity-0"
+                  >
+                    EK202, UL225..
+                  </span>
+                )}
+
+                {/* Clear button */}
+                {toFlightNumber && (
+                  <XMarkIcon
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                    onClick={() => setToFlightNumber("")}
+                  />
+                )}
+              </div>
+              
+            </div>
+            )}
+
             {/* Duration */}
             <div className="relative">
               {/* Icon */}
@@ -1411,7 +1581,7 @@ export default function Search() {
                     text-[13px] text-gray-500 transition-opacity
                     peer-focus:opacity-0"
                 >
-                  02:00 Hrs
+                  03:00 Hrs
                 </span>
               )}
 
@@ -1437,63 +1607,67 @@ export default function Search() {
               />
             </div>
 
-            <div className="relative">
-              <CalendarDaysIcon className={iconStyle} />
-              <DatePicker
-                selected={pickupDate}
-                onChange={setPickupDate}
-                dateFormat="dd MMM yyyy"
-                minDate={new Date()}
-                placeholderText="Pickup date"
-                className={`${inputClass} pt-[30px] pb-[8px]`}
-                wrapperClassName="w-full"
 
-                showMonthDropdown
-                showYearDropdown
-                dropdownMode="select"
-                calendarClassName="large-datepicker"
-              />
-              
-              {/* Floating label */}
-              <label
-                className={`pointer-events-none absolute left-11
-                  transition-all duration-200 text-gray-400
-                  ${
-                    toInput
-                      ? "top-3 text-xs"
-                      : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
-                  }`}
-              >
-                Pickup Date
-              </label>
-            </div>
 
-            <div className="relative">
-              <ClockIcon className={iconStyle} />
-              <DatePicker
-                selected={pickupTime}
-                onChange={setPickupTime}
-                showTimeSelect
-                showTimeSelectOnly
-                timeIntervals={5}
-                dateFormat="hh:mm aa"
-                placeholderText="12:00 pm"
-                className={`${inputClass} pt-[30px] pb-[8px]`}
-                wrapperClassName="w-full"
-                calendarClassName="large-timepicker"
-              />
-              {/* Floating label */}
-              <label
-                className={`pointer-events-none absolute left-11
-                  transition-all duration-200 text-gray-400
-                  ${
-                    toInput
-                      ? "top-3 text-xs"
-                      : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
-                  }`}
-              >
-                Pickup Date
-              </label>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="relative">
+                <CalendarDaysIcon className={iconStyle} />
+                <DatePicker
+                  selected={pickupDate}
+                  onChange={setPickupDate}
+                  dateFormat="dd MMM yyyy"
+                  minDate={new Date()}
+                  placeholderText="Pickup date"
+                  className={`${inputClass} pt-[30px] pb-[8px]`}
+                  wrapperClassName="w-full"
+
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode="select"
+                  calendarClassName="large-datepicker"
+                />
+                
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${
+                      toInput
+                        ? "top-3 text-xs"
+                        : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                    }`}
+                >
+                  Pickup Date
+                </label>
+              </div>
+
+              <div className="relative">
+                <ClockIcon className={iconStyle} />
+                <DatePicker
+                  selected={pickupTime}
+                  onChange={setPickupTime}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={5}
+                  dateFormat="hh:mm aa"
+                  placeholderText="12:00 pm"
+                  className={`${inputClass} pt-[30px] pb-[8px]`}
+                  wrapperClassName="w-full"
+                  calendarClassName="large-timepicker"
+                />
+                {/* Floating label */}
+                <label
+                  className={`pointer-events-none absolute left-11
+                    transition-all duration-200 text-gray-400
+                    ${
+                      toInput
+                        ? "top-3 text-xs"
+                        : "top-3 text-xs peer-focus:top-3 peer-focus:text-xs"
+                    }`}
+                >
+                  Pickup Date
+                </label>
+              </div>
             </div>
 
             <div className="relative">
@@ -1551,6 +1725,7 @@ export default function Search() {
             <div>
               <button
                 onClick={handleSearchByTheHr}
+                disabled={loading}
                 className="w-full py-3 rounded-xl text-base search-btn transition cursor-pointer">
                 {loading ? 'Searching...' : 'Search'}
               </button>

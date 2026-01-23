@@ -128,10 +128,10 @@ export default function RouteMap({isReturn=false}) {
     directionsService.route(
       {
         origin: pointA,
-        waypoints: stops.map((s) => ({
-          location: s,
-          stopover: true,
-        })),
+        // waypoints: stops.map((s) => ({
+        //   location: s,
+        //   stopover: true,
+        // })),
         destination: pointB,
         optimizeWaypoints: false,
         travelMode: window.google.maps.TravelMode.DRIVING,
