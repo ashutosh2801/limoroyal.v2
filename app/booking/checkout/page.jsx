@@ -154,13 +154,13 @@ export default function CheckoutPage() {
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-5">
                   <h2 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Payment details</h2>
                   <div className="flex justify-between items-center">
-                      <p className="text-sm text-gray-700">Payment</p>
+                      <p className="text-xs xl:text-sm text-gray-700">Payment</p>
                       <button 
                       onClick={() => router.push("/booking/payment")}
                       className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                   </div>
-                  <b className="text-xs md:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
-                  <div className="flex items-center gap-2 text-xs md:text-sm font-medium mt-2">
+                  <b className="text-xs xl:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
+                  <div className="flex items-center gap-2 text-xs xl:text-sm font-medium mt-2">
                     {data.paymentType == 'quote' ? <span className="text-green-500">Get a Quote</span> : <>
                       <Image src={visaIcon} alt="Visa" className="h-5 w-auto" />
                       •••• {data.cardData?.last4} ({data.cardData?.brand?.toUpperCase()})
@@ -174,12 +174,12 @@ export default function CheckoutPage() {
                     <div>
                       <h2 className="mb-4 text-sm xl:text-lg font-bold border-b border-gray-200 pb-1">Billing Information</h2>
                         <div className="flex justify-between items-center">
-                            <p className="text-sm text-gray-700">Billing Information</p>
+                            <p className="text-xs xl:text-sm text-gray-700">Billing Information</p>
                             <button
                             onClick={() => router.push("/booking/payment")}
                             className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                         </div>
-                        <b className="text-xs md:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
+                        <b className="text-xs xl:text-sm font-semibold">{`${data?.PickupInfo?.title} ${data?.PickupInfo?.firstName} ${data?.PickupInfo?.lastName}`}</b>
                     </div>
                 </div>
 
