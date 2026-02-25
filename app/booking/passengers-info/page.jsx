@@ -288,6 +288,7 @@ export default function PickupInfoPage() {
                   </div>
                 </div>
 
+                {data?.selectedVehicle?.isShowPrice == 1 && (
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
                   <div
                     className="flex justify-between items-center cursor-pointer border-b border-gray-200 pb-1"
@@ -307,7 +308,8 @@ export default function PickupInfoPage() {
                   >
                     <PriceBreakdown paymentData={data.payment} />
                   </div>
-                </div>               
+                </div>  
+                )}             
 
               </div>
             </div>
