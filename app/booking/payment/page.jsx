@@ -260,6 +260,7 @@ function PaymentForm() {
                   </div>
                 )}
 
+{data?.selectedVehicle?.isShowPrice == 1 && (
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
                   <div
                     className="flex justify-between items-center cursor-pointer border-b border-gray-200 pb-1"
@@ -280,6 +281,7 @@ function PaymentForm() {
                     <PriceBreakdown paymentData={data.returnData?.payment || data.payment} oldData={data.returnData?.payment ?data.payment : null} />  
                   </div>
                 </div>
+)}
               
             </div>
             </div>
