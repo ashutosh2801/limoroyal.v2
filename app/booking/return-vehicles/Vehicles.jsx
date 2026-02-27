@@ -35,6 +35,11 @@ export default function Booking() {
 
   const { data } = useSelector((state) => state.search);
   // console.log(data);
+  useEffect(() => {
+    if (!data || Object.keys(data).length === 0) {
+      router.push("/");
+    }
+  }, [data, router]);
   if (!data || Object.keys(data).length === 0) {
     router.push("/");
     return;
@@ -57,8 +62,8 @@ export default function Booking() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedIdx, setExpandedIdx] = useState(null);
-  const [passengers, setPassengers] = useState(1);
-  const [luggage, setLuggage] = useState(0);
+  // const [passengers, setPassengers] = useState(1);
+  // const [luggage, setLuggage] = useState(0);
   const [vehicleData, setVehicleData] = useState({});
   const [mobileModalOpen, setMobileModalOpen] = useState(false);
 
@@ -74,9 +79,9 @@ export default function Booking() {
           throw new Error(`Failed to load pickups:`);
         }
 
-        setPickups(json.data ?? json);
+        console.log("Fetched pickups:", json);
+        setPickups(json.vehicles || []);
 
-        console.log("Fetched pickups:", json.data ?? json);
       } catch (err) {
         console.error(err);
         console.error("Pickup fetch error:", err);
@@ -90,7 +95,7 @@ export default function Booking() {
 
   }, []);  
 
-  const pricedVehicles = vehicles.map((v) => {
+  const pricedVehicles = vehicles.length > 0 && vehicles.map((v) => {
     const basePrice =
       trip.tripType === 'oneway'
         ? (Number(v.priceKM || 0) * Number(trip.distanceKM || 0)) +
@@ -105,7 +110,7 @@ export default function Booking() {
       offerPrice: `$${offerPrice.toFixed(2)}`,
       numericPrice: basePrice, // optional but useful
     };
-  });
+  }) || [];
 
   const selectVahicle = () => {
 
@@ -267,6 +272,7 @@ export default function Booking() {
                   </div>
                 </div>
 
+                {data?.selectedVehicle?.isShowPrice == 1 && (    
                 <div className="bg-white rounded-md shadow-xl overflow-hidden text-black px-4 py-4 mb-4">
                   <div
                     className="flex justify-between items-center cursor-pointer border-b border-gray-200 pb-1"
@@ -291,6 +297,7 @@ export default function Booking() {
                     <PriceBreakdown paymentData={data.payment} />
                   </div>
                 </div>
+                )}
               </div>
             </div>
 
@@ -404,8 +411,17 @@ export default function Booking() {
 
                                 {/* price */}
                                 <div className="text-right md:w-70 xl:w-40 mt-8 md:mt-0">
-                                  <div className="text-[10px] md:text-base xl:text-base font-medium text-red-300 line-through">{v.offerPrice}</div>
-                                  <div className="text-xs md:text-lg xl:text-2xl font-bold md:mt-1 md:mb-1">{v.price}</div>
+                                  
+                                  {v.isShowPrice==1 ? (
+                                    <>
+                                      <div className="text-[10px] md:text-base xl:text-base font-medium text-red-300 line-through">{v.offerPrice}</div>
+                                      <div className="text-xs md:text-lg xl:text-2xl font-bold md:mt-1 md:mb-1">{v.price}</div>
+                                    </>
+                                  ) : (
+                                    <div className="text-xs md:text-md xl:text-lg font-bold md:mt-1 md:mb-1">Request a quote</div>
+                                  )}
+                                  {/* <div className="text-[10px] md:text-base xl:text-base font-medium text-red-300 line-through">{v.offerPrice}</div>
+                                  <div className="text-xs md:text-lg xl:text-2xl font-bold md:mt-1 md:mb-1">{v.price}</div> */}
                                   <div>
                                     <span className="hidden md:flex py-1 text-xs font-light md:justify-end items-center"><CheckCircleOutlineIcon className="w-5 h-5 text-green-600 mr-1 flex-shrink-0" /> Gratuity included</span>
                                   </div>
@@ -689,12 +705,12 @@ export default function Booking() {
 
 
                   <div className="border-t border-gray-200 mt-5">
-                    <h6 className="py-5 flex w-full text-black text-xs md:text-sm"> <ExclamationCircleIcon className="h-4 w-4 md:h-5 md:w-5 text-black mr-1" /> Eligable promotion auto-supplied</h6>
+                    <h6 className="py-5 flex w-full text-black text-xs md:text-sm"> <ExclamationCircleIcon className="h-4 w-4 md:h-5 md:w-5 text-black mr-1" /> Eligible promotion auto-supplied</h6>
                     <div className="border border-gray-200 rounded-xl">
                       <div className="p-4">
                         <b className="text-gray-500 font-semibold text-xs md:text-sm mb-2 flex">All classes include:</b>
-                        <p className="text-gray-700 text-xs xl:text-sm py-2 flex items-center items-start"> <CheckCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> Free Cancellation up until 1 hour before pickup</p>
-                        <p className="text-gray-700 text-xs xl:text-sm py-2 flex items-center items-start"> <CheckCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> Free 60 Minutes of wait time</p>
+                        <p className="text-gray-700 text-xs xl:text-sm py-2 flex items-center items-start"> <CheckCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> Free Cancellation before pickup 48 hours</p>
+                        <p className="text-gray-700 text-xs xl:text-sm py-2 flex items-center items-start"> <CheckCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> Free 30 Minutes of wait time</p>
                         <p className="text-gray-700 text-xs xl:text-sm py-2 flex items-center items-start"> <CheckCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> Meet & Greet</p>
                         <p className="text-gray-700 text-xs xl:text-sm py-2 flex items-center items-start"> <CheckCircleIcon className="h-5 w-5 text-gray-600 mr-1 flex-shrink-0" /> Complimentary bottle of water</p>
                       </div>
