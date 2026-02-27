@@ -11,7 +11,8 @@ import {
   CheckCircleIcon,
   ClockIcon,
   CalendarDaysIcon,
-  Squares2X2Icon
+  Squares2X2Icon,
+  ChevronDownIcon
 } from "@heroicons/react/24/solid";
 import { CheckCircleIcon as CheckCircleOutlineIcon } from "@heroicons/react/24/outline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -229,8 +230,12 @@ export default function Booking() {
                     <h4 className="text-sm xl:text-lg font-bold">
                       Booking Summary
                     </h4>
-                    <span className="text-xl font-bold">
-                      {collapse.booking ? "−" : "+"}
+                    <span className="flex items-center">
+                      <ChevronDownIcon
+                        className={`w-5 h-5 transition-transform duration-300 ${
+                          collapse.booking ? "rotate-180" : ""
+                        }`}
+                      />
                     </span>
                   </div>   
                   <div
@@ -250,8 +255,12 @@ export default function Booking() {
                     <h4 className="text-sm xl:text-lg font-bold">
                       Return Trip Booking Summary
                     </h4>
-                    <span className="text-xl font-bold">
-                      {collapse.returnBooking ? "−" : "+"}
+                    <span className="flex items-center">
+                      <ChevronDownIcon
+                        className={`w-5 h-5 transition-transform duration-300 ${
+                          collapse.returnBooking ? "rotate-180" : ""
+                        }`}
+                      />
                     </span>
                   </div>
                   <div
@@ -272,8 +281,12 @@ export default function Booking() {
                     <h4 className="text-sm xl:text-lg font-bold">
                       Price breakdown
                     </h4>
-                    <span className="text-xl font-bold">
-                      {collapse.price ? "−" : "+"}
+                    <span className="flex items-center">
+                      <ChevronDownIcon
+                        className={`w-5 h-5 transition-transform duration-300 ${
+                          collapse.price ? "rotate-180" : ""
+                        }`}
+                      />
                     </span>
                   </div>
                   <div

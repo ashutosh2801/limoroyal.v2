@@ -6,7 +6,7 @@ export default function PriceBreakdown({paymentData, oldData=null}) {
     
     return (
     <div>
-        <div className="relative mt-4 text-xs md:text-sm">
+        <div className="relative mt-4 text-xs xl:text-sm">
             <div className="flex justify-between py-1">
                 <span className="text-gray-700">Price {oldData!=null ? '(+ retrun trip)':''} excl. tax</span>
                 <span>{paymentData?.subTotalLabel}</span>
