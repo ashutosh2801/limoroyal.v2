@@ -9,15 +9,19 @@ import { usePathname } from 'next/navigation'
 import logo from "../../public/assets/limo-royale.png"
 
 const Header = () => {
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
-  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
-  const pathname = usePathname();
+    const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+    const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+    const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
+    const pathname = usePathname();
 
     const isActive = (path) => {
         if (typeof window === "undefined") return false;
         return window.location.pathname === path;
     };
+
+    if(pathname === "/booking-limo-royale") {
+        return null;
+    }
 
 
   return (

@@ -8,8 +8,15 @@ import {
 } from 'react-icons/fa'
 import Link from 'next/link'
 import FloatingActions from './FloatingActions';
+import { usePathname } from 'next/navigation'
 
 const Footer = () => {
+    const pathname = usePathname();
+
+    if(pathname === "/booking-limo-royale") {
+        return null;
+    }
+
   return (
     <div className='border-t lg:border-0 webBorderColor'>
       <div className='container mx-auto px-2'>
