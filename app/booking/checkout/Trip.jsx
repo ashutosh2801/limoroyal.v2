@@ -28,7 +28,7 @@ function Trip() {
                 </div>
             </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex flex-wrap md:flex-nowrap md:justify-between items-start">
             
             <div>
             {/* Locations */}
@@ -39,7 +39,7 @@ function Trip() {
 
             <button 
             onClick={() => router.push("/")}
-            className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
+            className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer mt-3 md:mt-6">Edit</button>
         </div>
         </div>
 
@@ -60,7 +60,7 @@ function Trip() {
                 <div className="flex items-end flex-col md:flex">
                     <button 
                     onClick={() => router.push("/booking")}
-                    className="text-xs font-semibold mt-3 md:mt-0 py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
+                    className="text-xs font-semibold py-2 px-4 bg-gray-100 hover:bg-gray-200 transition rounded-xl cursor-pointer">Edit</button>
                     <Image
                         src={data.selectedVehicle.img ?? vClass}
                         alt={data.selectedVehicle.name}

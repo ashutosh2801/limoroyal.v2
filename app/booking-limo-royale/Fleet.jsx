@@ -28,26 +28,10 @@ import Stretch4 from '../../public/assets/limousines/royale-stretch.png'
 const Fleet = () => {
   return (
     <main>
-        <div>
-            <div className='relative'>
-                <div className='page-bg object-cover absolute h-[450px] lg:h-[550px] inset-0 opacity-50'></div>
-                <div className='relative z-10 pt-50 lg:pt-80 pb-30'>
-                    <div className='container mx-auto px-2'>
-                        <div>
-                            <ul className='breadcrumb uppercase webColor text-sm flex'>
-                            <li><a href='/'>Home</a></li>
-                            <li>Fleet</li>
-                            </ul>
-                        </div>
-                        <h2 className='text-white text-2xl lg:text-6xl leading-snug my-5 font-medium'>Fleet</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div>
+        <div id='fleet'>
             <div className='container mx-auto px-2'>
-                <div className='pt-10 lg:pt-0 pb-10' data-aos="fade-up">
-                    <h1 className='text-white text-2xl lg:text-4xl leading-snug my-5'>Our Fleet</h1>
+                <div className='pt-10 lg:pt-5 pb-10 text-center' data-aos="fade-up">
+                    <h1 className='text-white text-2xl lg:text-3xl font-medium my-5'>Our Fleet</h1>
                     <p className='text-base leading-relaxed webFontColor'>
                     At Limo Royale, we understand the importance of seamless, professional travel for your business. Whether it’s for conferences, team-building retreats, business meetings, or corporate outings, our corporate charter service offers unmatched comfort, style, and efficiency. From initial booking to final drop-off, we ensure your team experiences a flawless journey, so you can focus on what matters most—your business.
                     </p>
@@ -57,11 +41,11 @@ const Fleet = () => {
         <div>
             <div className='container mx-auto px-2'>
                 <div id='suv' className='mb-10'>
-                    <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-5'>SUV</h2>
+                    <h2 className='text-white text-2xl lg:text-2xl leading-snug mb-5'>SUV</h2>
                     <div>
                         <Swiper
                             modules={[Autoplay]}
-                            spaceBetween={15}
+                            spaceBetween={20}
                             slidesPerView={1}
                             loop={true}
                             autoplay={{ delay: 2500, disableOnInteraction: false }}
@@ -73,7 +57,7 @@ const Fleet = () => {
                             }}
                         >
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px] rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={suv1} className='w-full h-45 mb-5 mt-5 object-contain' alt='Cadilac Escalade ESV' />
                                 <h3 className='text-white text-xl inline-block my-5'>Cadilac Escalade ESV</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -86,14 +70,14 @@ const Fleet = () => {
                                         <small className='text-white'>6</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Ideal for single passengers or small groups
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px] rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={suv2} className='w-full h-45 mb-5 mt-5 object-contain' alt='GMC Yukon XL' />
                                 <h3 className='text-white text-xl inline-block my-5'>GMC Yukon XL</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -106,14 +90,14 @@ const Fleet = () => {
                                         <small className='text-white'>6</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Traditional limo options for small to medium groups.
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px] rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={suv3} className='w-full h-45 mb-5 mt-5 object-contain' alt='Suburban High Country' />
                                 <h3 className='text-white text-xl inline-block my-5'>Suburban High Country</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -126,14 +110,14 @@ const Fleet = () => {
                                         <small className='text-white'>6</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Larger limousines for additional space and comfort.
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px] rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={suv4} className='w-full h-45 mb-5 mt-5 object-contain' alt='Lincoln Navigator Reserve L' />
                                 <h3 className='text-white text-xl inline-block my-5'>Lincoln Navigator Reserve</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -146,7 +130,7 @@ const Fleet = () => {
                                         <small className='text-white'>6</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Party bus for special occasions like birthdays or bachelor/bachelorette parties.
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
@@ -156,11 +140,11 @@ const Fleet = () => {
                     </div>
                 </div>
                 <div id='sedan' className='mb-10'>
-                    <h2 className='text-white text-2xl lg:text-4xl leading-snug my-5'>SEDAN</h2>
+                    <h2 className='text-white text-2xl lg:text-2xl leading-snug my-5'>SEDAN</h2>
                     <div>
                         <Swiper
                             modules={[Autoplay]}
-                            spaceBetween={15}
+                            spaceBetween={20}
                             slidesPerView={1}
                             loop={true}
                             autoplay={{ delay: 2500, disableOnInteraction: false }}
@@ -172,7 +156,7 @@ const Fleet = () => {
                             }}
                         >
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[440px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[440px] rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={sedan1} className='w-full h-45 mb-5 mt-5 object-contain' alt='Mercedes-Benz S-Class LWB' />
                                 <h3 className='text-white text-xl inline-block my-5'>Mercedes-Benz S-Class</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -189,7 +173,7 @@ const Fleet = () => {
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[440px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[440px] rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={sedan2} className='w-full h-45 mb-5 mt-5 object-contain' alt='Audi S8-L' />
                                 <h3 className='text-white text-2xl inline-block my-5'>Audi S8-L</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -206,7 +190,7 @@ const Fleet = () => {
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[440px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[440px] rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={sedan3} className='w-full h-45 mb-5 mt-5 object-contain' alt='BMW 7 Series' />
                                 <h3 className='text-white text-2xl inline-block my-5'>BMW 7 Series</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -223,7 +207,7 @@ const Fleet = () => {
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[440px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[440px] rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={sedan4} className='w-full h-45 mb-5 mt-5 object-contain' alt='TESLA Model S' />
                                 <h3 className='text-white text-2xl inline-block my-5'>TESLA Model S</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -243,11 +227,11 @@ const Fleet = () => {
                     </div>
                 </div>
                 <div id='coaches' className='mb-10'>
-                    <h2 className='text-white text-2xl lg:text-4xl leading-snug my-5'>Luxury Coaches</h2>
+                    <h2 className='text-white text-2xl lg:text-2xl leading-snug my-5'>Luxury Coaches</h2>
                     <div>
                         <Swiper
                             modules={[Autoplay]}
-                            spaceBetween={15}
+                            spaceBetween={20}
                             slidesPerView={1}
                             loop={true}
                             autoplay={{ delay: 2500, disableOnInteraction: false }}
@@ -259,7 +243,7 @@ const Fleet = () => {
                             }}
                         >
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={coaches1} className='w-full h-45 mb-5 mt-5 object-contain' alt='Prevost H3' />
                                 <h3 className='text-white text-2xl inline-block my-5'>Prevost H3</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -272,14 +256,14 @@ const Fleet = () => {
                                         <small className='text-white'>112</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Ideal for large events and tours, offering unmatched luxury and spacious seating.
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={coaches2} className='w-full h-45 mb-5 mt-5 object-contain' alt='TEMSA' />
                                 <h3 className='text-white text-2xl inline-block my-5'>TEMSA</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -292,14 +276,14 @@ const Fleet = () => {
                                         <small className='text-white'>68</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Perfect for mid-sized groups seeking comfort and sophistication.
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={coaches3} className='w-full h-45 mb-5 mt-5 object-contain' alt='Mini Bus' />
                                 <h3 className='text-white text-2xl inline-block my-5'>Mini Bus</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -312,14 +296,14 @@ const Fleet = () => {
                                         <small className='text-white'>48</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     An excellent choice for smaller groups with luxury and convenience in mind.
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={coaches4} className='w-full h-45 mb-5 mt-5 object-contain' alt='Sprinter VAN' />
                                 <h3 className='text-white text-2xl inline-block my-5'>Sprinter VAN</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -332,7 +316,7 @@ const Fleet = () => {
                                         <small className='text-white'>28</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Tailored for intimate group travel with top-tier amenities.
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
@@ -342,11 +326,11 @@ const Fleet = () => {
                     </div>
                 </div>
                 <div id='limousines' className='mb-10'>
-                    <h2 className='text-white text-2xl lg:text-4xl leading-snug my-5'>Stretch Limousines</h2>
+                    <h2 className='text-white text-2xl lg:text-2xl leading-snug my-5'>Stretch Limousines</h2>
                     <div>
                         <Swiper
                             modules={[Autoplay]}
-                            spaceBetween={15}
+                            spaceBetween={20}
                             slidesPerView={1}
                             loop={true}
                             autoplay={{ delay: 2500, disableOnInteraction: false }}
@@ -358,7 +342,7 @@ const Fleet = () => {
                             }}
                         >
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={Stretch1} className='w-full h-45 mb-5 mt-5 object-contain' alt='Royale Stretch Limousines' />
                                 <h3 className='text-white text-2xl inline-block my-5'>Royale Stretch Limousines</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -371,14 +355,14 @@ const Fleet = () => {
                                         <small className='text-white'>6</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Perfect for small group events, offering comfort and a touch of elegance for intimate gatherings or corporate transfers.
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={Stretch2} className='w-full h-45 mb-5 mt-5 object-contain' alt='Royale Super Stretch Limo' />
                                 <h3 className='text-white text-2xl inline-block my-5'>Royale Super Stretch Limo</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -391,14 +375,14 @@ const Fleet = () => {
                                         <small className='text-white'>10</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Combines luxury and spacious seating for medium-sized parties, weddings, or upscale outings
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={Stretch3} className='w-full h-45 mb-5 mt-5 object-contain' alt='Royale Ultra Stretch Limos' />
                                 <h3 className='text-white text-2xl inline-block my-5'>Royale Ultra Stretch Limos</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -411,7 +395,7 @@ const Fleet = () => {
                                         <small className='text-white'>10</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     A top-tier option for large groups, offering luxury seating, entertainment systems, and unmatched sophistication
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
@@ -421,11 +405,11 @@ const Fleet = () => {
                     </div>
                 </div>
                 <div id='grand-party-coach' className='mb-10'>
-                    <h2 className='text-white text-2xl lg:text-4xl leading-snug my-5'>Royale Grand Party Coach</h2>
+                    <h2 className='text-white text-2xl lg:text-2xl leading-snug my-5'>Royale Grand Party Coach</h2>
                     <div>
                         <Swiper
                             modules={[Autoplay]}
-                            spaceBetween={15}
+                            spaceBetween={20}
                             slidesPerView={1}
                             loop={true}
                             autoplay={{ delay: 2500, disableOnInteraction: false }}
@@ -437,7 +421,7 @@ const Fleet = () => {
                             }}
                         >
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center rounded-xl border border-[#1f1f1f] hover:border-[#333] transition duration-500' data-aos="fade-up">
                                 <Image src={Stretch4} className='w-full h-45 mb-5 mt-5 object-contain' alt='Royale Stretch Limousines' />
                                 <h3 className='text-white text-2xl inline-block my-5'>Royale Stretch Limousines</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -450,7 +434,7 @@ const Fleet = () => {
                                         <small className='text-white'>35</small>
                                     </li>
                                 </ul>
-                                <p className='text-base leading-relaxed webFontColor my-5 min-h-[80px]+'>
+                                <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]+'>
                                     A top-tier party coach with luxury amenities, including a VIP lounge area, karaoke setup, dance pole, and customizable lighting. Perfect for weddings, large group events, or all-night celebrations
                                 </p>
                                 <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
