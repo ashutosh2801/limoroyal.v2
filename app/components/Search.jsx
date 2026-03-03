@@ -515,7 +515,7 @@ export default function Search() {
   // ---------------- RENDER ----------------
   return (
     <div className="w-full px-4 relative z-52 mt-5">
-      <div className="bg-white w-full lg:max-w-md xl:max-w-lg shadow-xl relative lg:absolute right-0 lg:right-5 xl:right-20 lg:-top-150 xl:-top-130 mt-10 lg:mt-0 rounded-md">
+      <div className="bg-white w-full lg:max-w-md xl:max-w-lg shadow-xl relative lg:absolute right-0 lg:right-5 xl:right-20 lg:-top-150 xl:-top-130 mt-10 lg:mt-0 rounded-md search-box">
 
         {/* Tabs */}
         <div className="grid grid-cols-2 mt-1">
