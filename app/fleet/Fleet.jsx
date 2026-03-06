@@ -73,7 +73,7 @@ const Fleet = () => {
                             }}
                         >
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[580px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px]' data-aos="fade-up">
                                 <Image src={suv1} className='w-full h-45 mb-5 mt-5 object-contain' alt='Cadilac Escalade ESV' />
                                 <h3 className='text-white text-xl inline-block my-5'>Cadilac Escalade ESV</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -93,7 +93,7 @@ const Fleet = () => {
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[580px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px]' data-aos="fade-up">
                                 <Image src={suv2} className='w-full h-45 mb-5 mt-5 object-contain' alt='GMC Yukon XL' />
                                 <h3 className='text-white text-xl inline-block my-5'>GMC Yukon XL</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -113,7 +113,7 @@ const Fleet = () => {
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[580px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px]' data-aos="fade-up">
                                 <Image src={suv3} className='w-full h-45 mb-5 mt-5 object-contain' alt='Suburban High Country' />
                                 <h3 className='text-white text-xl inline-block my-5'>Suburban High Country</h3>
                                 <ul className='flex justify-center gap-5'>
@@ -133,7 +133,7 @@ const Fleet = () => {
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
-                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[580px]' data-aos="fade-up">
+                            <div className='bg-[#0a0a0a] p-5 text-center min-h-[500px]' data-aos="fade-up">
                                 <Image src={suv4} className='w-full h-45 mb-5 mt-5 object-contain' alt='Lincoln Navigator Reserve L' />
                                 <h3 className='text-white text-xl inline-block my-5'>Lincoln Navigator Reserve</h3>
                                 <ul className='flex justify-center gap-5'>

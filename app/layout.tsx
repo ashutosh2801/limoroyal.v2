@@ -16,7 +16,7 @@ export const metadata = {
   description:
     "Travel like royalty with Limo Royale. Premium fleet, expert chauffeurs, and personalized service for corporate, airport, or special events. Book now!",
   keywords: "airport chauffeur service, airport limo service",
-  metadataBase: new URL("https://limoroyal.com"),
+  metadataBase: new URL("https://limoroyal.com"),  
 
   alternates: {
     canonical: "/", // same as homepage
@@ -32,6 +32,13 @@ export const metadata = {
     description:
       "Travel like royalty with Limo Royale. Premium fleet, expert chauffeurs, and personalized service for corporate, airport, or special events. Book now!",
     url: "https://limoroyal.com/",
+    images: [{
+        url: "/assets/limo-royale.png",
+        width: 750,
+        height: 330,
+        alt: "Limo Royale Logo",
+      },
+    ],
   },
 
   twitter: {
@@ -39,6 +46,7 @@ export const metadata = {
     description:
       "Travel like royalty with Limo Royale. Premium fleet, expert chauffeurs, and personalized service for corporate, airport, or special events. Book now!",
     card: "summary_large_image",
+    images: ["/assets/limo-royale.png"],
   },
 
   other: {
@@ -75,6 +83,11 @@ export default function RootLayout({
           `}
         </Script>
         {/* End Google Tag Manager */}
+
+        <Script
+                  src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&loading=async&libraries=places`}
+                  strategy="afterInteractive" async defer
+                />
       </head>
       <body>
         {/* Google Tag Manager (noscript) */}
@@ -88,9 +101,9 @@ export default function RootLayout({
         </noscript>
         {/* End Google Tag Manager (noscript) */}
         <Providers>
-        <Header />
-        {children}
-        <Footer />
+          <Header />
+          {children}
+          <Footer />
         </Providers>
       </body>
     </html>

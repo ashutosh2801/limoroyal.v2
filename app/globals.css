@@ -149,7 +149,7 @@ a {
 
 .book-now-slide {
   font-family: "Sora", sans-serif;
-  color: #333;
+  color: #fff;
   background-color: #bb9a4b;
 }
 
@@ -257,7 +257,6 @@ a {
   color: #ceb366;
 }
 
-<<<<<<< HEAD
 /* Calendar container */
 .large-datepicker {
   font-size: 2rem;
@@ -304,7 +303,8 @@ a {
 }
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
   width: 120px !important;
-=======
+}
+
 .gallery-swiper .swiper-pagination-bullet {
   background: #fff;
   opacity: 0.4;
@@ -312,5 +312,41 @@ a {
 
 .gallery-swiper .swiper-pagination-bullet-active {
   opacity: 1;
->>>>>>> a3c8d0b71877c1086a6e0ea589bbe63bba8c6585
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+
+.cta-bk-form .search-box {
+  position: relative;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  float: right;
+  max-width: 100%;
 }

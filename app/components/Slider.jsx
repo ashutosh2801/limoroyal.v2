@@ -42,7 +42,7 @@ const Slider = () => {
                         />
                     </div>
                     <div className="absolute top-40 inset-0 flex flex-col items-start justify-center text-white text-left px-5 lg:px-10">
-                        <h2 className="text-5xl md:text-5xl lg:text-7xl font-medium mb-2 text-white leading-tight">
+                        <h2 className="text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-medium mb-2 text-white leading-tight">
                             Where Luxury <br /> Meets the Road
                         </h2>
                         <a
