@@ -143,7 +143,7 @@ export default function Services() {
                 </p>
 
                 <Link
-                  href="/online-reservations"
+                  href="/booking-limo-royale#quote"
                   className="inline-block text-sm uppercase tracking-wide text-[#bb9a4b] transition"
                 >
                   Book Now
