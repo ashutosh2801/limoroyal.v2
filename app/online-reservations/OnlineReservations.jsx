@@ -13,7 +13,7 @@ const OnlineReservations = () => {
                         <li>Book Now</li>
                         </ul>
                     </div>
-                    <h2 className='text-white text-2xl lg:text-6xl leading-snug my-5 font-medium'>Book Now</h2>
+                    <h1 className='text-white text-2xl lg:text-6xl leading-snug my-5 font-medium'>Book Now</h1>
                 </div>
             </div>
         </div>

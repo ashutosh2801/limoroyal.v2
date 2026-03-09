@@ -5,6 +5,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/online-reservations",
+    languages: {
+      "en-CA": "https://limoroyal.com/online-reservations",
+    },
   },
   openGraph: {
     title: "Book Your Ride Online | Limo Royale Luxury Chauffeur Service",
@@ -18,8 +21,6 @@ export const metadata = {
   },
   other: {
     "DC.title": "Book Your Ride Online | Limo Royale Luxury Chauffeur Service",
-    "hreflang": "en-ca",
-    "alternate": "https://limoroyal.com/online-reservations"
   }
 };
 

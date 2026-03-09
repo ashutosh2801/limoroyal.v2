@@ -5,6 +5,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/luxury-chauffeuring-services",
+    languages: {
+      "en-CA": "https://limoroyal.com/luxury-chauffeuring-services",
+    },
   },
   openGraph: {
     title: "Toronto Airport Chauffeur & Luxury Chauffeuring | Limo Royale",
@@ -17,12 +20,6 @@ export const metadata = {
     url: "https://limoroyal.com/luxury-chauffeuring-services",
   },
   dcTitle: "Toronto Airport Chauffeur & Luxury Chauffeuring | Limo Royale",
-  hreflangs: [
-    {
-      href: "https://limoroyal.com/luxury-chauffeuring-services",
-      hreflang: "en-ca",
-    },
-  ],
 };
 
 

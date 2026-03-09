@@ -7,6 +7,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/corporate-limo-service",
+    languages: {
+      "en-CA": "https://limoroyal.com/corporate-limo-service",
+    },
   },
   openGraph: {
     title: "Corporate Limo & Airport Shuttle Service Toronto | Limo Royale",
@@ -23,8 +26,6 @@ export const metadata = {
   other: {
     "DC.title":
       "Corporate Limo & Airport Shuttle Service Toronto | Limo Royale",
-    "hreflang": "en-ca",
-    "alternate": "https://limoroyal.com/corporate-limo-service",
   },
 };
 

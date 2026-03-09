@@ -5,6 +5,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/birthdays-bachelor-and-bachelorette-limo-service",
+    languages: {
+      "en-CA": "https://limoroyal.com/birthdays-bachelor-and-bachelorette-limo-service",
+    },
   },
   openGraph: {
     title: "Celebrate in Style: Birthday & Party Limo Service | Limo Royale",
@@ -17,12 +20,6 @@ export const metadata = {
     url: "https://limoroyal.com/birthdays-bachelor-and-bachelorette-limo-service",
   },
   dcTitle: "Celebrate in Style: Birthday & Party Limo Service | Limo Royale",
-  hreflangs: [
-    {
-      href: "https://limoroyal.com/birthdays-bachelor-and-bachelorette-limo-service",
-      hreflang: "en-ca",
-    },
-  ],
 };
 
 import BirthdaysBachelorAndBacheloretteLimoService from "./BirthdaysBachelorAndBacheloretteLimoService";

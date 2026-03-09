@@ -28,8 +28,7 @@ const Sitemap = () => {
   { title: "Contact", href: "/contact" },
   { title: "Book Now", href: "/online-reservations" },
   { title: "Login", href: "/login" },
-  { title: "Blog", href: "/about" },
-  { title: "Faqs", href: "/about" },
+  { title: "Blog", href: "/blog/" },
 ];
   return (
     <main>
