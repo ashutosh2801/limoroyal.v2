@@ -6,6 +6,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/sitemap",
+    languages: {
+      "en-CA": "https://limoroyal.com/sitemap",
+    },
   },
   openGraph: {
     title: "Limo Royal Sitemap | Luxury Limo & Chauffeur Services",
@@ -20,12 +23,6 @@ export const metadata = {
     url: "https://limoroyal.com/sitemap",
   },
   dcTitle: "Limo Royal Sitemap | Luxury Limo & Chauffeur Services",
-  hreflangs: [
-    {
-      href: "https://limoroyal.com/sitemap",
-      hreflang: "en-ca",
-    },
-  ],
 };
 
 

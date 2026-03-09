@@ -5,7 +5,7 @@ import Search from '../components/Search'
 
 export default function Cta() {
   return (
-    <section className="py-10 bg-[#0a0a0a] relative overflow-hidden">
+    <section id='quote' className="py-10 bg-[#0a0a0a] relative overflow-hidden">
       <div className="container mx-auto px-4">
         
         <div className="grid lg:grid-cols-2 md:gap-12 items-center">

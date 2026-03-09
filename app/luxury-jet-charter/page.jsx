@@ -6,6 +6,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/luxury-jet-charter",
+    languages: {
+      "en-CA": "https://limoroyal.com/luxury-jet-charter",
+    },
   },
   openGraph: {
     title: "Luxury Jet Charter – Private & Executive Flights | Limo Royal",
@@ -18,12 +21,6 @@ export const metadata = {
     url: "https://limoroyal.com/luxury-jet-charter",
   },
   dcTitle: "Luxury Jet Charter – Private & Executive Flights | Limo Royal",
-  hreflangs: [
-    {
-      href: "https://limoroyal.com/luxury-jet-charter",
-      hreflang: "en-ca",
-    },
-  ],
 };
 
 

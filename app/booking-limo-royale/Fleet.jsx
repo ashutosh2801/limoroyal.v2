@@ -27,7 +27,7 @@ import Stretch4 from '../../public/assets/limousines/royale-stretch.png'
 
 const Fleet = () => {
   return (
-    <main>
+    <section>
         <div id='fleet'>
             <div className='container mx-auto px-2'>
                 <div className='pt-10 lg:pt-5 pb-10 text-center' data-aos="fade-up">
@@ -73,7 +73,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Ideal for single passengers or small groups
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -93,7 +93,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Traditional limo options for small to medium groups.
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -113,7 +113,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Larger limousines for additional space and comfort.
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -133,7 +133,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Party bus for special occasions like birthdays or bachelor/bachelorette parties.
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                         </Swiper>
@@ -169,7 +169,7 @@ const Fleet = () => {
                                         <small className='text-white'>2</small>
                                     </li>
                                 </ul>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -186,7 +186,7 @@ const Fleet = () => {
                                         <small className='text-white'>2</small>
                                     </li>
                                 </ul>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -203,7 +203,7 @@ const Fleet = () => {
                                         <small className='text-white'>2</small>
                                     </li>
                                 </ul>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -220,7 +220,7 @@ const Fleet = () => {
                                         <small className='text-white'>2</small>
                                     </li>
                                 </ul>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                         </Swiper>
@@ -259,7 +259,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Ideal for large events and tours, offering unmatched luxury and spacious seating.
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -279,7 +279,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Perfect for mid-sized groups seeking comfort and sophistication.
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -299,7 +299,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     An excellent choice for smaller groups with luxury and convenience in mind.
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -319,7 +319,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Tailored for intimate group travel with top-tier amenities.
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                         </Swiper>
@@ -358,7 +358,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Perfect for small group events, offering comfort and a touch of elegance for intimate gatherings or corporate transfers.
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -378,7 +378,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     Combines luxury and spacious seating for medium-sized parties, weddings, or upscale outings
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                             <SwiperSlide>
@@ -398,7 +398,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]'>
                                     A top-tier option for large groups, offering luxury seating, entertainment systems, and unmatched sophistication
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                         </Swiper>
@@ -437,7 +437,7 @@ const Fleet = () => {
                                 <p className='text-sm leading-relaxed webFontColor my-5 min-h-[80px]+'>
                                     A top-tier party coach with luxury amenities, including a VIP lounge area, karaoke setup, dance pole, and customizable lighting. Perfect for weddings, large group events, or all-night celebrations
                                 </p>
-                                <a href='/online-reservations' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
+                                <a href='/booking-limo-royale#quote' className='webColor inline-block text-sm px-10 py-5 uppercase'>Book Now</a>
                             </div>
                             </SwiperSlide>
                         </Swiper>
@@ -445,7 +445,7 @@ const Fleet = () => {
                 </div>
             </div>
         </div>
-    </main>
+    </section>
   )
 }
 

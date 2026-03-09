@@ -5,6 +5,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/seaports-transport",
+    languages: {
+      "en-CA": "https://limoroyal.com/seaports-transport",
+    },
   },
   openGraph: {
     title: "Seaports Transport | Limo Royale",
@@ -17,12 +20,6 @@ export const metadata = {
     url: "https://limoroyal.com/seaports-transport",
   },
   dcTitle: "Seaports Transport | Limo Royale",
-  hreflangs: [
-    {
-      href: "https://limoroyal.com/seaports-transport",
-      hreflang: "en-ca",
-    },
-  ],
 };
 
 
