@@ -5,6 +5,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/airport-meet-and-greet-services",
+    languages: {
+      "en-CA": "https://limoroyal.com/airport-meet-and-greet-services",
+    },
   },
   openGraph: {
     title: "Airport Meet & Greet Services Toronto | Limo Royale",
@@ -17,12 +20,6 @@ export const metadata = {
     url: "https://limoroyal.com/airport-meet-and-greet-services",
   },
   dcTitle: "Airport Meet & Greet Services Toronto | Limo Royale",
-  hreflangs: [
-    {
-      href: "https://limoroyal.com/airport-meet-and-greet-services",
-      hreflang: "en-ca",
-    },
-  ],
 };
 
 

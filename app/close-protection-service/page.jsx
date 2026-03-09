@@ -6,6 +6,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/close-protection-service",
+    languages: {
+      "en-CA": "https://limoroyal.com/close-protection-service",
+    },
   },
   openGraph: {
     title: "Close Protection Service | Limo Royale",
@@ -18,12 +21,6 @@ export const metadata = {
     url: "https://limoroyal.com/close-protection-service",
   },
   dcTitle: "Close Protection Service | Limo Royale",
-  hreflangs: [
-    {
-      href: "https://limoroyal.com/close-protection-service",
-      hreflang: "en-ca",
-    },
-  ],
 };
 
 import CloseProtectionService from "./CloseProtectionService";

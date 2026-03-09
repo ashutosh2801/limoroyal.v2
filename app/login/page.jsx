@@ -5,6 +5,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/login",
+    languages: {
+      "en-CA": "https://limoroyal.com/login",
+    },
   },
   openGraph: {
     title: "Login to Limo Royale | Account & Order Management",
@@ -18,8 +21,6 @@ export const metadata = {
   },
   other: {
     "DC.title": "Login to Limo Royale | Account & Order Management",
-    "hreflang": "en-ca",
-    "alternate": "https://limoroyal.com/login"
   }
 };
 

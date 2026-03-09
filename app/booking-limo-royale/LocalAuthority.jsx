@@ -40,7 +40,7 @@ export default function LocalAuthority() {
 
           {routes.map((route, index) => (
             <Link
-              href="/online-reservations"
+              href="/booking-limo-royale#quote"
               key={index}
               className="group"
             >

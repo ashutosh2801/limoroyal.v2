@@ -8,6 +8,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/thank-you",
+    languages: {
+      "en-CA": "https://limoroyal.com/thank-you",
+    },
   },
 };
 

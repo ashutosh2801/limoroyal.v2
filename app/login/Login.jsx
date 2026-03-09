@@ -21,9 +21,9 @@ const Login = () => {
                 <li>Login</li>
               </ul>
             </div>
-            <h2 className='text-white text-2xl lg:text-6xl leading-snug my-5 font-medium'>
+            <h1 className='text-white text-2xl lg:text-6xl leading-snug my-5 font-medium'>
               Login
-            </h2>
+            </h1>
           </div>
         </div>
       </div>
@@ -31,6 +31,7 @@ const Login = () => {
       {/* Card */}
       <div className="flex items-center justify-center px-4 relative mt-20 lg:mt-0 mb-15 lg:mb-0">
         <div className="relative z-10 w-full max-w-lg bg-[#0a0a0a] backdrop-blur-xl border border-gray-900 rounded-2xl p-4 md:p-8 shadow-2xl">
+                   
 
           {/* ================= FORGOT PASSWORD ================= */}
           {isForgotPassword ? (

@@ -58,7 +58,7 @@ const AreasServed = () => {
                         <small className='text-sm webColor uppercase'>Craft Your Perfect Journey</small>
                         <h1 className='text-white text-2xl lg:text-4xl leading-snug mb-5 mt-2'>Customise Your Tour with Limo Royale</h1>
                         <p className='text-base leading-relaxed webFontColor'>
-                            At Limo Royale, we believe travel should reflect your personal style and desires. Our Customise Tour option allows you to tailor every aspect of your experience, from the destinations to the pace of travel, ensuring a journey that is uniquely yours. Whether you seek cultural immersion, natural wonders, or luxury escapes, our custom tours provide the flexibility and exclusivity you deserve. Travel in the utmost comfort with our premium fleet and knowledgeable chauffeurs, who are dedicated to bringing your vision to life.
+                            At Limo Royale, we believe travel should reflect your personal style and desires. Our customized Tour option allows you to tailor every aspect of your experience, from the destinations to the pace of travel, ensuring a journey that is uniquely yours. Whether you seek cultural immersion, natural wonders, or luxury escapes, our custom tours provide the flexibility and exclusivity you deserve. Travel in the utmost comfort with our premium fleet and knowledgeable chauffeurs, who are dedicated to bringing your vision to life.
                         </p>
                     </div>
                     <div data-aos="fade-up">
@@ -631,12 +631,6 @@ const AreasServed = () => {
                             <div className='bg-[#0a0a0a] p-10' data-aos="fade-up">
                                 <h4 className='text-white text-2xl lg:text-2xl mb-5'>Art & Culture</h4>
                                 <p className='text-base leading-relaxed webFontColor'>
-                                    Visit the Montreal Museum of Fine Arts or catch a performance at the Place des Arts, home to world-class concerts, theater, and dance.
-                                </p>
-                            </div>
-                            <div className='bg-[#0a0a0a] p-10' data-aos="fade-up">
-                                <h4 className='text-white text-2xl lg:text-2xl mb-5'>Art & Culture</h4>
-                                <p className='text-base leading-relaxed webFontColor'>
                                     Visit the Art Gallery of Ontario or explore the city’s dynamic street art scene, including iconic murals and graffiti alleyways that add a creative edge to the city’s landscape.
                                 </p>
                             </div>
@@ -666,14 +660,6 @@ const AreasServed = () => {
                                     <h4 className='text-white text-2xl lg:text-2xl mb-5'>Culinary Delights</h4>
                                     <p className='text-base leading-relaxed webFontColor'>
                                         Explore the flavors of Montreal with stops at iconic eateries, sampling local specialties like poutine, Montreal bagels, and fine French cuisine.
-                                    </p>
-                                </div>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                <div className='bg-[#0a0a0a] p-10 min-h-[380px]' data-aos="fade-up">
-                                    <h4 className='text-white text-2xl lg:text-2xl mb-5'>Art & Culture</h4>
-                                    <p className='text-base leading-relaxed webFontColor'>
-                                        Visit the Montreal Museum of Fine Arts or catch a performance at the Place des Arts, home to world-class concerts, theater, and dance.
                                     </p>
                                 </div>
                                 </SwiperSlide>
@@ -731,7 +717,7 @@ const AreasServed = () => {
                                 </p>
                             </div>
                             <div className='bg-black p-10' data-aos="fade-up">
-                                <h4 className='text-white text-2xl lg:text-2xl mb-5'>Personalized Itinerarie</h4>
+                                <h4 className='text-white text-2xl lg:text-2xl mb-5'>Personalized Itineraries</h4>
                                 <p className='text-base leading-relaxed webFontColor'>
                                     Choose from a variety of activities and experiences, tailoring your tour to suit your interests, whether it’s cultural exploration or outdoor recreation.
                                 </p>
@@ -775,7 +761,7 @@ const AreasServed = () => {
                                 </SwiperSlide>
                                 <SwiperSlide>
                                 <div className='bg-black p-10 min-h-[450px]' data-aos="fade-up">
-                                    <h4 className='text-white text-2xl lg:text-2xl mb-5'>Personalized Itinerarie</h4>
+                                    <h4 className='text-white text-2xl lg:text-2xl mb-5'>Personalized Itineraries</h4>
                                     <p className='text-base leading-relaxed webFontColor'>
                                         Choose from a variety of activities and experiences, tailoring your tour to suit your interests, whether it’s cultural exploration or outdoor recreation.
                                     </p>

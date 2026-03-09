@@ -34,29 +34,48 @@ const BusCharter = () => {
                 <div className='pt-20 lg:pt-0 pb-0'>
                     <div className='border-b webBorderColor pb-8 mb-8' data-aos="fade-up">
                         <small className='text-sm webColor uppercase'>Bus Charter</small>
-                        <h1 className='text-white text-2xl lg:text-4xl leading-snug mb-5 mt-2'>Your Corporate Travel Solution, Redefined</h1>
+                        <h1 className='text-white text-2xl lg:text-4xl leading-snug mb-5 mt-2'>Bus Charter: For All Your Corporate Travel Needs</h1>
                         <p className='text-base leading-relaxed webFontColor'>
-                        At Limo Royale, we understand the importance of seamless, professional travel for your business. Whether it’s for conferences, team-building retreats, business meetings, or corporate outings, our corporate charter service offers unmatched comfort, style, and efficiency. From initial booking to final drop-off, we ensure your team experiences a flawless journey, so you can focus on what matters most—your business.
+                        At Limo Royale, we are dedicated to providing seamless and professional transportation services to all our clients. For corporate outings, team-building retreats, or business meetings, we are there to provide you with our luxury bus charter service. We ensure a smooth journey, from booking to dropping you off at the destination.
                         </p>
                     </div>
                     <div data-aos="fade-up">
                         <h2 className='text-white text-2xl lg:text-3xl leading-snug mt-8 mb-8 font-medium'>What We Offer</h2>
                         <div className='hidden md:grid lg:grid-cols-2 lg:space-x-8 space-y-8 text-left'>
                             <div>
-                            <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Customizable Itineraries</h2>
-                            <p className='text-base leading-relaxed webFontColor'>We tailor our services to fit your schedule, offering multiple pickups, shuttle services between venues, or transportation for full-day events.</p>
+                            <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Luxury Fleet of Vehicles</h2>
+                            <p className='text-base leading-relaxed webFontColor'>Our luxury fleet of charter vehicles are equipped with amenities that you and your team require for a comfortable trip. From Wi-Fi to power outlets, temperature control, and many more features are what makes you travel in utmost comfort. Travel in elegance and arrive at your destination refreshed and ready for your next commitment.</p>
                             </div>
                             <div>
-                            <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Luxurious Fleet</h2>
-                            <p className='text-base leading-relaxed webFontColor'>Our charter vehicles are equipped with reclining leather seats, ample legroom, climate control, and onboard amenities such as WiFi and power outlets. Your team will travel in comfort and style, arriving at your destination refreshed.</p>
+                            <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Professional Chauffeurs</h2>
+                            <p className='text-base leading-relaxed webFontColor'>Our team of professional chauffeurs at Limo Royale ensure you reach your destination safely. They are experts in routes and know how to navigate city traffic to help you reach your destination on time. We ensure smooth travel to each and every one of our clients, every time.</p>
                             </div>
                             <div>
-                            <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Experienced Chauffeurs</h2>
-                            <p className='text-base leading-relaxed webFontColor'>Our professional drivers are trained to prioritize safety and punctuality, ensuring smooth travel. Familiar with local routes and traffic patterns, they guarantee you arrive on time, every time.</p>
+                            <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Personalized Schedules</h2>
+                            <p className='text-base leading-relaxed webFontColor'>We provide our clients personalized itineraries according to their schedules and to match with their requirements. We offer multiples pickups and shuttle services between venues to ensure smooth and comfortable travel solutions.</p>
                             </div>
                             <div>
-                            <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Complete Support</h2>
-                            <p className='text-base leading-relaxed webFontColor'>From booking to travel day, our customer service team is on hand to manage logistics and special requests, ensuring a seamless experience throughout your corporate event.</p>
+                            <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Support Service</h2>
+                            <p className='text-base leading-relaxed webFontColor'>Our Limo Royale customer support team is prepared to help you with everything related to your travels. From the point of booking to travel day, we are ready to serve you at the best level and provide you with assistance as and when you require.</p>
+                            </div>
+                        </div>
+                        <div data-aos="fade-up">
+                            <div className='grid lg:grid-cols-3 mt-5 mb-8'>
+                                <div>
+                                    <h2 className='text-white text-xl md:text-2xl font-medium'>What is it for?</h2> 
+                                </div>
+                                <div>
+                                    <ul className='text-base space-y-3 webFontColor list-disc pl-6'>
+                                        <li>Family Gatherings</li>
+                                        <li>Private Parties</li>
+                                        <li>Weddings</li>
+                                        <li>VIP Transport</li>
+                                    </ul>
+                                </div>
+                                {/* <div className='bg-[#0a0a0a] p-5 md:p-10 mt-10 lg:mt-0'>
+                                    <h2 className='text-white text-xl md:text-2xl font-medium'>Create unforgettable memories with our private charters.</h2>
+                                    <a href='/online-reservations' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>Contact us to book today!</a>
+                                </div> */}
                             </div>
                         </div>
                         <div className='block md:hidden text-left'>
@@ -105,16 +124,19 @@ const BusCharter = () => {
             <div className='bg-[#0a0a0a]' data-aos="fade-up">
                 <div className='grid grid-cols-1 lg:grid-cols-2 mt-8 lg:mt-0'>
                     <div>
-                        <Image src={EventBanner} alt='Corporate Travel Experience with Limo Royale' className='w-full h-[400px] object-cover object-bottom' />
+                        <Image src={EventBanner} alt='Corporate Travel Experience with Limo Royale' className='w-full h-[520px] object-cover object-bottom' />
                     </div>
                     <div className='py-5 md:py-5 px-5 md:px-10'>
                         <small className='text-sm webColor uppercase'>We are serving</small>
-                        <h2 className='text-white text-2xl lg:text-4xl my-5'>Events We Serve</h2>
+                        <h2 className='text-white text-2xl lg:text-4xl my-5'>Events We Offer Services</h2>
                         <ul className='text-base space-y-3 webFontColor list-disc pl-6'>
-                            <li>Business Meetings & Seminars</li>
+                            <li>Business Meetings</li>
                             <li>Corporate Retreats</li>
-                            <li>Team-Building Events</li>
-                            <li>Conferences & Trade Shows</li>
+                            <li>Seminars</li>
+                            <li>Team-Building programs</li>
+                            <li>Business conferences</li>
+                            <li>Trade shows</li>
+                            <li>Exhibitions</li>
                         </ul>
                         <p className='text-base leading-relaxed webFontColor mt-5'>Elevate your corporate travel experience with Limo Royale. </p>
                         <a href='/online-reservations' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>book your charter today</a>
@@ -313,19 +335,40 @@ const BusCharter = () => {
                         </p>
                     </div>
                     <div data-aos="fade-up">
-                        <h2 className='text-white text-2xl lg:text-3xl leading-snug mt-10 mb-8 font-medium'>Our City Charter Experience</h2>
+                        <h2 className='text-white text-2xl lg:text-3xl leading-snug mt-10 mb-8 font-medium'>Bus Charter City Experience</h2>
                         <div className='hidden md:grid lg:grid-cols-3 lg:space-x-8 space-y-8 text-left'>
                             <div>
-                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Tailored City Tour</h2>
-                                <p className='text-base leading-relaxed webFontColor'>We craft personalized itineraries that allow you to explore the best of what the city has to offer—whether it’s iconic landmarks, shopping districts, dining excursions, or cultural experiences.</p>
+                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Customized City Tour</h2>
+                                <p className='text-base leading-relaxed webFontColor'>You provide the itinerary, we provide you with transportation. We customize city tour itineraries to cover all iconic landmarks, shopping districts, dining, cultural experiences, and more.</p>
                             </div>
                             <div>
                                 <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Luxury Fleet</h2>
-                                <p className='text-base leading-relaxed webFontColor'>Travel in our fleet of modern vehicles, equipped with reclining seats, climate control, onboard WiFi, and entertainment options, ensuring your group enjoys the ride as much as the destination.</p>
+                                <p className='text-base leading-relaxed webFontColor'>Luxury vehicles in our fleet are fully equipped with all that is required for a comfortable journey. Ample legroom, reclining seats, plush leather interior, temperature control features, are what help to make it a comfortable and luxurious trip.</p>
                             </div>
                             <div>
-                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Experienced Chauffeur</h2>
-                                <p className='text-base leading-relaxed webFontColor'>Our drivers are familiar with the city’s roads and traffic patterns, allowing you to relax while we handle the navigation. Whether it’s a busy weekday or weekend, we ensure a smooth and punctual experience.</p>
+                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Experienced Chauffeurs</h2>
+                                <p className='text-base leading-relaxed webFontColor'>Our experienced chauffeurs ensure you have a smooth, comfortable, and safe journey all throughout. They will navigate you through city traffic to ensure that you enjoy every moment of the city tour.</p>
+                            </div>
+                        </div>
+                        <div className='border-t webBorderColor mt-5'>
+                            <h2 className='text-white text-2xl lg:text-3xl leading-snug mt-10 mb-8 font-medium'>Why Choose Us?</h2>
+                            <div className='hidden md:grid lg:grid-cols-2 lg:space-x-8 space-y-8 text-left'>
+                                <div>
+                                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Availability</h2>
+                                    <p className='text-base leading-relaxed webFontColor'>At Limo Royale, we are available 24/7 and provide continuous services to our clients. Our around-the-clock availability ensures clients can enjoy our transport services any time they require.</p>
+                                </div>
+                                <div>
+                                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Luxury Fleet</h2>
+                                    <p className='text-base leading-relaxed webFontColor'>Our well-maintained fleet of luxury vehicles provide the highest level of comfort and sophistication for you and your team.</p>
+                                </div>
+                                <div>
+                                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Safety and Reliability</h2>
+                                    <p className='text-base leading-relaxed webFontColor'>Your safety and satisfaction are our priority. Our professional chauffeurs ensure you travel in complete safety. Limo Royale provides reliable transportation services for corporate and personal events. </p>
+                                </div>
+                                <div>
+                                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Professional Service</h2>
+                                    <p className='text-base leading-relaxed webFontColor'>We provide customized services to clients to meet their specific requirements. We understand each client has unique requirements, thus ensuring a personalized service in every way. </p>
+                                </div>
                             </div>
                         </div>
                         <div className='block md:hidden text-left'>

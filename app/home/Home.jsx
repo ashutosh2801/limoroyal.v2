@@ -27,6 +27,9 @@ import GlobalImg4 from '../../public/assets/banners/global-4.jpg'
 import Icon1 from '../../public/assets/icons/icon-1.png'
 import Icon2 from '../../public/assets/icons/icon-2.png'
 import Icon3 from '../../public/assets/icons/icon-3.png'
+import Icon4 from '../../public/assets/icons/icon-4.png'
+import Icon5 from '../../public/assets/icons/icon-5.png'
+import Icon6 from '../../public/assets/icons/icon-6.png'
 
 import Search from '../components/Search'
 
@@ -54,10 +57,10 @@ export default function Home() {
         <div className='container mx-auto px-2'>
           <div className='grid md:grid-cols-2 space-x-4 py-10 md:py-10' data-aos="fade-up">
             <div>
-              <h1 className='text-white text-2xl lg:text-4xl mb-5 lg:mb-0 leading-snug font-medium'>Experience True Luxury with Over 20 Years of Global Expertise</h1>
+              <h1 className='text-white text-2xl lg:text-4xl mb-5 lg:mb-0 leading-snug font-medium'>Experience Two Decades of Expertise in Providing Luxury Transportation</h1>
             </div>
             <div>
-              <p className='webFontColor text-base leading-relaxed'>At Limo Royale, we go beyond providing simply transportation services. In fact, our goal is to provide a luxurious, memorable, and most satisfactory experience to our clientele. With more than 20 years of experience spanning multiple countries across the globe, we truly understand what clients require. Our expertise in the hotel and hospitality industries adds more depth to our service to clients. Our objective is to provide clients with a royal experience that exceeds expectations in luxury transportation.</p>
+              <p className='webFontColor text-base leading-relaxed'>Limo Royale is all about providing luxurious and comfortable transportation to all our clients. We have 20 years of experience providing the best transportation services across the region.  Our service goes beyond simply providing a method of transportation to our clients. We ensure each and every client is satisfied with our services by giving our best every time. We are a luxury transportation service company that exceeds expectations.</p>
               <a href='tel:+14167255466' title='Limo Royale Hotline' className='webFontColor hover:text-white mt-5 flex items-center'>
                 <div className='webBG rounded-full transition p-3 mr-2 inline-block'><PhoneIcon className="text-white w-5 h-5" /></div> <span className='webColor mr-2'>Call Center:</span> 416-725-5466
               </a>
@@ -127,14 +130,14 @@ export default function Home() {
         <div className='bg-[#0a0a0a] pt-5 pb-8'>
           <div className='container mx-auto px-2'>
             <div className='border-b webBorderColor pb-10 mb-10' data-aos="fade-up">
-              <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-5'>Our Legacy of Excellence</h2>
+              <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-5'>Two decades of excellence</h2>
               <p className='text-base leading-relaxed webFontColor'>
-                True luxury is not about the outer appearance of the fleet. Instead, it’s about making you feel extra special and comfortable along your journey. Our knowledge in the hospitality industry makes our service all the more special to our clients. We’ve served high-profile clients, including VIPs and business executives, which gives us a unique edge and enables us to provide a royal service all the way.
+                Our experience in the hospitality industry shines through the quality of the services we provide. Our transportation services focus on providing more than just a ride to the client. It enhances the experience with the inclusion of additional amenities to keep you comfortable throughout the journey.
               </p>
             </div>
 
             <div data-aos="fade-up">
-              <h3 className='text-white text-2xl mb-10'>What Makes Limo Royale Unique?</h3>
+              <h3 className='text-white text-2xl mb-10'>What Makes Us Special?</h3>
               <div className='lg:space-x-10 space-y-10 lg:space-y-0'>
                 <Swiper
                     modules={[Autoplay]}
@@ -151,27 +154,27 @@ export default function Home() {
                 >
                     <SwiperSlide>
                         <div>
-                        <h4 className='text-white text-xl lg:text-xl mb-5'>A Royal Experience, Every Time</h4>
+                        <h4 className='text-white text-xl lg:text-xl mb-5'>A Positive Experience</h4>
                         <p className='text-base leading-relaxed webFontColor'>
-                            Our service extends beyond merely transporting our clients from one location to another. It is all about making them enjoy the comfort level and luxury of travelling in our fleet. We prioritize privacy and comfort, making you feel special and cared for the moment you step into our vehicle. Clients enjoy being treated like royalty.
+                            At Limo Royale, We provide our clients a right royal experience from the moment they step into the vehicle until they reach their destination. We prioritize the comfort and privacy of our clients and make our best effort to fulfil these. Limo Royale is all about luxury traveling at an affordable rate. We go beyond simply transporting our clients from one place to another.
                         </p>
                         </div>
                     </SwiperSlide>
 
                     <SwiperSlide>
                         <div>
-                        <h4 className='text-white text-xl lg:text-xl mb-5'>Exclusive Fleet Under Two Years Old</h4>
+                        <h4 className='text-white text-xl lg:text-xl mb-5'>Luxury Fleet of Well-Maintained Vehicles</h4>
                         <p className='text-base leading-relaxed webFontColor'>
-                            We ensure each one of our vehicles is maintained and up to date with the latest technological advancements in the automotive industry. All our vehicles are under two years old, ensuring our clients experience the best service in a vehicle kept in good condition. You can travel in comfort in a vehicle equipped with the latest technology.
+                            All the vehicles in our fleet are under two years old. They are well-maintained to ensure the highest level of comfort to our clients. The fleet is equipped with the latest technological advancements to ensure a ride that keeps you connected with your personal and business commitments. We provide the best amenities for you in all our vehicles.
                         </p>
                         </div>
                     </SwiperSlide>
 
                     <SwiperSlide>
-                        <div className='lg:mr-[40px]'>
-                        <h4 className='text-white text-xl lg:text-xl mb-5'>Personalized Service</h4>
+                        <div>
+                        <h4 className='text-white text-xl lg:text-xl mb-5'>Customized Service</h4>
                         <p className='text-base leading-relaxed webFontColor'>
-                            Every small detail matters to us at Limo Royale. We curate personalized itineraries for our clients, ensuring they enjoy their journey to the fullest. The best experience comes with VIP treatment at every stage of the journey. We meticulously plan your journey, prioritizing luxury and comfort every step of the way.
+                            We curate every itinerary as per the client’s preferences. At Limo Royale, we treat each and every client with VIP treatment, ensuring they are comfortable all throughout their journey. We listen to their needs and ensure they are fully satisfied with our service. The best experience comes with satisfied clients who enjoy their journey to the fullest.
                         </p>
                         </div>
                     </SwiperSlide>
@@ -224,8 +227,8 @@ export default function Home() {
         <div className='container mx-auto px-2'>
           <div className='flex flex-col lg:flex-row lg:space-x-10 py-8' data-aos="fade-up">
             <div className='w-full lg:w-2/5'>
-              <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-8 font-medium'>Elite Chauffeurs, Exceptional Standards</h2>
-              <p className='text-base leading-relaxed webFontColor'>Each Limo Royale chauffeur is hand-selected for professionalism, discretion, and proven driving expertise. Our chauffeurs undergo rigorous background checks, safety certification, and continuous training to ensure flawless service on every trip. They are specialists in luxury transportation—combining polished etiquette, local knowledge, and proactive client care. With every assignment, their focus remains the same: your comfort, your privacy, and your safety—delivered with absolute professionalism.</p>
+              <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-8 font-medium'>Trusted Chauffeurs of Exceptional Standards</h2>
+              <p className='text-base leading-relaxed webFontColor'>Limo Royale Chauffeurs are all trusted with their ability to take clients to their destination safe and sound. We do rigorous background checks and follow standards in ensuring all chauffeurs are apt to protecting the client’s safety and taking them to their destination safely. Safety certifications, continuous training, and support ensure that all Limo Royale chauffeurs adhere to strict guidelines.</p>
               <a href='/online-reservations' title='Luxury Limo & Airport Chauffeur Service Toronto' className='inline-block book-now-slide text-sm px-9 py-4 mt-10 uppercase'>Book Now</a>
             </div>
             <div className='w-full lg:w-3/5'>
@@ -243,7 +246,7 @@ export default function Home() {
           <div className='value-bg object-cover absolute inset-0 opacity-50'></div>
           <div className='relative z-10 py-5 lg:py-20'>
             <div className='container mx-auto px-2'>
-              <h2 className='text-white text-2xl lg:text-4xl leading-snug my-5 font-medium'>Our Values: <br></br> Luxury, Precision, Royal Treatment</h2>
+              <h2 className='text-white text-2xl lg:text-4xl leading-snug my-5 font-medium'>Our Values</h2>
                 <div className='flex lg:space-x-5 space-y-5 lg:space-y-0 mt-10'>
                     <Swiper
                         modules={[Autoplay]}
@@ -260,20 +263,20 @@ export default function Home() {
                     >
                         <SwiperSlide className='h-auto flex'>
                             <div className='backdrop-blur-md bg-[#1b1b1b]/60 p-6 flex flex-col h-full w-full' data-aos="fade-up">
-                            <h4 className='text-white text-xl lg:text-2xl mb-5'>Luxury Above All</h4>
-                            <p className='text-base leading-relaxed webFontColor flex-grow'>Limo Royale is all about luxury. We focus on providing luxurious services to all our clients. Everything from our hand-selected fleet to our professional-level chauffeurs, we focus on delivering the best at all times.</p>
+                            <h4 className='text-white text-xl lg:text-2xl mb-5'>Punctuality and Reliabilit</h4>
+                            <p className='text-base leading-relaxed webFontColor flex-grow'>Limo Royale is your go-to transport service for precision, punctuality, and reliability. You can count on our Royale chauffeurs to be there on time to pick you up and take you to your destination safely. Beyond all of this, we give priority to providing the highest level of service to you.</p>
                             </div>
                         </SwiperSlide>
                         <SwiperSlide className='h-auto flex'>
                             <div className='backdrop-blur-md bg-[#1b1b1b]/60 p-6 flex flex-col h-full w-full' data-aos="fade-up">
-                            <h4 className='text-white text-xl lg:text-2xl mb-5'>Precision & Punctuality</h4>
-                            <p className='text-base leading-relaxed webFontColor flex-grow'>We value our clients’ time and ensure that we reach the client’s location on time and take them to their destination with precision and safety in mind, at all times. Limo Royale is your transport and chauffeur service for a reliable and safe journey. This is done all while keeping the delivery of the highest level of service in mind.</p>
+                            <h4 className='text-white text-xl lg:text-2xl mb-5'>Luxury</h4>
+                            <p className='text-base leading-relaxed webFontColor flex-grow'>We redefine luxury with our stylishly elegant and modern fleet of vehicles. All our vehicles are equipped with the latest technology to provide you a journey that is not only comfortable but also helps keep you connected to your business and personal commitments.</p>
                             </div>
                         </SwiperSlide>
                         <SwiperSlide className='h-auto flex'>
                             <div className='backdrop-blur-md bg-[#1b1b1b]/60 p-6 flex flex-col h-full w-full' data-aos="fade-up">
-                            <h4 className='text-white text-xl lg:text-2xl mb-5'>Royal Treatment</h4>
-                            <p className='text-base leading-relaxed webFontColor flex-grow'>At Limo Royale, you are not simply our client; you are our guest of honour. That’s how we treat every client of ours. Our dedicated service goes beyond pampering you in your journey in utmost comfort and luxury. You will go on a journey with customer service that extends the standard.</p>
+                            <h4 className='text-white text-xl lg:text-2xl mb-5'>Excellent Treatment</h4>
+                            <p className='text-base leading-relaxed webFontColor flex-grow'>Our fleet or luxurious vehicles and team of professional chauffeurs manage to give a royal treatment of excellence. From the time you step into the vehicle up until the end of the journey, you are cared for in the best possible manner. Our excellent treatment goes beyond the journey as we connect with our clients from booking until the end.</p>
                             </div>
                         </SwiperSlide>
                     </Swiper>
@@ -289,38 +292,10 @@ export default function Home() {
       <div>
         <div className='bg-[#0a0a0a] py-8'>
           <div className='container mx-auto px-2'>
-            <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-5 font-medium' data-aos="fade-up">Royale Excellence in Cleanliness and Vehicle Maintenance</h2>
-            <p className='hidden md:block text-base leading-relaxed webFontColor' data-aos="fade-up">At Limo Royale, we believe your ride should be more than just transportation—it should feel like an exceptional experience from start to finish. That’s why we go the extra mile to make sure every journey is comfortable, smooth, and stress-free. <br></br><br></br>Before every pickup, our team carefully checks each vehicle inside and out. From cleanliness to performance, nothing is left to chance. We make sure the car is spotless, perfectly prepared, and ready to give you the kind of ride you’d expect from a luxury service. <br></br><br></br>It’s the little details that matter—stepping into a fresh, polished car, enjoying the quiet elegance, and knowing everything has been taken care of for you. With us, you don’t just get from point A to point B—you enjoy the journey.</p>
-            <div className='block md:hidden'>
-                <Swiper
-                    modules={[Autoplay]}
-                    spaceBetween={40}
-                    slidesPerView={1}
-                    loop={true}
-                    autoplay={{ delay: 3500, disableOnInteraction: false }}
-                    breakpoints={{
-                    640: { slidesPerView: 1 },
-                    1200: { slidesPerView: 1 }
-                    }}
-                >
-                    <SwiperSlide>
-                        <p className='text-base leading-relaxed webFontColor'>
-                            At Limo Royale, we believe your ride should be more than just transportation—it should feel like an exceptional experience from start to finish. That’s why we go the extra mile to make sure every journey is comfortable, smooth, and stress-free.
-                        </p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <p className='text-base leading-relaxed webFontColor'>
-                            Before every pickup, our team carefully checks each vehicle inside and out. From cleanliness to performance, nothing is left to chance. We make sure the car is spotless, perfectly prepared, and ready to give you the kind of ride you’d expect from a luxury service.
-                        </p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <p className='text-base leading-relaxed webFontColor'>
-                            It’s the little details that matter—stepping into a fresh, polished car, enjoying the quiet elegance, and knowing everything has been taken care of for you. With us, you don’t just get from point A to point B—you enjoy the journey.
-                        </p>
-                    </SwiperSlide>
-                </Swiper>
-            </div>
-            <div className='flex md:space-x-5 space-y-5 lg:space-y-0 mt-10'>
+            <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-5 font-medium' data-aos="fade-up">Fleet of Clean and Well-Maintained Vehicles</h2>
+            <p className='hidden md:block text-base leading-relaxed webFontColor' data-aos="fade-up">We make sure you get into a well-polished, clean, and stylish vehicle fully-equipped with all amenities. Our fleet goes through thorough checking for cleanliness in order to maintain the highest quality of standard. From cleanliness to performance, we ensure everything is perfect to give you a smooth ride to your destination. We go the extra mile to ensure the vehicles are cleaned and well-maintained by checking them from inside out. <br></br><br></br>With Limo Royale, you don’t just travel from one place to another. You enjoy a comfortable, luxurious, and safe journey with us.</p>
+            <h2 className='text-white text-2xl lg:text-3xl leading-snug mt-5 font-medium' data-aos="fade-up">Elegance in Every Mile</h2>
+            <div className='flex md:space-x-5 space-y-5 lg:space-y-0 mt-5'>
                 <Swiper
                     modules={[Autoplay]}
                     spaceBetween={40}
@@ -336,20 +311,38 @@ export default function Home() {
                 >
                     <SwiperSlide className='h-auto flex'>
                         <div className='webBorderColor border rounded-lg p-5 flex flex-col h-full w-full' data-aos="fade-up">
-                            <Image src={Icon1} alt='Reclining seats' className='filter brightness-0 invert' />
-                            <h5 className='text-white text-xl lg:text-3xl mt-5 font-medium'>Reclining seats</h5>
+                            <Image src={Icon1} alt='Reclining & Massaging Seats' className='filter brightness-0 invert' />
+                            <h5 className='text-white text-xl lg:text-2xl mt-5 font-medium'>Reclining & Massaging Seats</h5>
                         </div>
                     </SwiperSlide>
                     <SwiperSlide className='h-auto flex'>
                         <div className='webBorderColor border rounded-lg p-5 flex flex-col h-full w-full' data-aos="fade-up">
                             <Image src={Icon2} alt='State-of-the-art sound systems' className='filter brightness-0 invert' />
-                            <h5 className='text-white text-xl lg:text-3xl mt-5 font-medium'>State-of-the-art sound systems</h5>
+                            <h5 className='text-white text-xl lg:text-2xl mt-5 font-medium'>State-of-the-art sound systems</h5>
                         </div>
                     </SwiperSlide>
                     <SwiperSlide className='h-auto flex'>
                         <div className='webBorderColor border rounded-lg p-5 flex flex-col h-full w-full' data-aos="fade-up">
-                            <Image src={Icon3} alt='Premium amenities' className='filter brightness-0 invert' />
-                            <h5 className='text-white text-xl lg:text-3xl mt-5 font-medium'>Premium amenities</h5>
+                            <Image src={Icon3} alt='Advanced Climate Control' className='filter brightness-0 invert' />
+                            <h5 className='text-white text-xl lg:text-2xl mt-5 font-medium'>Advanced Climate Control</h5>
+                        </div>
+                    </SwiperSlide>
+                    <SwiperSlide className='h-auto flex'>
+                        <div className='webBorderColor border rounded-lg p-5 flex flex-col h-full w-full' data-aos="fade-up">
+                            <Image src={Icon4} alt='Panoramic Sunroof' className='filter brightness-0 invert' />
+                            <h5 className='text-white text-xl lg:text-2xl mt-5 font-medium'>Panoramic Sunroof</h5>
+                        </div>
+                    </SwiperSlide>
+                    <SwiperSlide className='h-auto flex'>
+                        <div className='webBorderColor border rounded-lg p-5 flex flex-col h-full w-full' data-aos="fade-up">
+                            <Image src={Icon5} alt='Rear Entertainment System' className='filter brightness-0 invert' />
+                            <h5 className='text-white text-xl lg:text-2xl mt-5 font-medium'>Rear Entertainment System</h5>
+                        </div>
+                    </SwiperSlide>
+                    <SwiperSlide className='h-auto flex'>
+                        <div className='webBorderColor border rounded-lg p-5 flex flex-col h-full w-full' data-aos="fade-up">
+                            <Image src={Icon6} alt='Ambient Lighting' className='filter brightness-0 invert' />
+                            <h5 className='text-white text-xl lg:text-2xl mt-5 font-medium'>Ambient Lighting</h5>
                         </div>
                     </SwiperSlide>
                 </Swiper>
@@ -361,26 +354,26 @@ export default function Home() {
       <div>
         <div className='mt-8 pb-10 lg:pb-0'>
           <div className='container mx-auto px-2 md:text-center'>
-            <h2 className='text-white text-2xl lg:text-4xl leading-snug my-5 font-medium' data-aos="fade-up">Our Team</h2>
-            <p className='text-base leading-relaxed webFontColor' data-aos="fade-up">At Limo Royale, we take pride in offering more than just a ride—we provide an exceptional travel experience, guided by our elite team of Royale Chauffeurs. With a minimum of 15-20 years of professional driving experience, each Royale Chauffeur is handpicked to ensure that your journey is both safe and smooth. Our chauffeurs are not only skilled drivers but also masters of service, trained to deliver the royal treatment you deserve.</p>
+            <h2 className='text-white text-2xl lg:text-4xl leading-snug my-5 font-medium' data-aos="fade-up">Our Team of Royale Chauffeurs</h2>
+            <p className='text-base leading-relaxed webFontColor' data-aos="fade-up">Our Limo Royale team takes pride in providing almost two decades of excellent service to clients, offering more than just a ride to them. We ensure a smooth ride by our skilled drivers who are trained to provide a royal service to each and every client.</p>
             <div data-aos="fade-up">
-                <h2 className='text-white text-2xl lg:text-3xl leading-snug mt-10 mb-8 font-medium'>Why Choose a Royale Chauffeur?</h2>
+                <h2 className='text-white text-2xl lg:text-3xl leading-snug mt-10 mb-8 font-medium'>Why Choose Us?</h2>
                 <div className='hidden md:grid lg:grid-cols-2 lg:space-x-8 space-y-10 text-left'>
                   <div>
-                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Unmatched Expertise</h2>
-                    <p className='text-base leading-relaxed webFontColor'>With decades of experience across both local and international routes, our chauffeurs ensure that every journey is smooth, efficient, and worry-free.</p>
+                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Seamless Travel</h2>
+                    <p className='text-base leading-relaxed webFontColor'>Our seamless travel solutions at Limo Royale ensures you get to your destination with ease. Our professional chauffeurs are expert in routes and know how to navigate city traffic to take you comfortably and safely.</p>
                   </div>
                   <div>
-                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>A Commitment to Safety</h2>
-                    <p className='text-base leading-relaxed webFontColor'>Your safety is our foremost priority. Our highly skilled chauffeurs navigate all road conditions with confidence and care, allowing you complete peace of mind throughout your travel.</p>
+                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Unparalleled Expertise</h2>
+                    <p className='text-base leading-relaxed webFontColor'>Unmatched expertise of our chauffeurs come with years of experience of providing transportation solutions to every type of client. We master the art of making your ride as smooth as possible, helping you stay at ease at all times.</p>
                   </div>
                   <div>
-                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>The Art of Service</h2>
-                    <p className='text-base leading-relaxed webFontColor'>Driving is just one part of the job. Our chauffeurs are trained to provide discreet, professional, and courteous service—always attentive to your comfort and needs.</p>
+                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>High-Quality Service</h2>
+                    <p className='text-base leading-relaxed webFontColor'>Driving is part and parcel of our business, which is why our chauffeurs are experts in taking you on a safe and comfortable ride. They are courteous, attentive, and will serve you at the highest level possible, all along the way.</p>
                   </div>
                   <div>
-                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Seamless Travel, Every Time</h2>
-                    <p className='text-base leading-relaxed webFontColor'>From managing busy city traffic to getting you to important events right on time, your Royale Chauffeur ensures every journey feels effortless and stress-free.</p>
+                    <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Safety as a Priority</h2>
+                    <p className='text-base leading-relaxed webFontColor'>We treat client safety as priority. Our Royale chauffeurs ensure your safety and will give you the utmost care during your journey. They are committed to your safety, allowing you complete peace of mind throughout the journey.</p>
                   </div>
                 </div>
                 <div className='block md:hidden'>
@@ -397,26 +390,26 @@ export default function Home() {
                         >
                         <SwiperSlide>
                             <div>
-                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Unmatched Expertise</h2>
-                                <p className='text-base leading-relaxed webFontColor'>With decades of experience across both local and international routes, our chauffeurs ensure that every journey is smooth, efficient, and worry-free.</p>
+                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Seamless Travel</h2>
+                                <p className='text-base leading-relaxed webFontColor'>Our seamless travel solutions at Limo Royale ensures you get to your destination with ease. Our professional chauffeurs are expert in routes and know how to navigate city traffic to take you comfortably and safely.</p>
                             </div>
                         </SwiperSlide>
                         <SwiperSlide>
                             <div>
-                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>A Commitment to Safety</h2>
-                                <p className='text-base leading-relaxed webFontColor'>Your safety is our foremost priority. Our highly skilled chauffeurs navigate all road conditions with confidence and care, allowing you complete peace of mind throughout your travel.</p>
+                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Unparalleled Expertise</h2>
+                                <p className='text-base leading-relaxed webFontColor'>Unmatched expertise of our chauffeurs come with years of experience of providing transportation solutions to every type of client. We master the art of making your ride as smooth as possible, helping you stay at ease at all times.</p>
                             </div>
                         </SwiperSlide>
                         <SwiperSlide>
                             <div>
-                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>The Art of Service</h2>
-                                <p className='text-base leading-relaxed webFontColor'>Driving is just one part of the job. Our chauffeurs are trained to provide discreet, professional, and courteous service—always attentive to your comfort and needs.</p>
+                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>High-Quality Service</h2>
+                                <p className='text-base leading-relaxed webFontColor'>Driving is part and parcel of our business, which is why our chauffeurs are experts in taking you on a safe and comfortable ride. They are courteous, attentive, and will serve you at the highest level possible, all along the way.</p>
                             </div>
                         </SwiperSlide>
                         <SwiperSlide>
                             <div>
-                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Seamless Travel, Every Time</h2>
-                                <p className='text-base leading-relaxed webFontColor'>From managing busy city traffic to getting you to important events right on time, your Royale Chauffeur ensures every journey feels effortless and stress-free.</p>
+                                <h2 className='text-white text-xl lg:text-2xl leading-snug font-medium'>Safety as a Priority</h2>
+                                <p className='text-base leading-relaxed webFontColor'>We treat client safety as priority. Our Royale chauffeurs ensure your safety and will give you the utmost care during your journey. They are committed to your safety, allowing you complete peace of mind throughout the journey.</p>
                             </div>
                         </SwiperSlide>
                     </Swiper>
@@ -430,7 +423,7 @@ export default function Home() {
 
       <div>
         <div className='container mx-auto px-2'>
-          <div className='flex flex-col lg:flex-row lg:space-x-10 py-8'>
+          <div className='flex flex-col lg:flex-row items-center lg:space-x-10 py-8'>
             <div className='w-full lg:w-3/5' data-aos="fade-up">
                 <div className='grid grid-cols-2 space-x-5 mb-5 lg:mb-0'>
                   <div><Image src={GlobalImg3} className='w-full h-[200px] md:h-[400px] lg:h-[450px] object-cover object-bottom' alt='Join with the best Limo Service in Toronto' /></div>
@@ -439,8 +432,8 @@ export default function Home() {
             </div>
             <div className='w-full lg:w-2/5' data-aos="fade-up">
               <small className='webColor uppercase'>Only the best</small>
-              <h2 className='text-white text-2xl lg:text-4xl leading-snug my-3 font-medium'>Why We Stand Apart?</h2>
-              <p className='text-base leading-relaxed webFontColor hidden md:block'>At Limo Royale, every ride will make you feel special. We promise to give you more than just transportation—we want every client to feel truly valued and cared for. We’re not about being the biggest name out there, but about being the one you can always trust for the best experience.<br></br><br></br> When you step into one of our vehicles, it’s all about comfort, ease, and a touch of luxury that makes the journey just as enjoyable as the destination. With decades of experience in both limo services and hospitality, we’ve learned exactly what it takes to make people feel looked after. That’s why we go the extra mile—to give you the kind of service that stands out and stays with you.</p>
+              <h2 className='text-white text-2xl lg:text-4xl leading-snug my-3 font-medium'>How Do We Differ?</h2>
+              <p className='text-base leading-relaxed webFontColor hidden md:block'>At Limo Royale, it is not just about taking you to your destination. It’s about making you enjoy the journey and helping you feel at ease all throughout. We ensure you have the highest level of comfort and luxury that you deserve in your ride. <br></br><br></br>Our two decades of experience has taught us what people look for in a luxury transportation service. We are always willing to go the extra mile to help our clients have an enjoyable trip.</p>
             </div>
             <div className='block md:hidden'>
               <Swiper
@@ -455,10 +448,10 @@ export default function Home() {
                 }}
               >
                 <SwiperSlide>
-                  <p className='text-base leading-relaxed webFontColor'>At Limo Royale, every ride will make you feel special. We promise to give you more than just transportation—we want every client to feel truly valued and cared for. We’re not about being the biggest name out there, but about being the one you can always trust for the best experience.</p>
+                  <p className='text-base leading-relaxed webFontColor'>At Limo Royale, it is not just about taking you to your destination. It’s about making you enjoy the journey and helping you feel at ease all throughout. We ensure you have the highest level of comfort and luxury that you deserve in your ride.</p>
                 </SwiperSlide>
                 <SwiperSlide>
-                  <p className='text-base leading-relaxed webFontColor'>When you step into one of our vehicles, it’s all about comfort, ease, and a touch of luxury that makes the journey just as enjoyable as the destination. With decades of experience in both limo services and hospitality, we’ve learned exactly what it takes to make people feel looked after. That’s why we go the extra mile—to give you the kind of service that stands out and stays with you.</p>
+                  <p className='text-base leading-relaxed webFontColor'>Our two decades of experience has taught us what people look for in a luxury transportation service. We are always willing to go the extra mile to help our clients have an enjoyable trip.</p>
                 </SwiperSlide>
               </Swiper>
             </div>

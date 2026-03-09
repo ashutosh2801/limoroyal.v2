@@ -5,6 +5,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/long-distance-limo-service",
+    languages: {
+      "en-CA": "https://limoroyal.com/long-distance-limo-service",
+    },
   },
   openGraph: {
     title: "Long Distance Limo Service in Toronto | Travel with Comfort",
@@ -17,12 +20,6 @@ export const metadata = {
     url: "https://limoroyal.com/long-distance-limo-service",
   },
   dcTitle: "Long Distance Limo Service in Toronto | Travel with Comfort",
-  hreflangs: [
-    {
-      href: "https://limoroyal.com/long-distance-limo-service",
-      hreflang: "en-ca",
-    },
-  ],
 };
 
 

@@ -137,7 +137,7 @@ const AboutPage = () => {
                 </SwiperSlide>
                 <SwiperSlide>
                 <div className='bg-[#0a0a0a] p-6 min-h-[285px]' data-aos="fade-up">
-                  <h4 className='text-white text-xl lg:text-2xl mb-5'>Precision & Punctualit</h4>
+                  <h4 className='text-white text-xl lg:text-2xl mb-5'>Precision & Punctuality</h4>
                   <p className='text-base leading-relaxed webFontColor'>We understand the value of time. Our commitment to punctuality and professionalism ensures that every journey with Limo Royale is smooth, reliable, and stress-free. Our experienced chauffeurs are trained not only in safe driving but also in delivering the highest level of service.</p>
                 </div>
                 </SwiperSlide>
