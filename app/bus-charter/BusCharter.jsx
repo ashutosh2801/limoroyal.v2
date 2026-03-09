@@ -15,8 +15,8 @@ const BusCharter = () => {
     <main>
         <div>
             <div className='relative'>
-                <div className='bus-page-bg object-cover absolute h-[450px] lg:h-[550px] inset-0 opacity-50'></div>
-                <div className='relative z-10 pt-50 lg:pt-80 pb-30'>
+                <div className='bus-page-bg object-cover absolute h-[300px] md:h-[550px] inset-0 opacity-50'></div>
+                <div className='relative z-10 pt-40 lg:pt-80 md:pb-30'>
                     <div className='container mx-auto px-2'>
                         <div>
                             <ul className='breadcrumb uppercase webColor text-sm flex'>
@@ -124,7 +124,7 @@ const BusCharter = () => {
             <div className='bg-[#0a0a0a]' data-aos="fade-up">
                 <div className='grid grid-cols-1 lg:grid-cols-2 mt-8 lg:mt-0'>
                     <div>
-                        <Image src={EventBanner} alt='Corporate Travel Experience with Limo Royale' className='w-full h-[520px] object-cover object-bottom' />
+                        <Image src={EventBanner} alt='Corporate Travel Experience with Limo Royale' className='w-full md:h-[520px] object-cover object-bottom' />
                     </div>
                     <div className='py-5 md:py-5 px-5 md:px-10'>
                         <small className='text-sm webColor uppercase'>We are serving</small>
