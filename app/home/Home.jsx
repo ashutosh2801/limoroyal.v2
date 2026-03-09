@@ -263,7 +263,7 @@ export default function Home() {
                     >
                         <SwiperSlide className='h-auto flex'>
                             <div className='backdrop-blur-md bg-[#1b1b1b]/60 p-6 flex flex-col h-full w-full' data-aos="fade-up">
-                            <h4 className='text-white text-xl lg:text-2xl mb-5'>Punctuality and Reliabilit</h4>
+                            <h4 className='text-white text-xl lg:text-2xl mb-5'>Punctuality and Reliability</h4>
                             <p className='text-base leading-relaxed webFontColor flex-grow'>Limo Royale is your go-to transport service for precision, punctuality, and reliability. You can count on our Royale chauffeurs to be there on time to pick you up and take you to your destination safely. Beyond all of this, we give priority to providing the highest level of service to you.</p>
                             </div>
                         </SwiperSlide>
@@ -293,7 +293,7 @@ export default function Home() {
         <div className='bg-[#0a0a0a] py-8'>
           <div className='container mx-auto px-2'>
             <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-5 font-medium' data-aos="fade-up">Fleet of Clean and Well-Maintained Vehicles</h2>
-            <p className='hidden md:block text-base leading-relaxed webFontColor' data-aos="fade-up">We make sure you get into a well-polished, clean, and stylish vehicle fully-equipped with all amenities. Our fleet goes through thorough checking for cleanliness in order to maintain the highest quality of standard. From cleanliness to performance, we ensure everything is perfect to give you a smooth ride to your destination. We go the extra mile to ensure the vehicles are cleaned and well-maintained by checking them from inside out. <br></br><br></br>With Limo Royale, you don’t just travel from one place to another. You enjoy a comfortable, luxurious, and safe journey with us.</p>
+            <p className='text-base leading-relaxed webFontColor' data-aos="fade-up">We make sure you get into a well-polished, clean, and stylish vehicle fully-equipped with all amenities. Our fleet goes through thorough checking for cleanliness in order to maintain the highest quality of standard. From cleanliness to performance, we ensure everything is perfect to give you a smooth ride to your destination. We go the extra mile to ensure the vehicles are cleaned and well-maintained by checking them from inside out. <br></br><br></br>With Limo Royale, you don’t just travel from one place to another. You enjoy a comfortable, luxurious, and safe journey with us.</p>
             <h2 className='text-white text-2xl lg:text-3xl leading-snug mt-5 font-medium' data-aos="fade-up">Elegance in Every Mile</h2>
             <div className='flex md:space-x-5 space-y-5 lg:space-y-0 mt-5'>
                 <Swiper
@@ -423,7 +423,7 @@ export default function Home() {
 
       <div>
         <div className='container mx-auto px-2'>
-          <div className='flex flex-col lg:flex-row items-center lg:space-x-10 py-8'>
+          <div className='flex flex-col lg:flex-row md:items-center lg:space-x-10 py-8'>
             <div className='w-full lg:w-3/5' data-aos="fade-up">
                 <div className='grid grid-cols-2 space-x-5 mb-5 lg:mb-0'>
                   <div><Image src={GlobalImg3} className='w-full h-[200px] md:h-[400px] lg:h-[450px] object-cover object-bottom' alt='Join with the best Limo Service in Toronto' /></div>
@@ -441,7 +441,7 @@ export default function Home() {
                 spaceBetween={40}
                 slidesPerView={1}
                 loop={true}
-                autoplay={{ delay: 3500, disableOnInteraction: false }}
+                autoplay={{ delay: 350000, disableOnInteraction: false }}
                 breakpoints={{
                 640: { slidesPerView: 1 },
                 768: { slidesPerView: 1 }

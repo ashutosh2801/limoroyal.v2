@@ -128,7 +128,7 @@ const Header = () => {
                                                 Ladies Night Out Limo Service
                                             </Link>
 
-                                            <Link href="/luxury-chauffeuring-services-to-londons" className={`block px-6 py-3 link-service ${pathname === "/luxury-chauffeuring-services-to-londons" ? "service-active" : "border-transparent"}`} title='Events'>
+                                            <Link href="/luxury-chauffeuring-services-to-london" className={`block px-6 py-3 link-service ${pathname === "/luxury-chauffeuring-services-to-london" ? "service-active" : "border-transparent"}`} title='Events'>
                                                 Events
                                             </Link>
 
@@ -180,7 +180,7 @@ const Header = () => {
                                                     <ChevronRightIcon className="h-3 w-3 mr-2 mt-1 flex-shrink-0" /> Ladies Night Out Limo Service
                                                 </Link>
 
-                                                <Link href="/luxury-chauffeuring-services-to-londons" onClick={() => setIsMobileNavOpen(false)} className={`flex px-6 py-2 link-service ${pathname === "/luxury-chauffeuring-services-to-londons" ? "service-active" : "border-transparent"}`} title='Events'>
+                                                <Link href="/luxury-chauffeuring-services-to-london" onClick={() => setIsMobileNavOpen(false)} className={`flex px-6 py-2 link-service ${pathname === "/luxury-chauffeuring-services-to-london" ? "service-active" : "border-transparent"}`} title='Events'>
                                                     <ChevronRightIcon className="h-3 w-3 mr-2 mt-1 flex-shrink-0" /> Events
                                                 </Link>
 
@@ -286,7 +286,7 @@ const Header = () => {
                                         Wedding Cars
                                     </Link>
 
-                                    <Link href="/luxury-chauffeuring-services-to-londons" className="text-lg text-gray-300 hover:text-white">
+                                    <Link href="/luxury-chauffeuring-services-to-london" className="text-lg text-gray-300 hover:text-white">
                                         Events
                                     </Link>
 
