@@ -1,28 +1,25 @@
 export const metadata = {
-  title: "Ladies Night Out Limo Service in Toronto | Limo Royale",
+  title: "Luxury Chauffeuring Services to London | Limo Royale",
   description: "Celebrate your night out in style with Limo Royale’s luxury limo service in Toronto. Perfect for groups—book your fun and safe ride today!",
-  keywords: "Ladies Night Out Limo Service in Toronto",
+  keywords: "Luxury Chauffeuring Services to London",
   robots: "index, follow",
   alternates: {
-    canonical: "https://limoroyal.com/ladies-night-out-limo-service",
+    canonical: "https://limoroyal.com/luxury-chauffeuring-services-to-londons",
+    languages: {
+      "en-CA": "https://limoroyal.com/luxury-chauffeuring-services-to-londons",
+    },
   },
   openGraph: {
-    title: "Ladies Night Out Limo Service in Toronto | Limo Royale",
+    title: "Luxury Chauffeuring Services to London | Limo Royale",
     description: "Celebrate your night out in style with Limo Royale’s luxury limo service in Toronto. Perfect for groups—book your fun and safe ride today!",
-    url: "https://limoroyal.com/ladies-night-out-limo-service",
+    url: "https://limoroyal.com/luxury-chauffeuring-services-to-londons",
   },
   twitter: {
-    title: "Ladies Night Out Limo Service in Toronto | Limo Royale",
+    title: "Luxury Chauffeuring Services to London | Limo Royale",
     description: "Celebrate your night out in style with Limo Royale’s luxury limo service in Toronto. Perfect for groups—book your fun and safe ride today!",
-    url: "https://limoroyal.com/ladies-night-out-limo-service",
+    url: "https://limoroyal.com/luxury-chauffeuring-services-to-londons",
   },
-  dcTitle: "Ladies Night Out Limo Service in Toronto | Limo Royale",
-  hreflangs: [
-    {
-      href: "https://limoroyal.com/ladies-night-out-limo-service",
-      hreflang: "en-ca",
-    },
-  ],
+  dcTitle: "Luxury Chauffeuring Services to London | Limo Royale",
 };
 
 

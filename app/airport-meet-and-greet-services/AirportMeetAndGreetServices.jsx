@@ -33,46 +33,175 @@ const AirportMeetAndGreetServices = () => {
                             <Image src={AirportMeetBanner} className='w-full h-full' alt='Airport Meet & Greet with Chauffeur Service' />
                         </div>
                         <div className='border-b webBorderColor pb-10 mb-10' data-aos="fade-up">
-                            <h1 className='text-white text-2xl lg:text-4xl mt-10 mb-5 lg:mb-10'>Seamless and Luxurious Airport Transfers</h1>
+                            <h1 className='text-white text-2xl lg:text-4xl mt-10 mb-5 lg:mb-10'>Professional Airport Meet and Greet Services</h1>
                             <p className='webFontColor text-base leading-relaxed'>
-                                Traveling to and from the airport should be a smooth, stress-free experience, and at <b>Limo Royale</b>, we make sure your journey is nothing less than exceptional. Whether you’re traveling for business or leisure, our <b>Airport Limo Service</b> provides punctual, comfortable, and luxurious transportation, ensuring you arrive in style and on time. With our premium fleet of vehicles and professional <b>Royale Chauffeurs</b>, we take the hassle out of airport transportation and elevate it to a royal experience.
+                                Limo Royale provides the perfect setting for comfortable and professional airport transfers. Our airport limo service ensures comfort, punctuality, reliability, providing the highest quality of service as always. Our professional Royal chauffeurs ensure hassle-free airport transportation under every circumstance. Make your airport transfers seamless with Limo Royale airport limo service. 
                             </p>
                             <b className='text-white w-full block mb-5 mt-5'>Why Choose Limo Royale for Airport Transfers?</b>
                             <ul className='list-disc pl-5 space-y-4 webFontColor text-base'>
-                                <li><b>Luxury Fleet: </b>Our fleet of luxury sedans, SUVs, and limousines ensures that your ride to or from the airport is as comfortable as it is stylish. Enjoy spacious, plush seating, WiFi, and advanced climate control, all designed to provide a relaxing and refined environment.</li>
+                                <li><b>Arrival Experience: </b>One of our professional Royale chauffeurs will be available at the arrival hall, gate, or designated area. He will greet you and provide you with the best airport meet and greet services in Toronto.</li>
 
-                                <li><b>Punctuality is Key: </b>We understand the importance of time when it comes to catching flights or picking up travelers. Our <b>Royale Chauffeurs</b> closely monitor your flight schedule, ensuring prompt pickups and drop-offs. We adjust for any flight delays or early arrivals so that you’re never left waiting.</li>
+                                <li><b>Baggage Assistance: </b>Our professional Royale chauffeurs will provide you with all assistance with regard to your baggage handling. </li>
 
-                                <li><b>Experienced Chauffeurs: </b>Our highly professional chauffeurs, with <b>15-20 years of experience</b>, are experts in navigating busy airports and traffic conditions. They ensure you have a smooth ride, handling luggage and offering personalized assistance to make your journey completely hassle-free.</li>
+                                <li><b>Navigation through the terminal: </b>Whether you are new to airport travel or not, there is no need to worry with our airport limo service. We take care of your navigation through the terminal to ensure a seamless airport transfer process. </li>
                             </ul>
-                            <b className='text-white w-full block mb-5 mt-5'>Services We Offer:</b>
+
+                            <b className='text-white w-full block mb-5 mt-5'>Private Transfer Meet and Greet Services</b>
+                            <p className='webFontColor text-base mt-5'>Our airport limo service provides private meet and greet services as per client needs and requirements. Our Royale chauffeurs will meet you at the arrivals hall or gate to provide luggage assistance.<br></br><br></br> We specialize in providing discreet airport limo service for VIPs and high-profile clients. We tailor the experience to match their preferences.</p>
+
+                            <b className='text-white w-full block mb-5 mt-5'>Airport Limo Service: Who is it for?</b>
                             <ul className='list-disc pl-5 space-y-4 webFontColor text-base'>
-                                <li><b>Pickups and Drop-offs: </b>Whether you need transportation to or from the airport, we provide door-to-door service, ensuring you arrive at your destination on time and in style.</li>
+                                <li><b>Business Travellers: </b>Executives and all types of business travellers require the assistance of airport limo service. They require punctual and reliable airport transfer services for their business meetings.</li>
 
-                                <li><b>Flight Monitoring: </b>Our team monitors your flight in real-time, making adjustments to your pickup time as needed. This ensures timely service, even if your flight schedule changes.</li>
+                                <li><b>VIPs: </b>VIPs require luxury and comfort to ensure that they get to their destination on time. Our Royale chauffeurs provide all assistance VIPs require for a comfortable and safe ride to the destination. They consider punctuality as their highest priority.</li>
 
-                                <li><b>Meet and Greet: </b>For added convenience, we offer a meet-and-greet service where your chauffeur will be waiting for you at arrivals, ready to assist with luggage and provide a warm welcome.</li>
-
-                                <li><b>Corporate Airport Transfers: </b>For business travelers, we offer discrete and professional transportation that ensures you or your clients can travel in comfort while staying connected and productive.</li>
+                                <li><b>Families: </b>Family vacations require comfort, luxury, and ample space for luggage. Our airport limo service ensures all of these features are available for family travellers to provide seamless airport transfer services.</li>
                             </ul>
-                            <b className='text-white w-full block mb-5 mt-5'>Benefits of Choosing Limo Royale for Airport Transfers</b>
+
+                            <b className='text-white w-full block mb-5 mt-5'>Special Airport Limo Service</b>
                             <ul className='list-disc pl-5 space-y-4 webFontColor text-base'>
-                                <li><b>Stress-Free Travel: </b>Eliminate the hassle of navigating traffic, parking, or dealing with rental cars. With <b>Limo Royale</b>, we take care of all the details so that you can relax and enjoy your journey.</li>
+                                <li><b>ALWAYS Meet and Assist Service: </b>We provide personal assistance to and from the airport gate. This includes expedited processing, lounge access, and also help with terminal shopping, if required.</li>
 
-                                <li><b>Privacy and Discretion: </b>Whether traveling for business or leisure, our <b>Royale Chauffeurs</b> provide a professional and discreet service, allowing you to focus on what’s important.</li>
+                                <li><b>Royal Airport Concierge: </b>We provide aircraft-side greeting, porter service at baggage claim, and proper coordination with the Royale chauffeurs waiting outside the airport.</li>
 
-                                <li><b>Global Connectivity: </b>We cater to international travelers arriving from all over the world. Our team speaks multiple languages and understands the needs of high-profile clients who expect a seamless experience from airport to destination.</li>
+                                <li><b>Fast-Track VIP Service: </b>We specialize in arrival and departure meet and assist services. This includes gate-to-gate connection service for transit clients.</li>
                             </ul>
-                            <b className='text-white w-full block mb-5 mt-5'>Perfect for:</b>
-                            <ul className='list-disc pl-5 space-y-4 webFontColor text-base'>
-                                <li><b>Business Travelers: </b>For executives needing punctual, reliable transportation to and from the airport.</li>
+                            <div className="pt-2" data-aos="fade-up">
 
-                                <li><b>Family Vacations: </b>Ensure your family travels in comfort and luxury, with plenty of space for luggage and the convenience of door-to-door service.</li>
+                                <b className="text-white w-full block mb-5 mt-5">
+                                    Summary of the service types we provide
+                                </b>
 
-                                <li><b>VIP Guests: </b>Treat high-profile guests or clients to the ultimate travel experience with our premium airport limo service, ensuring they are met with luxury and elegance upon arrival.</li>
-                            </ul>
-                            <p className='webFontColor text-base mt-5'>Experience a smooth and luxurious journey to or from the airport with <b>Limo Royale’s Airport Limo Service. Book today</b> and let us take care of your travel needs, ensuring every part of your trip is seamless and stylish.</p>
+                                {/* Desktop Table */}
+                                <div className="hidden md:block overflow-x-auto">
+                                    <table className="w-full border border-gray-600 text-sm">
+                                    <thead>
+                                        <tr className="bg-gray-800 text-white">
+                                        <th className="border border-gray-600 p-3 text-left">Service Type</th>
+                                        <th className="border border-gray-600 p-3 text-left">Key Features</th>
+                                        <th className="border border-gray-600 p-3 text-left">Suitable For</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody className="webFontColor">
+                                        <tr>
+                                        <td className="border border-gray-600 p-3 font-semibold">Full Concierge</td>
+
+                                        <td className="border border-gray-600 p-3">
+                                            <ul className="list-disc pl-5 space-y-1">
+                                            <li>Gate escort service</li>
+                                            <li>Lounge access</li>
+                                            <li>Fast-track service</li>
+                                            <li>Porters for assistance</li>
+                                            </ul>
+                                        </td>
+
+                                        <td className="border border-gray-600 p-3">
+                                            <ul className="list-disc pl-5 space-y-1">
+                                            <li>First-time travellers</li>
+                                            <li>VIPs</li>
+                                            <li>Seniors</li>
+                                            </ul>
+                                        </td>
+                                        </tr>
+
+                                        <tr>
+                                        <td className="border border-gray-600 p-3 font-semibold">
+                                            Driver Meet & Greet Services
+                                        </td>
+
+                                        <td className="border border-gray-600 p-3">
+                                            <ul className="list-disc pl-5 space-y-1">
+                                            <li>Greeting with a signboard at the arrival hall</li>
+                                            <li>Help load luggage to the car</li>
+                                            </ul>
+                                        </td>
+
+                                        <td className="border border-gray-600 p-3">
+                                            <ul className="list-disc pl-5 space-y-1">
+                                            <li>Business travellers</li>
+                                            <li>Families with heavy luggage</li>
+                                            </ul>
+                                        </td>
+                                        </tr>
+
+                                        <tr>
+                                        <td className="border border-gray-600 p-3 font-semibold">Transit Assistance</td>
+
+                                        <td className="border border-gray-600 p-3">
+                                            <ul className="list-disc pl-5 space-y-1">
+                                            <li>Guidance between terminals and gates for connections</li>
+                                            </ul>
+                                        </td>
+
+                                        <td className="border border-gray-600 p-3">
+                                            <ul className="list-disc pl-5 space-y-1">
+                                            <li>Complex connections</li>
+                                            <li>Short layovers</li>
+                                            </ul>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                </div>
+
+                                {/* Mobile Cards */}
+                                <div className="md:hidden space-y-6">
+
+                                    <div className="border border-gray-600 p-5 rounded-lg">
+                                    <h4 className="text-white font-semibold mb-3">Full Concierge</h4>
+
+                                    <p className="text-gray-300 font-medium mb-1">Key Features</p>
+                                    <ul className="list-disc pl-5 text-sm webFontColor mb-3">
+                                        <li>Gate escort service</li>
+                                        <li>Lounge access</li>
+                                        <li>Fast-track service</li>
+                                        <li>Porters for assistance</li>
+                                    </ul>
+
+                                    <p className="text-gray-300 font-medium mb-1">Suitable For</p>
+                                    <ul className="list-disc pl-5 text-sm webFontColor">
+                                        <li>First-time travellers</li>
+                                        <li>VIPs</li>
+                                        <li>Seniors</li>
+                                    </ul>
+                                    </div>
+
+                                    <div className="border border-gray-600 p-5 rounded-lg">
+                                    <h4 className="text-white font-semibold mb-3">Driver Meet & Greet Services</h4>
+
+                                    <p className="text-gray-300 font-medium mb-1">Key Features</p>
+                                    <ul className="list-disc pl-5 text-sm webFontColor mb-3">
+                                        <li>Greeting with a signboard at the arrival hall</li>
+                                        <li>Help load luggage to the car</li>
+                                    </ul>
+
+                                    <p className="text-gray-300 font-medium mb-1">Suitable For</p>
+                                    <ul className="list-disc pl-5 text-sm webFontColor">
+                                        <li>Business travellers</li>
+                                        <li>Families with heavy luggage</li>
+                                    </ul>
+                                    </div>
+
+                                    <div className="border border-gray-600 p-5 rounded-lg">
+                                    <h4 className="text-white font-semibold mb-3">Transit Assistance</h4>
+
+                                    <p className="text-gray-300 font-medium mb-1">Key Features</p>
+                                    <ul className="list-disc pl-5 text-sm webFontColor mb-3">
+                                        <li>Guidance between terminals and gates for connections</li>
+                                    </ul>
+
+                                    <p className="text-gray-300 font-medium mb-1">Suitable For</p>
+                                    <ul className="list-disc pl-5 text-sm webFontColor">
+                                        <li>Complex connections</li>
+                                        <li>Short layovers</li>
+                                    </ul>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
+                        
                         <div data-aos="fade-up">
                             <ServiceFaq />
                         </div>

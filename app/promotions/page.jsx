@@ -5,6 +5,9 @@ export const metadata = {
   robots: "index, follow",
   alternates: {
     canonical: "https://limoroyal.com/promotions",
+    languages: {
+      "en-CA": "https://limoroyal.com/promotions",
+    },
   },
   openGraph: {
     title: "Limo Royale Promotions | Luxury Limo & Airport Chauffeur Deals",
@@ -17,12 +20,6 @@ export const metadata = {
     url: "https://limoroyal.com/promotions",
   },
   dcTitle: "Limo Royale Promotions | Luxury Limo & Airport Chauffeur Deals",
-  hreflangs: [
-    {
-      href: "https://limoroyal.com/promotions",
-      hreflang: "en-ca",
-    },
-  ],
 };
 
 import Promotions from "./Promotions";

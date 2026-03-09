@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import ServiceSidePanel from '../components/ServiceSidePanel'
-import ServiceFaq from '../components/ServiceFaq'
+import ServiceFaq from './ServiceFaq'
 import chauffeuringBanner from '../../public/assets/services/chauffeuring-services.jpg'
 import CustomerExperiences from '../components/CustomerExperiences'
 
@@ -33,15 +33,16 @@ const LuxuryChauffeuringServicesToLondons = () => {
                             <Image src={chauffeuringBanner} className='w-full h-full' alt='Luxury Chauffeuring Services' />
                         </div>
                         <div className='border-b webBorderColor pb-10 mb-10' data-aos="fade-up">
-                            <h1 className='text-white text-2xl lg:text-4xl mt-10 mb-5 lg:mb-10'>Luxury Chauffeuring Services</h1>
+                            <h1 className='text-white text-2xl lg:text-4xl mt-10 mb-5 lg:mb-10'>Luxury Chauffeuring Services at your Fingertips</h1>
                             <p className='webFontColor text-base leading-relaxed'>
-                                Our Luxury Chauffeuring Services offer an elevated level of comfort and professionalism for any occasion. Whether you’re attending a corporate event, a wedding, or simply need a luxurious ride to the airport, our experienced chauffeurs ensure a smooth, stylish, and timely journey. We take pride in offering impeccable service, from the moment you are picked up to your final destination.<br></br><br></br>
+                                We provide luxury chauffeuring services for any event. Be it a wedding, corporate event, or simply any occasion, our professional chauffeurs are ready to take you in complete luxury and comfort. We ensure a smooth and timely journey to your destination. From pick-up to drop-off, you are guaranteed professionalism all throughout the journey.<br></br><br></br>
 
-                                Our fleet features high-end vehicles that are meticulously maintained and equipped with all the amenities to provide you with an extraordinary experience. From plush interiors to advanced technology, every detail is carefully considered to enhance your comfort and relaxation.<br></br><br></br>
+                                Our fleet consists of high-end, well-maintained vehicles equipped with all amenities required for a comfortable and luxurious journey. The inclusion of plush interiors and every other detail are carefully considered to give you the best airport transfer experience. Our stylish vehicles are what every executive or business prefers when it comes to corporate travel.<br></br><br></br>
 
-                                Our chauffeurs are highly trained professionals who embody courtesy and discretion. They are knowledgeable of the best routes, ensuring you arrive on time, while also maintaining the highest standards of safety and privacy. You can trust our team to make your trip stress-free and enjoyable.<br></br><br></br>
+                                We provide luxury chauffeuring services with our highly-trained chauffeurs who display professionalism at the highest level. They ensure the safety of each and every client they provide transport services for. They know the best routes in the city and how to optimize to provide efficient and effective transportation services to clients. Trust them for a stress-free and enjoyable journey to your destination.<br></br><br></br>
 
-                                Whether you’re looking for a ride for a special event or need reliable transportation for daily commutes, our Luxury Chauffeuring Services offer convenience, elegance, and personalized attention. We are committed to ensuring that every journey you take with us is nothing short of exceptional.
+                                You may embark in a professional or personal journey, we are there for you all the way from the start to the end!
+
                             </p>
                         </div>
                         <div data-aos="fade-up">
