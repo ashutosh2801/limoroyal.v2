@@ -10,8 +10,8 @@ const LuxuryChauffeuringServices = () => {
     <main>
         <div>
             <div className='relative'>
-                <div className='page-bg object-cover absolute h-[450px] lg:h-[550px] inset-0 opacity-50'></div>
-                <div className='relative z-10 pt-50 lg:pt-60 xl:pt-80 pb-30 md:pb-30 xl:pb-10'>
+                <div className='page-bg object-cover absolute h-[300px] md:h-[550px] inset-0 opacity-50'></div>
+                <div className='relative z-10 pt-40 lg:pt-80 pb-0 md:pb-30 xl:pb-0'>
                     <div className='container mx-auto px-2'>
                         <div>
                             <ul className='breadcrumb uppercase webColor text-sm flex'>

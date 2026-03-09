@@ -62,8 +62,8 @@ const ServiceSidePanel = () => {
                         </li>
 
                         <li>
-                            <Link href='/luxury-chauffeuring-services-to-londons' title='Luxury Chauffeuring Services to London'
-                                className={`services-link ${isActive("/luxury-chauffeuring-services-to-londons") ? "side-active" : "border-transparent"}`}>
+                            <Link href='/luxury-chauffeuring-services-to-london' title='Luxury Chauffeuring Services to London'
+                                className={`services-link ${isActive("/luxury-chauffeuring-services-to-london") ? "side-active" : "border-transparent"}`}>
                                 Events
                             </Link>
                         </li>

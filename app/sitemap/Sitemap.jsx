@@ -12,7 +12,7 @@ const Sitemap = () => {
       { title: "Airport Transfers", href: "/airport-transfers" },
       { title: "Wedding Cars", href: "/wedding-cars" },
       { title: "Ladies Night Out Limo Service", href: "/ladies-night-out-limo-service" },
-      { title: "Events", href: "/luxury-chauffeuring-services-to-londons" },
+      { title: "Events", href: "/luxury-chauffeuring-services-to-london" },
       { title: "Airport Meet and Greet Services", href: "/airport-meet-and-greet-services" },
       { title: "Promotions", href: "/promotions" },
       { title: "Birthdays, Bachelor, & Bachelorette Limo Service", href: "/birthdays-bachelor-and-bachelorette-limo-service" },
@@ -34,8 +34,8 @@ const Sitemap = () => {
     <main>
         <div>
             <div className="relative">
-                <div className="page-bg object-cover absolute h-[450px] lg:h-[550px] inset-0 opacity-50"></div>
-                <div className="relative z-10 pt-50 lg:pt-80 pb-30">
+                <div className="page-bg object-cover absolute h-[300px] md:h-[550px] inset-0 opacity-50"></div>
+                <div className="relative z-10 pt-40 lg:pt-80 pb-20 md:pb-30">
                     <div className="container mx-auto px-2">
                         <ul className="breadcrumb uppercase webColor text-sm flex">
                         <li><a href="/">Home</a></li>

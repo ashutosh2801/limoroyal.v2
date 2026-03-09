@@ -230,8 +230,9 @@ a {
 
 @media (max-width:767px){
 
-  .page-bg {
-    background-size: 300%;
+  .page-bg,
+  .bus-page-bg {
+    background-size: cover !important;
   }
 
 }

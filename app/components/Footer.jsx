@@ -43,7 +43,7 @@ const Footer = () => {
             <Link href='/casino-limo-service' className='webFontColor block mb-3'>Casino Limo Service</Link>
             <Link href='/airport-transfers' className='webFontColor block mb-3'>Airport Transfers</Link>
             <Link href='/wedding-cars' className='webFontColor block mb-3'>Wedding Cars</Link>
-            <Link href='/luxury-chauffeuring-services-to-londons' className='webFontColor block mb-3'>Events</Link>
+            <Link href='/luxury-chauffeuring-services-to-london' className='webFontColor block mb-3'>Events</Link>
             <Link href='/promotions' className='webFontColor block mb-3'>Promotions</Link>
           </div>
 

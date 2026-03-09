@@ -10,8 +10,8 @@ const Promotions = () => {
     <main>
         <div>
             <div className='relative'>
-                <div className='page-bg object-cover absolute h-[450px] lg:h-[550px] inset-0 opacity-50'></div>
-                <div className='relative z-10 pt-50 lg:pt-80 pb-30 md:pb-30 xl:pb-10'>
+                <div className='page-bg object-cover absolute h-[300px] md:h-[550px] inset-0 opacity-50'></div>
+                <div className='relative z-10 pt-40 lg:pt-80 pb-10 md:pb-30 xl:pb-20'>
                     <div className='container mx-auto px-2'>
                         <div>
                             <ul className='breadcrumb uppercase webColor text-sm flex'>
@@ -30,7 +30,7 @@ const Promotions = () => {
                     <ServiceSidePanel />
                     <div className='w-full md:w-3/5 lg:w-2/3'>
                         <div data-aos="fade-up">
-                            <Image src={PromotionsBanner} className='w-full h-[500px] object-cover object-bottom' alt='Promotion Limo Service' />
+                            <Image src={PromotionsBanner} className='w-full md:h-[500px] object-cover object-bottom' alt='Promotion Limo Service' />
                         </div>
                         <div className='border-b webBorderColor pb-10 mb-10' data-aos="fade-up">
                             <h1 className='text-white text-2xl lg:text-4xl mt-10 mb-5 lg:mb-10'>Arrive in Style and Make Memories to Last a Lifetime</h1>
