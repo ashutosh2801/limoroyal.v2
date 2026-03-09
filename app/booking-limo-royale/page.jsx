@@ -1,3 +1,15 @@
+import Navigation from './Navigation'
+import Hero from './Hero'
+import Search from '../components/Search'
+import Services from './Services'
+import Fleet from './Fleet'
+import WhyChooseUs from './WhyChooseUs';
+import Reviews from "./Reviews"
+import LocalAuthority from './LocalAuthority'
+import Faq from './Faq'
+import Cta from './Cta'
+import Footer from './Footer'
+
 export const metadata = {
   title: "Book Now | Limo Royale",
   description:
@@ -5,9 +17,9 @@ export const metadata = {
   keywords:
     "Bus Charter Service Toronto, Luxury Bus Charter & Group Travel",
   alternates: {
-    canonical: "https://limoroyal.com/booknow",
+    canonical: "https://limoroyal.com/booking-limo-royale",
     languages: {
-      "en-ca": "https://limoroyal.com/booknow",
+      "en-ca": "https://limoroyal.com/booking-limo-royale",
     },
   },
   images: ["https://limoroyal.com/_next/static/media/limo-royal.00028e7b.png"],
@@ -16,7 +28,7 @@ export const metadata = {
     title: "Book Now | Limo Royale",
     description:
       "Travel in style with Limo Royale’s luxury bus charters. Corporate, private, or sports groups enjoy spacious fleet, expert chauffeurs, and seamless rides.",
-    url: "https://limoroyal.com/booknow",
+    url: "https://limoroyal.com/booking-limo-royale",
     images: [
       {
         url: "https://limoroyal.com/_next/static/media/limo-royal.00028e7b.png",
@@ -35,22 +47,10 @@ export const metadata = {
     images: ["https://limoroyal.com/_next/static/media/limo-royal.00028e7b.png"],
   },
   other: {
-    "twitter:url": "https://limoroyal.com/booknow",
+    "twitter:url": "https://limoroyal.com/booking-limo-royale",
     "DC.title": "Book Now | Limo Royale",
   },
 };
-
-import Navigation from './Navigation'
-import Hero from './Hero'
-import Search from '../components/Search'
-import Services from './Services'
-import Fleet from './Fleet'
-import WhyChooseUs from './WhyChooseUs';
-import Reviews from "./Reviews"
-import LocalAuthority from './LocalAuthority'
-import Faq from './Faq'
-import Cta from './Cta'
-import Footer from './Footer'
 
 export default function Limo() {
 
