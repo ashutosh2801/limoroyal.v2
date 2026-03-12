@@ -3,20 +3,22 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import area1 from '../../public/assets/areas-served/boston.jpg'
-import area2 from '../../public/assets/areas-served/staten-island.jpg'
-import area3 from '../../public/assets/areas-served/manhattan.jpg'
-import area4 from '../../public/assets/areas-served/brooklyn.jpg'
-import area5 from '../../public/assets/areas-served/new-york.jpg'
-import area6 from '../../public/assets/areas-served/gilbert.jpg'
+import area1 from '../../public/assets/areas-served/niagara-falls.jpg'
+import area2 from '../../public/assets/areas-served/london-ontario.jpg'
+import area3 from '../../public/assets/areas-served/kitchener.jpg'
+import area4 from '../../public/assets/areas-served/hamilton.jpg'
+import area5 from '../../public/assets/areas-served/kingston.jpg'
+import area6 from '../../public/assets/areas-served/ottawa.jpg'
+import area7 from '../../public/assets/areas-served/windsor.jpg'
 
 const routes = [
-  { title: "New York ⇄ Boston", image: area1 },
-  { title: "New York ⇄ Staten Island", image: area2 },
-  { title: "New York ⇄ Manhattan", image: area3 },
-  { title: "New York ⇄ Brooklyn", image: area4 },
-  { title: "Newark Airport ⇄ Manhattan", image: area5 },
-  { title: "Brooklyn ⇄ Gilbert", image: area6 },
+  { title: "Toronto ⇄ Niagara Falls", image: area1 },
+  { title: "Toronto ⇄ London Ontario", image: area2 },
+  { title: "Toronto ⇄ Kitchener", image: area3 },
+  { title: "Toronto ⇄ Hamilton", image: area4 },
+  { title: "Toronto ⇄ Kingston", image: area5 },
+  { title: "Toronto ⇄ Ottawa", image: area6 },
+  { title: "Toronto ⇄ Windsor", image: area7 },
 ]
 
 export default function LocalAuthority() {
