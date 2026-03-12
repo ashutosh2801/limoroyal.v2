@@ -32,7 +32,7 @@ const Navigation = () => {
 
                 {/* Logo */}
                 <div className='w-1/2 lg:w-1/4'>
-                  <Link href='/booking-limo-royale'>
+                  <Link href='/'>
                     <Image
                       src={logo}
                       alt='Luxury Limo Service for Memorable Rides - Limo Royal'
@@ -85,30 +85,30 @@ const Navigation = () => {
                                 <div className="flex flex-col xl:justify-between xl:items-center xl:flex-row space-y-2 xl:space-y-0 text-left xl:text-center text-white uppercase py-10 xl:py-0">
                                     <div className='flex flex-col xl:flex-row gap-2 xl:gap-8'>
                                         <Link 
-                                        href="/booking-limo-royale" 
+                                        href="/" 
                                         onClick={() => setIsMobileNavOpen(false)} className='link border-b border-transparent hover:border-yellow-200'
                                         >
                                         Home
                                         </Link>
 
-                                        <Link href="/booking-limo-royale#services" onClick={() => setIsMobileNavOpen(false)} className='link border-b border-transparent hover:border-yellow-200'>
+                                        <Link href="/booking#services" onClick={() => setIsMobileNavOpen(false)} className='link border-b border-transparent hover:border-yellow-200'>
                                             Services
                                         </Link>
 
-                                        <Link href="/booking-limo-royale#fleet" onClick={() => setIsMobileNavOpen(false)} className='link border-b border-transparent hover:border-yellow-200'>
+                                        <Link href="/booking#fleet" onClick={() => setIsMobileNavOpen(false)} className='link border-b border-transparent hover:border-yellow-200'>
                                             Fleet
                                         </Link>
 
-                                        <Link href="/booking-limo-royale#reviews" onClick={() => setIsMobileNavOpen(false)} className='link border-b border-transparent hover:border-yellow-200'>
+                                        <Link href="/booking#reviews" onClick={() => setIsMobileNavOpen(false)} className='link border-b border-transparent hover:border-yellow-200'>
                                             Reviews
                                         </Link>
 
-                                        <Link href="/booking-limo-royale#faq" onClick={() => setIsMobileNavOpen(false)} className='link border-b border-transparent hover:border-yellow-200'>
+                                        <Link href="/booking#faq" onClick={() => setIsMobileNavOpen(false)} className='link border-b border-transparent hover:border-yellow-200'>
                                             FAQ
                                         </Link>
                                     </div>
                                     <div className='flex flex-col xl:flex-row gap-2 xl:gap-8'>
-                                        <Link href="tel:+14167255466" onClick={() => setIsMobileNavOpen(false)} className="book-now-link px-5 py-1">
+                                        <Link href="https://limoroyal.com/booking#quote" onClick={() => setIsMobileNavOpen(false)} className="book-now-link px-5 py-1">
                                             Book Now
                                         </Link>
                                     </div>
