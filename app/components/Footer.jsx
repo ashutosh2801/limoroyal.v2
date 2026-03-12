@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation'
 const Footer = () => {
     const pathname = usePathname();
 
-    if(pathname === "/booking-limo-royale") {
+    if(pathname === "/booking") {
         return null;
     }
 

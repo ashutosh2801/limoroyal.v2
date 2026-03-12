@@ -17,9 +17,9 @@ export const metadata = {
   keywords:
     "Bus Charter Service Toronto, Luxury Bus Charter & Group Travel",
   alternates: {
-    canonical: "https://limoroyal.com/booking-limo-royale",
+    canonical: "https://limoroyal.com/booking",
     languages: {
-      "en-ca": "https://limoroyal.com/booking-limo-royale",
+      "en-ca": "https://limoroyal.com/booking",
     },
   },
   images: ["https://limoroyal.com/_next/static/media/limo-royal.00028e7b.png"],
@@ -28,7 +28,7 @@ export const metadata = {
     title: "Book Now | Limo Royale",
     description:
       "Travel in style with Limo Royale’s luxury bus charters. Corporate, private, or sports groups enjoy spacious fleet, expert chauffeurs, and seamless rides.",
-    url: "https://limoroyal.com/booking-limo-royale",
+    url: "https://limoroyal.com/booking",
     images: [
       {
         url: "https://limoroyal.com/_next/static/media/limo-royal.00028e7b.png",
@@ -44,10 +44,10 @@ export const metadata = {
     description:
       "Travel in style with Limo Royale’s luxury bus charters. Corporate, private, or sports groups enjoy spacious fleet, expert chauffeurs, and seamless rides.",
     card: "summary_large_image",
-    images: ["https://limoroyal.com/_next/static/media/limo-royal.00028e7b.png"],
+    images: ["https://limoroyal.com/assets/limo-royale.png"],
   },
   other: {
-    "twitter:url": "https://limoroyal.com/booking-limo-royale",
+    "twitter:url": "https://limoroyal.com/booking",
     "DC.title": "Book Now | Limo Royale",
   },
 };
