@@ -19,7 +19,7 @@ const Header = () => {
         return window.location.pathname === path;
     };
 
-    if(pathname === "/booking-limo-royale") {
+    if(pathname === "/booking") {
         return null;
     }
 
