@@ -19,7 +19,6 @@ export const metadata = {
   metadataBase: new URL("https://limoroyal.com"),  
 
   alternates: {
-    canonical: "/", // same as homepage
     languages: {
       "en-ca": "https://limoroyal.com",
     },
