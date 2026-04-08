@@ -3,7 +3,12 @@ export const metadata = {
   description: "Travel in style with Limo Royale’s luxury fleet of sedans, SUVs, and limousines. Book your premium, comfortable, and unforgettable journey today.",
   keywords: "Fleet of Luxury Airport Limos, Premium Luxury Vehicles for Every Occasion",
   robots: "index, follow",
-  canonical: "https://limoroyal.com/fleet",
+  alternates: {
+    canonical: "https://limoroyal.com/fleet",
+    languages: {
+      "en-ca": "https://limoroyal.com/fleet",
+    },
+  },
   openGraph: {
     title: "Limo Royale Fleet | Premium Luxury Vehicles for Every Occasion",
     description: "Travel in style with Limo Royale’s luxury fleet of sedans, SUVs, and limousines. Book your premium, comfortable, and unforgettable journey today.",
@@ -16,7 +21,6 @@ export const metadata = {
   },
   other: {
     "DC.title": "Limo Royale Fleet | Premium Luxury Vehicles for Every Occasion",
-    "hreflang": "en-ca"
   }
 };
 
