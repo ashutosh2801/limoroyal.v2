@@ -6,6 +6,7 @@ import {
   FaFacebookF, FaInstagram, FaTwitter, 
   FaPinterest, FaYoutube, FaLinkedin, FaTiktok 
 } from 'react-icons/fa'
+import { FaXTwitter } from "react-icons/fa6";
 import Link from 'next/link'
 import FloatingActions from './FloatingActions';
 import { usePathname } from 'next/navigation'
@@ -170,7 +171,7 @@ const Footer = () => {
               <FaLinkedin />
             </a>
             <a href="https://x.com/limoroyalelux" target="_blank" className="p-2 text-lg mr-1 rounded-lg text-white social-icon inline-block">
-              <FaTwitter />
+              <FaXTwitter />
             </a>
             <a href="https://www.pinterest.com/limoroyale/" target="_blank" className="p-2 text-lg mr-1 rounded-lg text-white social-icon inline-block">
               <FaPinterest />
