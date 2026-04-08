@@ -3,7 +3,12 @@ export const metadata = {
   description: "Get in touch with Limo Royale to reserve your premium limo or airport chauffeur service. Experience comfort and elegance with our expert chauffeurs.",
   keywords: "Book Your Luxury Chauffeur Service Today, Best Airport Limo Service Toronto, Airport Transportation Toronto ",
   robots: "index, follow",
-  canonical: "https://limoroyal.com/contact",
+  alternates: {
+    canonical: "https://limoroyal.com/contact",
+    languages: {
+      "en-ca": "https://limoroyal.com/contact",
+    },
+  },
   openGraph: {
     title: "Contact Limo Royale | Book Your Luxury Chauffeur Service Today",
     description: "Get in touch with Limo Royale to reserve your premium limo or airport chauffeur service. Experience comfort and elegance with our expert chauffeurs.",
@@ -16,7 +21,6 @@ export const metadata = {
   },
   other: {
     "DC.title": "Contact Limo Royale | Book Your Luxury Chauffeur Service Today",
-    "hreflang": "en-ca"
   }
 };
 
