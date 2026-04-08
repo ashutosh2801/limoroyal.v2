@@ -94,7 +94,7 @@ const Gallery = () => {
         {/* CTA */}
         <div className="relative mt-5 text-center" data-aos="fade-up">
           <a
-            href="/online-reservations"
+            href="/booking"
             title="Book Luxury Fleet Canada"
             className="inline-block view-more-btn text-sm px-10 py-5 uppercase"
           >

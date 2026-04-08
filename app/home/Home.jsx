@@ -85,7 +85,7 @@ export default function Home() {
                   <div className="text-left">
                     <a href='/fleet'><Image src={cat1} alt="LUXURY SEDAN" className="w-full h-50 object-contain bg-[#222] rounded-xl" loading='lazy' /></a>
                     <h3 className="text-white text-xl uppercase my-5"><a href='/fleet'>LUXURY SEDAN</a></h3>
-                    <a href='/online-reservations' title='Book Now Luxury Sedan' className='webColor text-base'>Book Now</a>
+                    <a href='/booking' title='Book Now Luxury Sedan' className='webColor text-base'>Book Now</a>
                   </div>
                 </SwiperSlide>
 
@@ -93,7 +93,7 @@ export default function Home() {
                   <div className="text-left">
                     <a href='/fleet'><Image src={cat2} alt="LUXURY SUV" className="w-full h-50 object-contain bg-[#222] rounded-xl" loading='lazy' /></a>
                     <h3 className="text-white text-xl uppercase my-5"><a href='/fleet'>LUXURY SUV</a></h3>
-                    <a href='/online-reservations' title='Book Now Luxury SUV' className='webColor text-base'>Book Now</a>
+                    <a href='/booking' title='Book Now Luxury SUV' className='webColor text-base'>Book Now</a>
                   </div>
                 </SwiperSlide>
 
@@ -101,7 +101,7 @@ export default function Home() {
                   <div className="text-left">
                     <a href='/fleet'><Image src={cat3} alt="EXECUTIVE VAN" className="w-full h-50 object-contain bg-[#222] rounded-xl" loading='lazy' /></a>
                     <h3 className="text-white text-xl uppercase my-5"><a href='/fleet'>EXECUTIVE VAN</a></h3>
-                    <a href='/online-reservations' title='Book Now Executive Van' className='webColor text-base'>Book Now</a>
+                    <a href='/booking' title='Book Now Executive Van' className='webColor text-base'>Book Now</a>
                   </div>
                 </SwiperSlide>
 
@@ -109,7 +109,7 @@ export default function Home() {
                   <div className="text-left">
                     <a href='/fleet'><Image src={cat4} alt="STRETCH LIMO" className="w-full h-50 object-contain bg-[#222] rounded-xl" loading='lazy' /></a>
                     <h3 className="text-white text-xl uppercase my-5"><a href='/fleet'>STRETCH LIMO</a></h3>
-                    <a href='/online-reservations' title='Book Now Stretch Limo' className='webColor text-base'>Book Now</a>
+                    <a href='/booking' title='Book Now Stretch Limo' className='webColor text-base'>Book Now</a>
                   </div>
                 </SwiperSlide>
 
@@ -117,7 +117,7 @@ export default function Home() {
                   <div className="text-left">
                     <a href='/fleet'><Image src={cat5} alt="LUXURY COACH" className="w-full h-50 object-contain bg-[#222] rounded-xl" loading='lazy' /></a>
                     <h3 className="text-white text-xl uppercase my-5"><a href='/fleet'>LUXURY COACH</a></h3>
-                    <a href='/online-reservations' title='Book Now Luxury Coach' className='webColor text-base'>Book Now</a>
+                    <a href='/booking' title='Book Now Luxury Coach' className='webColor text-base'>Book Now</a>
                   </div>
                 </SwiperSlide>
               </Swiper>
@@ -229,7 +229,7 @@ export default function Home() {
             <div className='w-full lg:w-2/5'>
               <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-8 font-medium'>Trusted Chauffeurs of Exceptional Standards</h2>
               <p className='text-base leading-relaxed webFontColor'>Limo Royale Chauffeurs are all trusted with their ability to take clients to their destination safe and sound. We do rigorous background checks and follow standards in ensuring all chauffeurs are apt to protecting the client’s safety and taking them to their destination safely. Safety certifications, continuous training, and support ensure that all Limo Royale chauffeurs adhere to strict guidelines.</p>
-              <a href='/online-reservations' title='Luxury Limo & Airport Chauffeur Service Toronto' className='inline-block book-now-slide text-sm px-9 py-4 mt-10 uppercase'>Book Now</a>
+              <a href='/booking' title='Luxury Limo & Airport Chauffeur Service Toronto' className='inline-block book-now-slide text-sm px-9 py-4 mt-10 uppercase'>Book Now</a>
             </div>
             <div className='w-full lg:w-3/5'>
                 <div className='grid grid-cols-2 space-x-5 mt-10 lg:mt-0'>

@@ -231,7 +231,7 @@ const Header = () => {
                                         Contact
                                     </Link>
 
-                                    <Link href="/online-reservations" onClick={() => setIsMobileNavOpen(false)} className="book-now-link px-5 py-1">
+                                    <Link href="/booking" onClick={() => setIsMobileNavOpen(false)} className="book-now-link px-5 py-1">
                                         Book Now
                                     </Link>
 
@@ -309,7 +309,7 @@ const Header = () => {
                                             Toll-free: 1-888-870-LIMO
                                         </a>
 
-                                        <Link href="/online-reservations" className="inline-block book-now-link rounded-md px-7 py-2 mt-2">
+                                        <Link href="/booking" className="inline-block book-now-link rounded-md px-7 py-2 mt-2">
                                             Book Now
                                         </Link>
                                     </div>

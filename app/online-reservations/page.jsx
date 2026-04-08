@@ -4,15 +4,15 @@ export const metadata = {
   keywords: "Limo Royale Luxury Chauffeur Service, Cheap Airport Limo",
   robots: "index, follow",
   alternates: {
-    canonical: "https://limoroyal.com/online-reservations",
+    canonical: "https://limoroyal.com/booking",
     languages: {
-      "en-CA": "https://limoroyal.com/online-reservations",
+      "en-CA": "https://limoroyal.com/booking",
     },
   },
   openGraph: {
     title: "Book Your Ride Online | Limo Royale Luxury Chauffeur Service",
     description: "Reserve your luxury limo or private tour with Limo Royale. Easy online booking for airport transfers, city tours, and more.",
-    url: "https://limoroyal.com/online-reservations",
+    url: "https://limoroyal.com/booking",
   },
   twitter: {
     title: "Book Your Ride Online | Limo Royale Luxury Chauffeur Service",

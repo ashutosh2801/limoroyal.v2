@@ -222,7 +222,7 @@ const AreasServed = () => {
                             </Swiper>
                         </div>
                         <div data-aos="fade-up">
-                            <a href='/online-reservations' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
+                            <a href='/booking' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
                             <a href='https://maps.app.goo.gl/YKPLgaV9XEWUdKay7' target='_blank' className='inline-block check-map-btn text-sm px-9 py-4 mt-5 uppercase'>Check Map</a>
                         </div>
                     </div>
@@ -318,7 +318,7 @@ const AreasServed = () => {
                             </Swiper>
                         </div>
                         <div data-aos="fade-up">
-                            <a href='/online-reservations' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
+                            <a href='/booking' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
                             <a href='https://maps.app.goo.gl/1jA6Tca3RLnhTLPv8' target='_blank' className='inline-block check-map-btn text-sm px-9 py-4 mt-5 uppercase'>Check Map</a>
                         </div>
                     </div>
@@ -414,7 +414,7 @@ const AreasServed = () => {
                             </Swiper>
                         </div>
                         <div data-aos="fade-up">
-                            <a href='/online-reservations' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
+                            <a href='/booking' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
                             <a href='https://maps.app.goo.gl/1jA6Tca3RLnhTLPv8' target='_blank' className='inline-block check-map-btn text-sm px-9 py-4 mt-5 uppercase'>Check Map</a>
                         </div>
                     </div>
@@ -510,7 +510,7 @@ const AreasServed = () => {
                             </Swiper>
                         </div>
                         <div data-aos="fade-up">
-                            <a href='/online-reservations' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
+                            <a href='/booking' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
                             <a href='https://maps.app.goo.gl/fspJwJ1iHHB15DKx7' target='_blank' className='inline-block check-map-btn text-sm px-9 py-4 mt-5 uppercase'>Check Map</a>
                         </div>
                     </div>
@@ -592,7 +592,7 @@ const AreasServed = () => {
                             </Swiper>
                         </div>
                         <div data-aos="fade-up">
-                            <a href='/online-reservations' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
+                            <a href='/booking' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
                             <a href='https://maps.app.goo.gl/db2ZdGosJdCCHgiT8' target='_blank' className='inline-block check-map-btn text-sm px-9 py-4 mt-5 uppercase'>Check Map</a>
                         </div>
                     </div>
@@ -674,7 +674,7 @@ const AreasServed = () => {
                             </Swiper>
                         </div>
                         <div data-aos="fade-up">
-                            <a href='/online-reservations' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
+                            <a href='/booking' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
                             <a href='https://maps.app.goo.gl/dKy6mEvuDeAB34mx5' target='_blank' className='inline-block check-map-btn text-sm px-9 py-4 mt-5 uppercase'>Check Map</a>
                         </div>
                     </div>
@@ -771,7 +771,7 @@ const AreasServed = () => {
                         </div>
                         <div data-aos="fade-up">
                             <h5 className='text-white text-2xl lg:text-2xl mt-5'>With Limo Royale, you’ll enjoy the perfect blend of luxury and adventure in Sault Ste. Marie.</h5>
-                            <a href='/online-reservations' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
+                            <a href='/booking' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
                             <a href='https://maps.app.goo.gl/s4xJyRBUi3Y955YQ7' target='_blank' className='inline-block check-map-btn text-sm px-9 py-4 mt-5 uppercase'>Check Map</a>
                         </div>
                     </div>
@@ -868,7 +868,7 @@ const AreasServed = () => {
                         </div>
                         <div data-aos="fade-up">
                             <h5 className='text-white text-2xl lg:text-2xl mt-8'>Escape to the serenity of the Blue Mountains and let Limo Royale deliver a travel experience defined by comfort, luxury, and breathtaking landscapes.</h5>
-                            <a href='/online-reservations' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
+                            <a href='/booking' className='inline-block view-more-btn text-sm px-9 py-4 mt-5 mr-3 uppercase'>Book Now</a>
                             <a href='https://maps.app.goo.gl/dKy6mEvuDeAB34mx5' target='_blank' className='inline-block check-map-btn text-sm px-9 py-4 mt-5 uppercase'>Check Map</a>
                         </div>
                     </div>

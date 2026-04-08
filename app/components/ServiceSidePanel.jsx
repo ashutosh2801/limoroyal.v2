@@ -107,7 +107,7 @@ const ServiceSidePanel = () => {
                     <b className='text-white text-xl lg:text-2xl mt-8 mb-8 font-normal block'>Book Today</b>
                     <p className='text-gray-300'>Book Car Rental Today</p>
 
-                    <Link href='/online-reservations'
+                    <Link href='/booking'
                           title='Book Car Rental from Limo Royale'
                           className='inline-block book-now-slide text-sm px-10 py-4 mt-5 uppercase'>
                         Book Now

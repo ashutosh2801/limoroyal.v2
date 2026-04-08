@@ -219,7 +219,8 @@ export default function Search() {
 
         const airportData = extractAirportData(place);
         // const fullAddress = `${place.formatted_address ? place.formatted_address : place.name}`;
-        const fullAddress = `${place.formatted_address}`;
+        // const fullAddress = `${place.formatted_address}`;
+        const fullAddress = `${place.name}`;
 
         if (stopIndex !== null) {
           const updated = [...additionalStops];

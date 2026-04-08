@@ -74,7 +74,7 @@ const BusCharter = () => {
                                 </div>
                                 {/* <div className='bg-[#0a0a0a] p-5 md:p-10 mt-10 lg:mt-0'>
                                     <h2 className='text-white text-xl md:text-2xl font-medium'>Create unforgettable memories with our private charters.</h2>
-                                    <a href='/online-reservations' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>Contact us to book today!</a>
+                                    <a href='/booking' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>Contact us to book today!</a>
                                 </div> */}
                             </div>
                         </div>
@@ -139,7 +139,7 @@ const BusCharter = () => {
                             <li>Exhibitions</li>
                         </ul>
                         <p className='text-base leading-relaxed webFontColor mt-5'>Elevate your corporate travel experience with Limo Royale. </p>
-                        <a href='/online-reservations' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>book your charter today</a>
+                        <a href='/booking' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>book your charter today</a>
                     </div>
                 </div>
             </div>
@@ -227,7 +227,7 @@ const BusCharter = () => {
                         </div>
                         <div className='bg-[#0a0a0a] p-5 md:p-10 mt-10 lg:mt-0'>
                             <h2 className='text-white text-xl md:text-2xl font-medium'>Create unforgettable memories with our private charters.</h2>
-                            <a href='/online-reservations' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>Contact us to book today!</a>
+                            <a href='/booking' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>Contact us to book today!</a>
                         </div>
                     </div>
                 </div>
@@ -317,7 +317,7 @@ const BusCharter = () => {
                             </div>
                             <div className='bg-black p-5 md:p-10 mt-10 lg:mt-0'>
                                 <h2 className='text-white text-xl md:text-2xl font-medium'>Trust Limo Royale to get your team to the game, every time.</h2>
-                                <a href='/online-reservations' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>Book your team's charter</a>
+                                <a href='/booking' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>Book your team's charter</a>
                             </div>
                         </div>
                     </div>
@@ -419,7 +419,7 @@ const BusCharter = () => {
                             </div>
                             <div className='bg-[#0a0a0a] p-5 md:p-10 mt-10 lg:mt-0'>
                                 <h2 className='text-white text-xl md:text-2xl font-medium'>Experience the city like never before with Limo Royale’s City Charter Services.</h2>
-                                <a href='/online-reservations' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>contact us to book now</a>
+                                <a href='/booking' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>contact us to book now</a>
                             </div>
                         </div>
                     </div>
@@ -501,7 +501,7 @@ const BusCharter = () => {
                             <div></div>
                             <div className='bg-black p-5 md:p-10 mt-0 lg:mt-0'>
                                 <h2 className='text-white text-xl md:text-2xl font-medium'>Let us take care of the transportation, so you can focus on celebrating your love.</h2>
-                                <a href='/online-reservations' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>Book your wedding shuttle</a>
+                                <a href='/booking' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>Book your wedding shuttle</a>
                             </div>
                         </div>
                     </div>
@@ -583,7 +583,7 @@ const BusCharter = () => {
                             <div></div>
                             <div className='bg-[#0a0a0a] p-5 md:p-10 mt-0 lg:mt-0'>
                                 <h2 className='text-white text-xl md:text-2xl font-medium'>Start or end your trip in luxury with Limo Royale’s Airport Shuttle Services.</h2>
-                                <a href='/online-reservations' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>book today</a>
+                                <a href='/booking' className='inline-block view-more-btn text-sm px-5 md:px-10 py-5 mt-5 uppercase'>book today</a>
                             </div>
                         </div>
                     </div>
