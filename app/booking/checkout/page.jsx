@@ -39,10 +39,15 @@ export default function CheckoutPage() {
       setError(null);
       setErrors(null);
 
+      const date = new Date(data.pickupDate);
+      const time = new Date(data.pickupTime);
+      const pickupDate = date.toLocaleDateString('en-CA');
+      const pickupTime = time.toLocaleTimeString('en-CA');
+
       const payload = {
         trip_type: data.tripType,
-        pickup_date: data.pickupDate,
-        pickup_time: data.pickupTime,
+        pickup_date: pickupDate,
+        pickup_time: pickupTime,
         from: data.from,
         additionalStops: data.additionalStops || [],
         to: data.to || "",
@@ -77,6 +82,8 @@ export default function CheckoutPage() {
         },
         returnData: data.returnData
       };
+      // console.log('payload', payload);
+      // return;
       const result = await createBooking(payload);    
       // console.log('result', result);
       // return;
@@ -212,18 +219,18 @@ export default function CheckoutPage() {
 
                 {/* Book now button */}
                 <div>
-                    <button
+                    {/* <button
                       onClick={booknow}
                       disabled={loading}
                       className="w-full py-3 text-white webBG rounded-md hover:opacity-90 text-sm mt-4 cursor-pointer">
-                        {loading ? "Booking..." : data?.paymentType == 'quote' ? "Get a Quote Now"  : "Book now"}
+                        {loading ? "Please wait..." : data?.paymentType == 'quote' ? "Get a Quote Now"  : "Book now"}
                     </button>
                     {error && (
                       <p className="text-red-500 text-base mt-2">{error}</p>
                     )}
                     {errors && errors.map((error, i) => (
                       <p key={i} className="text-red-500 text-base mt-2">{error}</p>
-                    ))}
+                    ))} */}
                     <p className="text-gray-300 text-xs mt-4">By Booking, Our <a href="" target="_blank" className="font-medium underline text-gray-300">Terms & Conditions</a> apply in their current version</p>
                 </div>
               </div>
@@ -267,13 +274,22 @@ export default function CheckoutPage() {
                       <FaChevronLeft className="text-white text-xs xl:text-sm mr-1 mt-[2px] xl:mt-1" />
                       Back
                     </button>
-                    {/* <button
+                    <button
                       onClick={booknow}
                       disabled={loading}
                       className="flex py-3 px-2 md:px-10 rounded-md font-medium text-white webBG hover:opacity-90 cursor-pointer text-xs md:text-base w-auto"
                     >
-                      {loading ? "Booking..." : data.paymentType == 'quote' ? "Get a Quote Now"  : "Book now"}
-                    </button>                     */}
+                      {loading ? "Please wait..." : data.paymentType == 'quote' ? "Get a Quote Now"  : "Book now"}
+                    </button>                    
+                  </div>
+
+                  <div>
+                    {error && (
+                      <p className="text-red-500 text-base mt-2">{error}</p>
+                    )}
+                    {errors && errors.map((error, i) => (
+                      <p key={i} className="text-red-500 text-base mt-2">{error}</p>
+                    ))}
                   </div>
 
                 </div>

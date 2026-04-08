@@ -165,7 +165,7 @@ const AboutPage = () => {
               <p className='text-base leading-relaxed webFontColor'>At <b>Limo Royale</b>, every journey is meticulously planned and executed to perfection. We take pride in ensuring that our fleet not only meets but exceeds the expectations of our discerning clients. That’s why we have a <b>dedicated team of professionals</b> who conduct thorough <b>vehicle cleanliness and quality checks</b> before each pickup. Every vehicle is detailed to immaculate standards, ensuring that your experience with us is luxurious from the moment you step inside.
               <br></br><br></br>
               Our commitment to maintaining the highest quality standards means that no detail is overlooked. From spotless interiors to the flawless performance of our vehicles, we guarantee that your ride will be as smooth and elegant as possible.</p>
-              <a href='/online-reservations' title='Luxury Limo & Airport Chauffeur Service Toronto' className='inline-block book-now-slide text-sm px-10 py-5 mt-10 uppercase'>Book Now</a>
+              <a href='/booking' title='Luxury Limo & Airport Chauffeur Service Toronto' className='inline-block book-now-slide text-sm px-10 py-5 mt-10 uppercase'>Book Now</a>
             </div>
           </div>          
         </div>
@@ -177,7 +177,7 @@ const AboutPage = () => {
             <div className='w-full lg:w-2/5'>
               <h2 className='text-white text-2xl lg:text-4xl leading-snug mb-5 font-medium'>Royale Chauffeur: Your Journey in Expert Hands</h2>
               <p className='text-base leading-relaxed webFontColor'>At <b>Limo Royale</b>, we take pride in offering more than just a ride—we provide an exceptional travel experience, guided by our elite team of <b>Royale Chauffeurs</b>. With a minimum of <b>15-20 years of professional driving experience</b>, each Royale Chauffeur is handpicked to ensure that your journey is both <b>safe</b> and <b>smooth</b>. Our chauffeurs are not only skilled drivers but also masters of service, trained to deliver the <b>royal treatment</b> you deserve.</p>
-              <a href='/online-reservations' title='Luxury Limo & Airport Chauffeur Service Toronto' className='inline-block book-now-slide text-sm px-9 py-4 mt-10 uppercase'>Book Now</a>
+              <a href='/booking' title='Luxury Limo & Airport Chauffeur Service Toronto' className='inline-block book-now-slide text-sm px-9 py-4 mt-10 uppercase'>Book Now</a>
             </div>
             <div className='w-full lg:w-3/5'>
                 <div className='grid grid-cols-2 space-x-5 mt-10 lg:mt-0'>
@@ -250,7 +250,7 @@ const AboutPage = () => {
               <p className='text-base leading-relaxed webFontColor'>At <b>Limo Royale</b>, we don’t follow trends—we set new standards. Our service is built around one core promise: to give every client a <b>royal experience</b>. Unlike other limo services, we are not focused on being the largest or the most visible—we are focused on being the <b>best</b>. Our goal is to ensure that every time a client steps into one of our vehicles, they experience the ultimate in luxury and comfort.
               <br></br><br></br>
               We believe that the journey should be just as special as the destination. That’s why we go above and beyond to ensure that your time with us reflects the elegance and refinement you deserve. Our <b>20+ years of experience</b> in both the limo service and hotel industry have given us a unique insight into what it means to provide <b>world-class service</b>. We pride ourselves on standing out in an industry where many others fall short.</p>
-              <a href='/online-reservations' title='Luxury Limo & Airport Chauffeur Service Toronto' className='inline-block book-now-slide text-sm px-10 py-5 mt-10 uppercase'>Book Now</a>
+              <a href='/booking' title='Luxury Limo & Airport Chauffeur Service Toronto' className='inline-block book-now-slide text-sm px-10 py-5 mt-10 uppercase'>Book Now</a>
             </div>
           </div>          
         </div>
