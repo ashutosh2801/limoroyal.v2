@@ -26,7 +26,7 @@ const Sitemap = () => {
   { title: "Areas Served", href: "/areas-served" },
   { title: "Fleet", href: "/fleet" },
   { title: "Contact", href: "/contact" },
-  { title: "Book Now", href: "/online-reservations" },
+  { title: "Book Now", href: "/booking" },
   { title: "Login", href: "/login" },
   { title: "Blog", href: "/blog/" },
 ];

@@ -50,7 +50,7 @@ function PaymentForm() {
   const hasReturnTrip = Boolean(data?.PickupInfo?.returnTrip);
   const activeStep = hasReturnTrip ? 4 : 2;
 
-  const [paymentOption, setPaymentOption] = useState("card");
+  const [paymentOption, setPaymentOption] = useState("quote");
   const [nameOnCard, setNameOnCard] = useState("");
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -106,7 +106,7 @@ function PaymentForm() {
 
   useEffect(()=>{
     setNameOnCard(data?.cardData?.nameOnCard || "");
-    setPaymentOption(data?.paymentType || "card")
+    setPaymentOption(data?.paymentType || "quote")
   }, [data]);
 
   const handlePayment = async () => {
@@ -320,6 +320,7 @@ function PaymentForm() {
                         <input
                           type="radio"
                           name="paymentOption"
+                          disabled={true}
                           value="card"
                           checked={paymentOption === "card"}
                           onChange={() => setPaymentOption("card")}
@@ -549,10 +550,10 @@ function PaymentForm() {
                         }`}
                       >
                         {processing
-                            ? "Processing..."
+                            ? "Please wait..."
                             : paymentOption === "card"
                             ? "Proceed to Checkout"
-                            : "Get a Quote"}
+                            : "Confirm Preview"}
                         <FaChevronRight className="text-white text-xs xl:text-sm ml-1 mt-[2px] xl:mt-1" />
                       </button>
                     </div>

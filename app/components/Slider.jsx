@@ -46,7 +46,7 @@ const Slider = () => {
                             Where Luxury <br /> Meets the Road
                         </h2>
                         <a
-                            href='/online-reservations'
+                            href='/booking'
                             title='Book Now from Limo Royale'
                             className='inline-block book-now-slide text-sm px-4 py-2 md:px-9 md:py-4 mt-2 uppercase'
                         >
