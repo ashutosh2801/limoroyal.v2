@@ -81,7 +81,7 @@ const Contact = () => {
                                 416-725-LIMO<br></br>
                                 (416-725-5466)
                             </a>
-                            <a href='tel:4167255466' className='text-base md:text-sm lg:text-base leading-relaxed webFontColor w-full inline-block'>
+                            <a href='tel:+14167255466' className='text-base md:text-sm lg:text-base leading-relaxed webFontColor w-full inline-block'>
                                 Toll-free:<br></br>
                                 1 (888) 870-LIMO (5466)
                             </a>

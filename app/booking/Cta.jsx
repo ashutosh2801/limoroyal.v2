@@ -30,7 +30,7 @@ export default function Cta() {
               href="tel:+14167255466"
               className="inline-block webBG text-white font-semibold px-8 py-4 rounded-full transition duration-300 text-base uppercase tracking-wide hover:opacity-90"
             >
-              CALL (416) 725-5466
+              CALL +1 (416) 725-5466
             </Link>
           </div>
 
